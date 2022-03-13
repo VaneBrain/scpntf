@@ -674,6 +674,7 @@ Global MonitorTimer# = 0.0, MonitorTimer2# = 0.0, UpdateCheckpoint1%, UpdateChec
 Global PlayerDetected%
 ;Global PrevInjuries#,PrevBloodloss#
 Global NoTarget% = False
+Global NoBlink% = False
 
 Global NVGImages = LoadAnimImage("GFX\battery.png",64,64,0,2)
 MaskImage NVGImages,255,0,255
@@ -1421,13 +1422,16 @@ Function MainLoop()
 					End Select 
 					BlinkTimer = BLINKFREQ
 				EndIf
-				
 				BlinkTimer = BlinkTimer - FPSfactor
 			Else
-				BlinkTimer = BlinkTimer - FPSfactor * 0.6 * BlinkEffect
-				If EyeIrritation > 0 Then BlinkTimer=BlinkTimer-Min(EyeIrritation / 100.0 + 1.0, 5.0) * FPSfactor
+				If NoBlink = False Then
+					BlinkTimer = BlinkTimer - FPSfactor * 0.6 * BlinkEffect
+					If EyeIrritation > 0 Then BlinkTimer=BlinkTimer-Min(EyeIrritation / 100.0 + 1.0, 5.0) * FPSfactor
 				
-				darkA = Max(darkA, 0.0)
+					darkA = Max(darkA, 0.0)
+				Else
+					BlinkTimer = BLINKFREQ
+				EndIf
 			EndIf
 			
 			If BlinkEffectTimer > 0 Then
@@ -2926,7 +2930,7 @@ Function MovePlayer()
 		HealSPPlayer(0.01 * FPSfactor)
 	EndIf
 	
-	If Playable Then
+	If Playable And NoBlink = False Then
 		If (Not co\Enabled)
 			If KeyHit(KEY_BLINK) Then BlinkTimer = 0
 			If KeyDown(KEY_BLINK) And BlinkTimer < - 10 Then BlinkTimer = -10
@@ -4193,6 +4197,7 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	DeleteElevatorObjects()
 	
 	NoTarget% = False
+	NoBlink% = False
 	
 	OptionsMenu% = -1
 	QuitMSG% = -1

@@ -264,6 +264,7 @@ Function UpdateConsole(commandSet%)
 								Case "3"
 									CreateConsoleMsg("- playmusic [clip + .wav/.ogg]")
 									CreateConsoleMsg("- notarget")
+									CreateConsoleMsg("- noblink")
 									CreateConsoleMsg("- unlockexits")
 								Case "asd"
 									CreateConsoleMsg("HELP - asd")
@@ -369,7 +370,20 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Will play tracks in .ogg/.wav format")
 									CreateConsoleMsg("from "+Chr(34)+"SFX\Music\Custom\"+Chr(34)+".")
 									CreateConsoleMsg("******************************")
-									
+								Case "notarget"
+									CreateConsoleMsg("HELP - notarget")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles notarget, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Prevents NPC's from targeting the player")
+									CreateConsoleMsg("******************************")
+								Case "noblink"
+									CreateConsoleMsg("HELP - noblink")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles noblink, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Prevents the player from blinking")
+									CreateConsoleMsg("******************************")
 								Default
 									CreateConsoleMsg("There is no help available for that command.",255,150,0)
 							End Select
@@ -964,6 +978,25 @@ Function UpdateConsole(commandSet%)
 								CreateConsoleMsg("NOTARGET OFF")
 							Else
 								CreateConsoleMsg("NOTARGET ON")	
+							EndIf
+							;[End Block]
+						Case "noblink"
+							;[Block]
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							
+							Select StrTemp
+								Case "on", "1", "true"
+									NoBlink% = True						
+								Case "off", "0", "false"
+									NoBlink% = False	
+								Default
+									NoBlink% = Not NoBlink%
+							End Select
+							
+							If NoBlink% = False Then
+								CreateConsoleMsg("NOBLINK OFF")
+							Else
+								CreateConsoleMsg("NOBLINK ON")	
 							EndIf
 							;[End Block]
 						Case "spawnradio"
