@@ -279,7 +279,11 @@ Function UpdateNPCtype173(n.NPCs)
 							Else
 								If Rand(400)=1 Then RotateEntity (n\Collider, 0, Rnd(360), 0)
 								TranslateEntity n\Collider,Cos(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor,0.0,Sin(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor
-								n\Angle = Rnd(-120,120)
+								If NoTarget = False Then
+									n\Angle = Rnd(-120,120)
+								Else
+									n\Angle = 0
+								EndIf
 							EndIf
 						EndIf
 					EndIf ; less than 2 rooms away from the player
