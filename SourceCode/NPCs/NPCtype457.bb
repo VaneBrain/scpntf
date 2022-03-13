@@ -61,6 +61,7 @@ Function UpdateNPCtype457(n.NPCs)
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\burn.ogg"))
 					EndIf
 					Kill()
+					DeathMSG = Designation+". Cause of death: Severe 3rd degree burns across the body. Assumed to be attacked by SCP-457."
 				Else
 					n\State = SCP457_WALK
 				EndIf

@@ -3616,6 +3616,7 @@ Function LoadEntities()
 	ParticleTextures[8] = LoadTexture_Strict("GFX\particle.png",1+2,2)
 	ParticleTextures[9] = LoadAnimTexture("GFX\fog_textures.png",1+2,256,256,0,4)
 	ParticleTextures[12] = LoadTexture_Strict("GFX\WaterParticle3.png",1+2,2)
+	ParticleTextures[13] = LoadTexture_Strict("GFX\fire_particle.png",1+2,2)
 	
 	SetChunkDataValues()
 	
