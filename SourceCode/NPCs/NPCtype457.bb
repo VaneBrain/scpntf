@@ -78,6 +78,12 @@ Function UpdateNPCtype457(n.NPCs)
 						MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
 						
 						AnimateNPC(n, 284, 333, n\CurrSpeed)
+					Else
+						v3d_1 = CreateVector3D(334, 494, 0.3)
+						v3d_2 = CreateVector3D(284, 333, 0.43)
+						NPC_GoTo(n, v3d_1, v3d_2, Collider, 1.0)
+						Delete v3d_1
+						Delete v3d_2
 					EndIf
 				ElseIf dist<=0.5625 Then
 					If yaw<=60.0 Then
