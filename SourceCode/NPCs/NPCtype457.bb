@@ -56,7 +56,7 @@ Function UpdateNPCtype457(n.NPCs)
 		Select n\State
 			Case SCP457_ATTACK
 				;[Block]
-				If (Not GodMode) Then
+				If (Not GodMode) And (Not NoTarget) Then
 					If psp\Health > 0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\burn.ogg"))
 					EndIf
@@ -68,8 +68,8 @@ Function UpdateNPCtype457(n.NPCs)
 				;[End Block]
 			Case SCP457_WALK
 				;[Block]
-				If dist<20.0 And dist>1.21 Then
-					If EntityVisible(Collider, n\Collider) Then
+				If dist<20.0 And dist>0.5625 Then
+					If EntityVisible(Collider, n\Collider) And (Not NoTarget) Then
 						PointEntity n\obj, Collider
 						RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 30.0), 0
 						
@@ -79,7 +79,7 @@ Function UpdateNPCtype457(n.NPCs)
 						
 						AnimateNPC(n, 284, 333, n\CurrSpeed)
 					EndIf
-				ElseIf dist<0.5625 Then
+				ElseIf dist<=0.5625 Then
 					If yaw<=60.0 Then
 						n\State = SCP457_ATTACK
 						n\CurrSpeed = 0
