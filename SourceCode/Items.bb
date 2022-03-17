@@ -345,6 +345,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("SCP-198","scp198","GFX\items\scp198.b3d","GFX\items\INVscp198.jpg","",0.04)
 	CreateItemTemplate("SCP-109","scp109","GFX\items\scp109.b3d","GFX\items\INVscp109.jpg","",0.0009)
 	it = CreateItemTemplate("Document SCP-109", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc109.jpg", 0.003) : it\sound = 0
+	it = CreateItemTemplate("Ammo Crate", "ammocrate", "GFX\items\ammo_crate.x", "GFX\items\INVfreezer.jpg", "", 0.01) : it\fastPickable = true
 ;	CreateItemTemplate("Silencer", "silencer", "GFX\weapons\Silencer.b3d","GFX\weapons\INVsilencer.jpg","",0.02)
 	
 	CreateItemTemplate("Fuse", "fuse", "GFX\items\fuse.b3d", "GFX\items\INVfuse.jpg", "", 0.025)
@@ -795,8 +796,8 @@ Function PickItem(item.Items)
 								item\itemtemplate\found = True
 								Inventory[n] = item
 								HideEntity item\collider
-								g\CurrAmmo = item\state
-								g\CurrReloadAmmo = item\state2
+								g\CurrAmmo = g\MaxCurrAmmo
+								g\CurrReloadAmmo = 0
 								Exit
 							EndIf
 						Next
@@ -853,6 +854,25 @@ Function PickItem(item.Items)
 					Msg = "You are not in need to replace your kevlar."
 					MsgTimer = 70 * 5
 				EndIf
+			Case "ammocrate"
+				For g = Each Guns
+					If g\GunType = GUNTYPE_SHOTGUN Then
+						g\CurrReloadAmmo = Min(g\CurrReloadAmmo+(g\MaxCurrAmmo),g\MaxReloadAmmo)
+					Else
+						g\CurrReloadAmmo = Min(g\CurrReloadAmmo+2, g\MaxReloadAmmo)
+					EndIf
+				Next
+		
+				Msg = "You picked up an ammo crate which gave you some ammo for any weapons you have"
+				MsgTimer = 70 * 5
+				If item\itemtemplate\sound <> 66 Then PlaySound_Strict(PickSFX[item\itemtemplate\sound])
+				item\Picked = True
+				item\Dropped = -1
+					
+				item\itemtemplate\found=True
+				ItemAmount = ItemAmount + 1
+					
+				HideEntity(item\collider)
 		End Select
 	EndIf
 	CatchErrors("PickItem")
