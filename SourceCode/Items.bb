@@ -796,8 +796,10 @@ Function PickItem(item.Items)
 								item\itemtemplate\found = True
 								Inventory[n] = item
 								HideEntity item\collider
-								g\CurrAmmo = g\MaxCurrAmmo
-								g\CurrReloadAmmo = 0
+								g\CurrAmmo = item\state
+								g\CurrReloadAmmo = item\state2
+								Msg = "A " + item\itemtemplate\name + " has been picked up."
+								MsgTimer = 70 * 5
 								Exit
 							EndIf
 						Next
