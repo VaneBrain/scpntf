@@ -1,0 +1,13 @@
+v0.2.4
+0.2.3版的存档与该版本兼容
+
+-Fixed a game crash that can occur when D-Class shoots the player.
+-Fixed Continue button still working with incompatible save files.
+-Fixed description of Objectives disappearing after loading a save file.
+-Fixed player shooting after pressing the elevator button.
+-Fixed a bug when player was reloading the weapon while typing in a chat.
+-Fixed a game crash that can occur when D-Class shoots the player.
+-Fixed Continue button still working with incompatible save files.
+-Fixed description of Objectives disappearing after loading a save file.
+-Fixed player shooting after pressing the elevator button.
+-Fixed a bug when player was reloading the weapon while typing in a chat.

@@ -1,41 +1,13 @@
-v0.2.3
+v0.2.4
+Save files from version 0.2.3 are compatible with this version.
 
-[GENERAL]
--Many code fixes and improvements by Jabka.
--Few bump mapping texture improvements by MetridSiardily.
--Restricted the spawn of Singleplayer NPCs into Multiplayer (and vice versa).
-
-[SINGLEPLAYER]
--Added objective system, telling current objective that player has to do.
--Fixed some buttons appearing in death screen if player used Continue from Main Menu.
--Fixed wrong music playing in SCP-049's containment chamber.
--Fixed some bugs in the checkpoint when players come back to it:
-	*Fixed airlock doors being closed.
-	*Fixed SCP-106 kidnapping player in elevator.
-	*Fixed hitboxes of sinked teammates still being active.
--Fixed D-Class's alert lines playing if the D-Class is already dead.
-
-[MULTIPLAYER]
--Added voting system for next map.
--Added sorting by name, gamemode, map and players for server list.
--Added new music by Firefox for Waves ("Conflict Arises").
--Revamped Host Server menu section:
-	*Each map now has own preview image.
-	*Each gamemode now has own preview image and description.
-	*Fixed the value 0 appearing in the max players and timeout input boxes when empty.
--Revamped Syringes. They now add stamina regeneration boost for 10 seconds.
--Fuses now have an icon displaying around the map when dropped by construction worker zombies.
--Changes to SCP-035:
-	*Reduced his health from 15000 to 12000
-	*Fixed his agitation state not working (when the spine tentacles spawn)
-	*Increased the cooldown timer for when tentacles can spawn from 5 to 10 seconds.
--Fixed zombie/SCP-939/SCP-035 death message appearing again if player is already dead.
--Fixed crouch and shoot lagging in Multiplayer for clients.
--Added failsafes for player models, nametags and player weapons (so they won't be invisible and crash the game, hopefully).
--Fixed few places in Offices map where NPCs could've get stuck.
--Fixed double lights in one of the generator rooms in Old Sewers map.
--Fixed an unlit brush in Old Sewers map.
-
-...and other small fixes and improvements!
-
-----------------------------------------------------------------------------------
+-Fixed a game crash that can occur when D-Class shoots the player.
+-Fixed Continue button still working with incompatible save files.
+-Fixed description of Objectives disappearing after loading a save file.
+-Fixed player shooting after pressing the elevator button.
+-Fixed a bug when player was reloading the weapon while typing in a chat.
+-Fixed a game crash that can occur when D-Class shoots the player.
+-Fixed Continue button still working with incompatible save files.
+-Fixed description of Objectives disappearing after loading a save file.
+-Fixed player shooting after pressing the elevator button.
+-Fixed a bug when player was reloading the weapon while typing in a chat.

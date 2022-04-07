@@ -2240,7 +2240,7 @@ End Function
 
 Function InitCredits()
 	Local cl.CreditsLine, d.Doors
-	Local file% = OpenFile("Credits.txt")
+	Local file% = OpenFile_Strict("Credits.txt")
 	Local l$, i%
 	
 	CreditsFont% = LoadFont_Strict("GFX\font\Courier New.ttf", Int(21 * (opt\GraphicHeight / 1024.0)))
@@ -6181,7 +6181,7 @@ Function CatchErrors(location$)
 ;			WriteLine errF,"Error(s):"
 ;		Else
 ;			Local canwriteError% = True
-;			errF = OpenFile(gv\ErrorFile)
+;			errF = OpenFile_Strict(gv\ErrorFile)
 ;			While (Not Eof(errF))
 ;				Local l$ = ReadLine(errF)
 ;				If Left(l,Len(location))=location
@@ -6266,18 +6266,18 @@ End Function
 Function InitFonts()
 	Local txt$
 	
-	fo\Font[Font_Default] = LoadFont("GFX\font\Courier New.ttf", Int(16 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Default_Medium] = LoadFont("GFX\font\Courier New.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Default_Large] = LoadFont("GFX\font\Courier New.ttf", Int(46 * (opt\GraphicHeight / 1024.0))) ;TODO make this use a bold font
-	fo\Font[Font_Menu_Small] = LoadFont("GFX\font\Capture It.ttf",Int(23 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Menu_Medium] = LoadFont("GFX\font\Capture It.ttf",Int(42 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Menu] = LoadFont("GFX\font\Capture It.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Digital_Small] = LoadFont("GFX\font\DS-Digital.ttf", Int(20 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Digital_Medium] = LoadFont("GFX\font\DS-Digital.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Digital_Large] = LoadFont("GFX\font\DS-Digital.ttf", Int(58 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Journal] = LoadFont("GFX\font\Journal.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Default] = LoadFont_Strict("GFX\font\Courier New.ttf", Int(16 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Default_Medium] = LoadFont_Strict("GFX\font\Courier New.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Default_Large] = LoadFont_Strict("GFX\font\Courier New.ttf", Int(46 * (opt\GraphicHeight / 1024.0))) ;TODO make this use a bold font
+	fo\Font[Font_Menu_Small] = LoadFont_Strict("GFX\font\Capture It.ttf",Int(23 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Menu_Medium] = LoadFont_Strict("GFX\font\Capture It.ttf",Int(42 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Menu] = LoadFont_Strict("GFX\font\Capture It.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Digital_Small] = LoadFont_Strict("GFX\font\DS-Digital.ttf", Int(20 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Digital_Medium] = LoadFont_Strict("GFX\font\DS-Digital.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Digital_Large] = LoadFont_Strict("GFX\font\DS-Digital.ttf", Int(58 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Journal] = LoadFont_Strict("GFX\font\Journal.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
 	
-	fo\ConsoleFont% = LoadFont("GFX\font\Minimal5x7.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
+	fo\ConsoleFont% = LoadFont_Strict("GFX\font\Minimal5x7.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
 	
 	SetFont fo\Font[Font_Menu]
 	

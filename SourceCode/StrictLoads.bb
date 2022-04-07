@@ -313,6 +313,28 @@ Function UpdateStreamSoundOrigin(streamHandle%,cam%,entity%,range#=10,volume#=1.
 	EndIf
 End Function
 
+Function OpenFile_Strict(File$)
+	Local tmp
+	Local file1$
+	If I_Loc\Localized Then
+		File1 = I_Loc\LangPath+File$
+		If FileType(File1$) = 1 Then
+			tmp = OpenFile(File1$)
+			Return tmp 
+		EndIf
+	EndIf
+
+	If FileType(File$) <> 1 Then RuntimeError "File " + File$ + " not found."
+	
+	If FileType(File$) <> 1 Then RuntimeError "File " + File$ + " not found."
+	tmp = OpenFile(File$)
+
+	
+	If tmp = 0 Then RuntimeError "Failed to load File: "+File$
+	
+	Return tmp 
+End Function
+
 Function LoadMesh_Strict(File$,parent=0)
 	Local tmp%,i%,sf%,b%,t1%,name$,texture%,t2%
 	Local texAlpha% = 0
@@ -558,14 +580,24 @@ End Function
 
 ;don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$,flags=1,texdeletetype%=0)
-	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
-	
 	Local tmp
+	Local file1$
+	If I_Loc\Localized Then
+		File1 = I_Loc\LangPath+File$
+		If FileType(File1$) = 1 Then
+			tmp = LoadTextureCheckingIfInCache(File1$,texdeletetype,flags)
+			If tmp = 1 Then Return tmp 
+		EndIf
+	EndIf
+
+	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
 	
 	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
 	tmp = LoadTextureCheckingIfInCache(File$,texdeletetype,flags)
+
 	
 	If tmp = 0 Then RuntimeError "Failed to load Texture: "+File$
+	
 	Return tmp 
 End Function   
 
@@ -585,11 +617,23 @@ Function LoadBrush_Strict(file$,flags,u#=1.0,v#=1.0)
 End Function 
 
 Function LoadFont_Strict(file$, height%)
-	If FileType(file$)<>1 Then RuntimeError "Font " + file$ + " not found."
+	Local tmp
+	Local File1$
+	If I_Loc\Localized Then
+		File1 = I_Loc\LangPath+File$
+		DebugLog file1
+		If FileType(File1$) = 1 Then
+			tmp = LoadFont(File1$, height%)
+			Return tmp 
+		EndIf
+	EndIf
 	
-	tmp = LoadFont(file, height)
+	If FileType(File$) <> 1 Then RuntimeError "Font " + File$ + " not found."
+	tmp = LoadFont(File$, height%)
+
 	
-	If tmp = 0 Then RuntimeError "Failed to load Font: " + file$ 
+	If tmp = 0 Then RuntimeError "Failed to load Font: "+File$
+	
 	Return tmp
 End Function
 

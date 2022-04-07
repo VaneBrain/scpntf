@@ -98,6 +98,9 @@
 		Dmitry Smagin
 		Ivan Badikov
 
+*Simplified Chinese localization by ZiYue Sinicization Team.
+		ZiYueCommentary
+
 *The game is based on the works of the SCP Foundation community.
 
 

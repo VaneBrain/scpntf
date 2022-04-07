@@ -849,7 +849,7 @@ Function UpdateMainMenu()
 						
 						y = y + 50*MenuScale
 						
-						If DrawButton(x+20*MenuScale,y,220*MenuScale,30*MenuScale,"Control configuration",False) Then
+						If DrawButton(x+20*MenuScale,y,220*MenuScale,30*MenuScale,GetLocalString("Options", "controlcfg"),False) Then
 							MainMenuTab = MenuTab_Options_ControlsBinding
 						EndIf	
 ;					Else
@@ -1038,13 +1038,13 @@ Function UpdateMainMenu()
 				width = 580 * MenuScale
 				height = 190 * MenuScale
 				
-				If DrawButton(x+20*MenuScale,y+20*MenuScale,width-40*MenuScale,70*MenuScale,"CREDITS",2) Then
+				If DrawButton(x+20*MenuScale,y+20*MenuScale,width-40*MenuScale,70*MenuScale,GetLocalString("Menu", "credits"),2) Then
 					LightSpriteTex[0] = LoadTexture_Strict("GFX\light1.jpg",1,0)
 					LightSpriteTex[2] = LoadTexture_Strict("GFX\lightsprite.jpg",1,0)
 					LoadMaterials("Data\materials.ini")
 					LoadCredits()
 				EndIf
-				If DrawButton(x+20*MenuScale,y+100*MenuScale,width-40*MenuScale,70*MenuScale,"WEBSITES",2) Then MainMenuTab = MenuTab_Websites
+				If DrawButton(x+20*MenuScale,y+100*MenuScale,width-40*MenuScale,70*MenuScale,GetLocalString("Menu", "websites"),2) Then MainMenuTab = MenuTab_Websites
 				;[End Block]
 			Case MenuTab_Achievements
 				;[Block]
@@ -2315,7 +2315,7 @@ Function RenderMainMenu()
 						;[End Block]
 				ElseIf MainMenuTab = MenuTab_Options_ControlsBinding Then
 					;[Block]
-					Text(x + 20 * MenuScale, y - 10 * MenuScale, "Control configuration:")
+					Text(x + 20 * MenuScale, y - 10 * MenuScale, GetLocalString("Options", "controlcfg")+": ")
 					y = y + 10 * MenuScale
 					
 					Text(x + 20 * MenuScale, y + 15 * MenuScale, GetLocalString("Options","cont_forward"))
@@ -2536,7 +2536,7 @@ Function RenderMainMenu()
 				
 				Color(255, 255, 255)
 				SetFont fo\Font[Font_Menu]
-				Text(x + width / 2, y + height / 2, "WEBSITES", True, True)
+				Text(x + width / 2, y + height / 2, GetLocalString("Menu", "websites"), True, True)
 				
 				x = 60 * MenuScale
 				y = y + height + 20 * MenuScale
@@ -2972,7 +2972,7 @@ Function RenderMainMenu()
 				
 				Color(255, 255, 255)
 				SetFont fo\Font[Font_Menu]
-				Text(x + width / 2, y + height / 2, "HOST SERVER", True, True)
+				Text(x + width / 2, y + height / 2, GetLocalString("Multiplayer", "hostserver"), True, True)
 				
 				x = 60 * MenuScale
 				y = y + height + 20 * MenuScale
@@ -2982,9 +2982,9 @@ Function RenderMainMenu()
 				
 				SetFont fo\Font[Font_Default]
 				
-				Text (x + 20 * MenuScale, y + 25 * MenuScale, "Server name:")
+				Text (x + 20 * MenuScale, y + 25 * MenuScale, GetLocalString("Multiplayer", "servername"))
 				
-				Text (x + 20 * MenuScale, y + 65 * MenuScale, "Password:")
+				Text (x + 20 * MenuScale, y + 65 * MenuScale, GetLocalString("Multiplayer", "serverpwd"))
 				
 				DrawImage mp_I\PasswordIcon, x + 470 * MenuScale, y + 55 * MenuScale, (mp_I\PasswordVisible)
 				If MouseOn(x + 470 * MenuScale, y + 55 * MenuScale, 30 * MenuScale, 30 * MenuScale) Then
@@ -2996,15 +2996,15 @@ Function RenderMainMenu()
 				
 				Color 255,255,255
 				
-				Text (x + 20 * MenuScale, y + 105 * MenuScale, "Selected gamemode:")
+				Text (x + 20 * MenuScale, y + 105 * MenuScale, GetLocalString("Multiplayer", "selemode"))
 				
-				Text (x + 20 * MenuScale, y + 145 * MenuScale, "Selected map:")
+				Text (x + 20 * MenuScale, y + 145 * MenuScale, GetLocalString("Multiplayer", "selemap"))
 				
-				Text (x + 20 * MenuScale, y + 185 * MenuScale, "Maximum players:")
+				Text (x + 20 * MenuScale, y + 185 * MenuScale, GetLocalString("Multiplayer", "maxplayer"))
 				
-				Text (x + 20 * MenuScale, y + 225 * MenuScale, "Server timeout (secs):")
+				Text (x + 20 * MenuScale, y + 225 * MenuScale, GetLocalString("Multiplayer", "servertimeout"))
 				
-				Text (x + 20 * MenuScale, y + 265 * MenuScale, "Private server:")
+				Text (x + 20 * MenuScale, y + 265 * MenuScale, GetLocalString("Multiplayer", "serverprivate"))
 				If MouseOn(x+375*MenuScale,y+260*MenuScale,20*MenuScale,20*MenuScale)
 					DrawOptionsTooltip("private")
 				EndIf
@@ -3019,7 +3019,7 @@ Function RenderMainMenu()
 				
 				Color(255, 255, 255)
 				SetFont fo\Font[Font_Menu]
-				Text(x + width / 2, y + height / 2, "SELECT MAP", True, True)
+				Text(x + width / 2, y + height / 2, GetLocalString("Multiplayer", "selectmap"), True, True)
 				
 				x = 60 * MenuScale
 				y = y + height + 20 * MenuScale
@@ -3052,7 +3052,7 @@ Function RenderMainMenu()
 				
 				Color(255, 255, 255)
 				SetFont fo\Font[Font_Menu_Medium]
-				Text(x + width / 2, y + height / 2, "SELECT GAMEMODE", True, True)
+				Text(x + width / 2, y + height / 2, GetLocalString("Multiplayer", "selectmode"), True, True)
 				
 				x = 60 * MenuScale
 				y = y + height + 20 * MenuScale
@@ -3098,7 +3098,7 @@ Function RenderMainMenu()
 				
 				Color(255, 255, 255)
 				SetFont fo\Font[Font_Menu_Medium]
-				Text(x + width / 2, y + height / 2, "GAMEMODE OPTIONS", True, True)
+				Text(x + width / 2, y + height / 2, GetLocalString("Multiplayer", "modeoptions"), True, True)
 				
 				x = 60 * MenuScale
 				y = y + height + 20 * MenuScale
@@ -3112,11 +3112,11 @@ Function RenderMainMenu()
 						height = 120 * MenuScale
 						DrawFrame(x, y, width, height)
 						
-						Text (x + 20 * MenuScale, y + 30 * MenuScale, "Difficulty:")
+						Text (x + 20 * MenuScale, y + 30 * MenuScale, GetLocalString("Multiplayer", "diff"))
 						
 						y=y+50*MenuScale
 						
-						Text (x + 20 * MenuScale, y + 30 * MenuScale, "Amount of waves:")
+						Text (x + 20 * MenuScale, y + 30 * MenuScale, GetLocalString("Multiplayer", "wavesamount"))
 						;[End Block]
 				End Select
 				;[End Block]
@@ -3323,7 +3323,7 @@ Function UpdateLauncher()
 	
 	BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 	
-	Local ChangeLogFile = OpenFile("changelog.txt")
+	Local ChangeLogFile = OpenFile_Strict("changelog.txt")
 	Local ChangeLogLineAmount% = 0
 	Local l$ = ""
 	Local chl.ChangeLogLines
@@ -3338,7 +3338,7 @@ Function UpdateLauncher()
 			If Left(l,5)<>"-----" Then
 				chl.ChangeLogLines = New ChangeLogLines
 				If Instr(l,"v"+VersionNumber)>0 Then
-					chl\txt = "NEW UPDATE: "+l
+					chl\txt = GetLocalString("Launcher", "update")+l
 				Else
 					chl\txt = l
 				EndIf
@@ -3916,6 +3916,8 @@ Function SlideBar#(x%, y%, width%, value#, currButton%=-1, currButtonTab%=0, cur
 	Local currSlideBar.MenuSlideBar
 	Local msb.MenuSlideBar
 	Local buttonexists%=False
+	txtlow = GetLocalString("Options", "low")
+	txthigh = GetLocalString("Options", "high")
 	For msb = Each MenuSlideBar
 		If msb\x=x And msb\y=y And msb\width=width
 			buttonexists=True
@@ -3967,7 +3969,12 @@ Function RowText(A$, X, Y, W, H, align% = 0, Leading#=1)
 	Local b$
 	
 	While Len(A) > 0
-		Local space = Instr(A$, " ")
+		Local space
+		If I_Loc\Lang = "Chinese" Then
+			space = Instr(A$, "")
+		Else
+			space = Instr(A$, " ")
+		EndIf
 		If space = 0 Then space = Len(A$)
 		Local temp$ = Left(A$, space)
 		Local trimmed$ = Trim(temp) ;we might ignore a final space 
@@ -4217,7 +4224,7 @@ Function DrawOptionsTooltip(option$,value#=0,ingame%=False)
 			B = 255
 			txt2 = GetLocalStringR("Options", "currentval", Int(value*100))+"% "+GetLocalStringR("Options", "defaultval",Int(100))
 		Case "controls"
-			txt = "Configure the in-game control scheme."
+			txt = GetLocalString("Options", "controlcfgtxt")
 		Case "controller"
 			txt = "Enables/Disables controller support."
 			If value=1
@@ -4244,7 +4251,7 @@ Function DrawOptionsTooltip(option$,value#=0,ingame%=False)
 		;Multiplayer options
 			;[Block]
 		Case "private"
-			txt = "Use this to make your server hidden from the server list."
+			txt = GetLocalString("Options", "privatetxt")
 			;[End Block]
 	End Select
 	
