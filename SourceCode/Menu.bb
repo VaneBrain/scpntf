@@ -3970,7 +3970,7 @@ Function RowText(A$, X, Y, W, H, align% = 0, Leading#=1)
 	
 	While Len(A) > 0
 		Local space
-		If I_Loc\Lang = "Chinese" Then
+		If I_Loc\Lang = "Schinese" Then
 			space = Instr(A$, "")
 		Else
 			space = Instr(A$, " ")
