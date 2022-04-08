@@ -94,7 +94,11 @@ Function UpdateLang(Lang$)
 End Function
 
 ;UpdateLang(GetINIString(gv\OptionFile, "options", "pack", "English"))
-UpdateLang(Steam_GetCurrentGameLang())
+If CommandLine() = "" Then 
+	UpdateLang(Steam_GetCurrentGameLang())
+Else 
+	UpdateLang(CommandLine())
+EndIf
 
 Function SetLocalString(Section$, Parameter$)
 	Local l.LocalString = New LocalString
