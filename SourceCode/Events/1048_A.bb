@@ -23,7 +23,9 @@ Function UpdateEvent_1048_A(e.Events)
 			Case 1
 				Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 				
-				If (EntityDistanceSquared(Collider, e\room\Objects[0])<PowTwo(2.5)) Then e\EventState = 2
+				If (Not NoTarget) Then
+					If (EntityDistanceSquared(Collider, e\room\Objects[0])<PowTwo(2.5)) Then e\EventState = 2
+				EndIf
 			Case 2
 				Local prevFrame# = AnimTime(e\room\Objects[0]) 
 				Animate2(e\room\Objects[0], prevFrame, 2.0, 647.0, 1.0, False)
@@ -41,7 +43,7 @@ Function UpdateEvent_1048_A(e.Events)
 				RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
 				
 				If (prevFrame>646.0) Then
-					If (PlayerRoom = e\room) Then
+					If (PlayerRoom = e\room) And (Not GodMode) Then
 						e\EventState = 3	
 						PlaySound_Strict e\Sound2
 						
@@ -83,14 +85,17 @@ Function UpdateEvent_1048_A(e.Events)
 				EndIf
 				
 				If (e\EventState2>70*15) Then
-					Kill()
+					If (Not GodMode) Then
+						Kill()
+					EndIf
+					e\room\Objects[0] = FreeEntity_Strict(e\room\Objects[0])
 					e\EventState = 4
 					RemoveEvent(e)
 				EndIf
 		End Select 
 		
 		If (e <> Null) Then
-			If PlayerRoom <> e\room Then
+			If PlayerRoom <> e\room Or (GodMode) Then
 				If e\EventState3>0 Then
 					e\EventState3 = e\EventState3+FPSfactor
 					

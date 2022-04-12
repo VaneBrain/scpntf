@@ -166,8 +166,10 @@ Function UpdateNPCtype939(n.NPCs)
 								If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider))<PowTwo(1.5) Then
 									PlayNPCSound(n, n\Sound2)
 									;Injuries = Injuries + Rnd(1.5, 2.5)-WearingVest*0.5
-									DamageSPPlayer(Rnd(10.0, 25.0))
-									BlurTimer = 500
+									If (Not GodMode) Then
+										DamageSPPlayer(Rand(35,55))
+										BlurTimer = 500
+									EndIf
 								Else
 									n\Frame	 = 449
 								EndIf
