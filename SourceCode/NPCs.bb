@@ -3697,11 +3697,11 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			CreateConsoleMsg("SCP-860-2 cannot be spawned with the console. Sorry!", 255, 0, 0)
 			
 		Case "939", "scp939", "scp-939"
-			If mp_I\Gamemode\ID = Gamemode_Waves Then
+			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+				CreateConsoleMsg("SCP-939 instances cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+			Else
 				n.NPCs = CreateNPC(NPCtype939, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				consoleMSG = "SCP-939 instance spawned."
-			Else
-				CreateConsoleMsg("SCP-939 instances cannot be spawned with the console. Sorry!", 255, 0, 0)
 			EndIf
 			
 		Case "966", "scp966", "scp-966"
