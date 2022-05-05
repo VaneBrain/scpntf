@@ -56,19 +56,20 @@ Function UpdateNPCtype457(n.NPCs)
 		Select n\State
 			Case SCP457_ATTACK
 				;[Block]
-				If (Not GodMode) Then
+				If (Not GodMode) And (Not NoTarget) Then
 					If psp\Health > 0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\burn.ogg"))
 					EndIf
 					Kill()
+					DeathMSG = Designation+". Cause of death: Severe 3rd degree burns across the body. Assumed to be attacked by SCP-457."
 				Else
 					n\State = SCP457_WALK
 				EndIf
 				;[End Block]
 			Case SCP457_WALK
 				;[Block]
-				If dist<20.0 And dist>1.21 Then
-					If EntityVisible(Collider, n\Collider) Then
+				If dist<20.0 And dist>0.5625 Then
+					If EntityVisible(Collider, n\Collider) And (Not NoTarget) Then
 						PointEntity n\obj, Collider
 						RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 30.0), 0
 						
@@ -77,8 +78,14 @@ Function UpdateNPCtype457(n.NPCs)
 						MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
 						
 						AnimateNPC(n, 284, 333, n\CurrSpeed)
+					Else
+						v3d_1 = CreateVector3D(334, 494, 0.3)
+						v3d_2 = CreateVector3D(284, 333, 0.43)
+						NPC_GoTo(n, v3d_1, v3d_2, Collider, 1.0)
+						Delete v3d_1
+						Delete v3d_2
 					EndIf
-				ElseIf dist<0.5625 Then
+				ElseIf dist<=0.5625 Then
 					If yaw<=60.0 Then
 						n\State = SCP457_ATTACK
 						n\CurrSpeed = 0
