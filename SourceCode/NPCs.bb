@@ -3610,18 +3610,19 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 	
 	Select c_input$ 
 		Case "008", "008zombie"
-			If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
-				CreateConsoleMsg("SCP-008 infected human cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
-			Else
-				If mp_I\Gamemode\ID = Gamemode_Waves Then
+			If mp_I\Gamemode <> Null Then
+				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+					CreateConsoleMsg("SCP-008 infected human cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+				Else If mp_I\Gamemode\ID = Gamemode_Waves Then
 					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-				Else	
-					n.NPCs = CreateNPC(NPCtype008, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				EndIf
+			Else
+				n.NPCs = CreateNPC(NPCtype008, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+			EndIf	
+			If n.NPCs <> Null Then
 				n\State = 1
 				consoleMSG = "SCP-008 infected human spawned."
-			EndIf	
-			
+			EndIf
 		Case "049", "scp049", "scp-049"
 			If NTF_GameModeFlag = 3 Then
 				CreateConsoleMsg("SCP-049 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
@@ -3632,8 +3633,10 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie"
-			If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
-				CreateConsoleMsg("SCP-049-2 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+			If mp_I\Gamemode <> Null Then
+				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+					CreateConsoleMsg("SCP-049-2 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+				EndIf
 			Else	
 				n.NPCs = CreateNPC(NPCtypeZombie, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				n\State = 1
@@ -3697,9 +3700,11 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			CreateConsoleMsg("SCP-860-2 cannot be spawned with the console. Sorry!", 255, 0, 0)
 			
 		Case "939", "scp939", "scp-939"
-			If mp_I\Gamemode\ID = Gamemode_Waves Then
-				n.NPCs = CreateNPC(NPCtype939, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-				consoleMSG = "SCP-939 instance spawned."
+			If mp_I\Gamemode <> Null Then
+				If mp_I\Gamemode\ID = Gamemode_Waves Then
+					n.NPCs = CreateNPC(NPCtype939, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+					consoleMSG = "SCP-939 instance spawned."
+				EndIf
 			Else
 				CreateConsoleMsg("SCP-939 instances cannot be spawned with the console. Sorry!", 255, 0, 0)
 			EndIf
@@ -3713,9 +3718,11 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a"
-			If mp_I\Gamemode\ID = Gamemode_Waves Then
-				n.NPCs = CreateNPC(NPCtype1048a, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-				consoleMSG = "SCP-1048-a instance spawned."
+			If mp_I\Gamemode <> Null Then
+				If mp_I\Gamemode\ID = Gamemode_Waves Then
+					n.NPCs = CreateNPC(NPCtype1048a, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+					consoleMSG = "SCP-1048-a instance spawned."
+				EndIf
 			Else
 				CreateConsoleMsg("SCP-1048-A cannot be spawned with the console. Sorry!", 255, 0, 0)
 			EndIf
@@ -3813,9 +3820,11 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				n\State = 0
 			EndIf	
 		Case "035", "scp-035", "scp035"
-			If mp_I\Gamemode\ID = Gamemode_Waves Then
-				n.NPCs = CreateNPC(NPCtype035, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-				consoleMSG = "SCP-035 spawned."
+			If mp_I\Gamemode <> Null Then
+				If mp_I\Gamemode\ID = Gamemode_Waves Then
+					n.NPCs = CreateNPC(NPCtype035, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+					consoleMSG = "SCP-035 spawned."
+				EndIf
 			Else
 				CreateConsoleMsg("SCP-035 cannot be spawned in Singleplayer. Sorry!", 255, 0, 0)
 			EndIf	
@@ -3827,8 +3836,13 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				consoleMSG = "SCP-682 spawned."
 			EndIf	
 		Case "457", "scp-457", "scp457"
-			If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
-				CreateConsoleMsg("SCP-457 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+			If mp_I\Gamemode <> Null Then
+				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+					CreateConsoleMsg("SCP-457 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+				Else
+					n.NPCs = CreateNPC(NPCtype457, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+					consoleMSG = "SCP-457 spawned."
+				EndIf
 			Else	
 				n.NPCs = CreateNPC(NPCtype457, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				consoleMSG = "SCP-457 spawned."
