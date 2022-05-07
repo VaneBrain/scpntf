@@ -2323,7 +2323,15 @@ Function DrawGUI()
 		y% = opt\GraphicHeight - 95
 		
 		;Blinking Bar
-		Color 255, 255, 255	
+		If BlinkTimer <= BLINKFREQ / 5 Then
+			Color 255, 0, 0
+		Else
+			If BlinkEffect < 1.0 Then
+				Color 0, 255, 0
+			Else
+				Color 255, 255, 255
+			EndIf
+		EndIf
 		Rect (x, y, width, height, False)
 		For i = 1 To Int(((width - 2) * (BlinkTimer / (BLINKFREQ))) / 10)
 			DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
@@ -2336,7 +2344,15 @@ Function DrawGUI()
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		End If
 		
-		Color 255, 255, 255
+		If BlinkTimer <= 0.0 Or BlurTimer > 0.0 Then
+			Color 255, 0, 0
+		Else
+			If BlinkEffect < 1.0 Then
+				Color 0, 255, 0
+			Else
+				Color 255, 255, 255
+			EndIf
+		EndIf
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		
 		DrawImage BlinkIcon, x - 50, y
@@ -2385,10 +2401,14 @@ Function DrawGUI()
 		If Stamina < 100.0 And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 			y = opt\GraphicHeight - 55
 			x = (opt\GraphicWidth / 2) - (width / 2) + 20
-			If Stamina <= 20.0 Then
-				Color 255, 0, 0
+			If InfiniteStamina Or (StaminaEffect < 1.0) Then
+				Color 0, 255, 0
 			Else
-				Color 255, 255, 255
+				If Stamina <= 20.0 Then
+					Color 255, 0, 0
+				Else
+					Color 255, 255, 255
+				EndIf
 			EndIf
 			Rect (x, y, width, height, False)
 			For i = 1 To Int(((width - 2) * (Stamina / 100.0)) / 10)
@@ -2398,10 +2418,14 @@ Function DrawGUI()
 			Color 0, 0, 0
 			Rect(x - 50, y, 30, 30)
 			
-			If Stamina <= 0.0 Then
-				Color 255, 0, 0
+			If InfiniteStamina Or (StaminaEffect < 1.0) Then
+				Color 0, 255, 0
 			Else
-				Color 255, 255, 255
+				If Stamina <= 0.0 Then
+					Color 255, 0, 0
+				Else
+					Color 255, 255, 255
+				EndIf
 			EndIf
 			Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 			If Crouch Then

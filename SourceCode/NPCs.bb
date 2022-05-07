@@ -3776,13 +3776,14 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				consoleMSG = "Aggressive Class-D spawned."
 			EndIf	
 			
-		Case "scientist","sci"
-			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
-				CreateConsoleMsg("Scientist cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
-			Else
-				n.NPCs = CreateNPC(NPCtypeSci, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-				consoleMSG = "Scientist spawned."
-			EndIf	
+		; Not implemented yet
+		;Case "scientist","sci"
+			;If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
+				;CreateConsoleMsg("Scientist cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
+			;Else
+				;n.NPCs = CreateNPC(NPCtypeSci, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+				;consoleMSG = "Scientist spawned."
+			;EndIf	
 			
 		Case "076","scp-076","scp-076-2","scp076","scp076-2"
 			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then

@@ -369,7 +369,13 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Will play tracks in .ogg/.wav format")
 									CreateConsoleMsg("from "+Chr(34)+"SFX\Music\Custom\"+Chr(34)+".")
 									CreateConsoleMsg("******************************")
-									
+								Case "notarget"
+									CreateConsoleMsg("HELP - notarget")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles notarget, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Prevents NPC's from targeting the player")
+									CreateConsoleMsg("******************************")
 								Default
 									CreateConsoleMsg("There is no help available for that command.",255,150,0)
 							End Select
