@@ -96,10 +96,21 @@ Function FillRoom_Checkpoints(r.Rooms)
 End Function
 
 Function UpdateEvent_Checkpoints(e.Events)
-	Local ne.NewElevator,r.Rooms,e2.Events
+	Local ne.NewElevator,r.Rooms,e2.Events,n.NPCs
 	Local playerElev%,prevZone%
 	
 	If PlayerRoom = e\room Then
+		If TaskExists(TASK_CHECKPOINT) Then
+			EndTask(TASK_CHECKPOINT)
+			BeginTask(TASK_GOTOZONE)
+		EndIf
+		
+		If NTF_CurrZone <> EZ And TaskExists(TASK_GOTOZONE) And e\room\RoomDoors[CHECKPOINT_ELEVATOR_DOOR_ID]\open Then
+			EndTask(TASK_GOTOZONE)
+			BeginTask(TASK_CONTAIN106)
+			BeginTask(TASK_CONTAIN173)
+		EndIf
+		
 		If e\room\Objects[CHECKPOINT_COUNTERWEIGHT_ID] <> 0 Then
 			PositionEntity e\room\Objects[CHECKPOINT_COUNTERWEIGHT_ID],EntityX(e\room\Objects[CHECKPOINT_COUNTERWEIGHT_ID]),-EntityY(e\room\Objects[CHECKPOINT_ELEVATOR_ID]) - (7300 * (NTF_CurrZone = EZ)),EntityZ(e\room\Objects[CHECKPOINT_COUNTERWEIGHT_ID])
 		EndIf
@@ -108,7 +119,7 @@ Function UpdateEvent_Checkpoints(e.Events)
 		ElseIf e\room\RoomDoors[CHECKPOINT_ELEVATOR_DOOR_ID]\openstate <> 0.0 And (Not EntityHidden(e\room\Objects[CHECKPOINT_ELEVATOR_FAKE_DOOR_ID])) Then
 			HideEntity(e\room\Objects[CHECKPOINT_ELEVATOR_FAKE_DOOR_ID])
 		EndIf
-		If e\EventState2 = 0 And EntityY(Collider) > 2800.0*RoomScale Lor EntityY(Collider) <- 2800.0*RoomScale Then
+		If e\EventState2 = 0 And EntityY(Collider) > 2800.0*RoomScale Lor EntityY(Collider) < -2800.0*RoomScale Then
 			e\EventState = e\EventState + (0.01*FPSfactor)
 			EntityAlpha e\room\Objects[CHECKPOINT_DARK_SPRITE_ID],Min(e\EventState,1.0)
 			If e\EventState > 1.05 Then
@@ -197,6 +208,16 @@ Function UpdateEvent_Checkpoints(e.Events)
 						End Select
 						RotateEntity Collider,0,180,0
 						TeleportEntity(Collider,EntityX(ne\obj,True),EntityY(ne\obj,True)+0.5,EntityZ(ne\obj,True),0.3,True)
+						;For now as a temporary solution
+						For n = Each NPCs
+							If (n\NPCtype = NPCtypeMTF And (Not n\IsDead)) Lor (n\NPCtype = NPCtype173 And n\Idle = SCP173_BOXED) Then
+								TeleportEntity(n\Collider, EntityX(Collider), EntityY(Collider) + 0.1, EntityZ(Collider) + 0.2, n\CollRadius)
+								If Curr173 <> Null And n\NPCtype = NPCtype173 And Curr173 <> n Then
+									RemoveNPC(Curr173)
+									Curr173 = n
+								EndIf
+							EndIf
+						Next
 						StopStream_Strict(ne\soundchn)
 						ne\soundchn = StreamSound_Strict("SFX\General\Elevator\Loop.ogg",opt\SFXVolume,Mode)
 						ne\currsound = 2

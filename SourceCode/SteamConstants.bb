@@ -10,6 +10,14 @@ Const k_EFriendRelationshipIgnoredFriend% = 6
 Const k_EFriendRelationshipSuggested_DEPRECATED% = 7
 Const k_EFriendRelationshipMax% = 8
 
+;EP2PSend
+;Specifies the send type of SendP2PPacket.
+;Typically k_EP2PSendUnreliable is what you want For UDP-like packets, k_EP2PSendReliable For TCP-like packets
+Const k_EP2PSendUnreliable% = 0
+Const k_EP2PSendUnreliableNoDelay% = 1
+Const k_EP2PSendReliable% = 2
+Const k_EP2PSendReliableWithBuffering% = 3
+
 ;Steam Achievement Constants
 Const ACHV_939_5MIN$ = "ACHV_939_5MIN"
 Const ACHV_BURNING_MAN$ = "ACHV_BURNING_MAN"

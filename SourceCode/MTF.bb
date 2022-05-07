@@ -335,8 +335,6 @@ Global CKM_Back = 3		;Circle
 Global CKM_Next = 6		;R1
 Global CKM_Prev = 5		;L1
 
-Global NTF_GameModeFlag% = -1
-
 Global FOV% = GetINIInt(gv\OptionFile, "options", "fov", 60)
 
 Type CubeMap

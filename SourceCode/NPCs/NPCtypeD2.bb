@@ -1,4 +1,5 @@
 ;[Block]
+Const D2_TRICK = 5
 Const D2_RELOAD = 4
 Const D2_GO_AFTER = 3
 Const D2_FIND_COVER = 2
@@ -40,25 +41,29 @@ Function CreateNPCtypeD2(n.NPCs)
 	EntityTexture(n\obj, tex)
 	
 	n\Speed = 4.0 / 100
+	n\HP = 60+(15*SelectedDifficulty\otherFactors)
+	n\CollRadius = 0.16
 	
 	MeshCullBox (n\obj, -MeshWidth(ClassDObj2), -MeshHeight(ClassDObj2), -MeshDepth(ClassDObj2)*5, MeshWidth(ClassDObj2)*2, MeshHeight(ClassDObj2)*2, MeshDepth(ClassDObj2)*10)
 	
-	Local i% = Rand(1, 100)
-	If i <= 33 Then
+	random% = Rand(1, 100)
+	If random <= 42 Then
 		SwitchNPCGun%(n, GUN_USP)
-	ElseIf i > 33 And i <= 66 Then	
+		If Rand(1,10) = 1 Then
+			n\State3 = n\HP
+		EndIf	
+	ElseIf random > 42 And random <= 84 Then	
 		SwitchNPCGun%(n, GUN_BERETTA)
-	ElseIf i > 66 And i <= 78 Then
+		If Rand(1,10) = 1 Then
+			n\State3 = n\HP
+		EndIf	
+	ElseIf random > 84 And random <= 90 Then
 		SwitchNPCGun%(n, GUN_P90)
-	ElseIf i > 78 And i <= 90 Then
+	ElseIf random > 90 And random <= 96 Then
 		SwitchNPCGun%(n, GUN_MP5K)
-	ElseIf i > 90 Then
+	ElseIf random > 96 Then
 		SwitchNPCGun%(n, GUN_SPAS12)
 	EndIf	
-	
-	n\CollRadius = 0.16
-	
-	n\HP = 80+(20*SelectedDifficulty\otherFactors)
 	
 	CopyHitBoxes(n)
 End Function
@@ -70,7 +75,7 @@ Function UpdateNPCtypeD2(n.NPCs)
 	prevFrame = n\Frame
 	
 	If n\IsDead = False Then
-		If n\State = D2_IDLE Lor n\State = D2_GO_AFTER Then
+		If (n\State = D2_IDLE Lor n\State = D2_GO_AFTER) And n\State <> D2_TRICK Then
 			For n2.NPCs = Each NPCs
 				If n2\HP > 0 Then
 					If n2\NPCtype = NPCtypeMTF Then
@@ -87,10 +92,15 @@ Function UpdateNPCtypeD2(n.NPCs)
 			Next
 			If (Not NoTarget) And psp\Health > 0 Then
 				If NPCSeesEntity(n, Camera) Then
-					If n\State = D2_IDLE Then 
-						PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\MTF_Spotted"+Rand(1, 5)+".ogg"))
-					EndIf
-					n\State = D2_ATTACK
+					If n\State3 = n\HP Then
+						n\State = D2_TRICK
+						PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\Unarmed"+Rand(1, 3)+".ogg"))
+					Else
+						If n\State = D2_IDLE Then 
+							PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\MTF_Spotted"+Rand(1, 5)+".ogg"))
+						EndIf
+						n\State = D2_ATTACK
+					EndIf	
 				EndIf
 			EndIf
 		EndIf
@@ -220,6 +230,23 @@ Function UpdateNPCtypeD2(n.NPCs)
 					n\State = D2_GO_AFTER
 				EndIf
 				;[End Block]
+			Case D2_TRICK
+				;[Block]
+				dist = EntityDistanceSquared(n\Collider, Collider)
+				AnimateNPC(n,357,381,0.2)
+				HideEntity(n\Gun\obj)
+				PointEntity n\obj, Collider
+				RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 20.0), 0
+				If n\HP <> n\State3 Lor dist <= 10.0 Then
+					PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\MTF_Spotted"+Rand(1, 5)+".ogg"))
+					n\State = D2_ATTACK
+					n\State3 = 0
+					ShowEntity(n\Gun\obj)
+				ElseIf dist > 100.0 Then
+					n\State = D2_IDLE
+					ShowEntity(n\Gun\obj)
+				EndIf	
+				;[End block]
 			Case STATE_SCRIPT
 				;[Block]
 				

@@ -129,7 +129,7 @@ Function UpdateEmitters()
 	For e.Emitters = Each Emitters
 		If e\Disable = True Then 
 			updateEmitter = False
-		ElseIf NTF_GameModeFlag = 3 Then
+		ElseIf gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 			updateEmitter = (EntityDistanceSquared(e\Obj, Players[mp_I\PlayerID]\Collider) < PowTwo(16))
 		Else
 			updateEmitter = (PlayerRoom = e\Room Lor e\Room\dist < 8)

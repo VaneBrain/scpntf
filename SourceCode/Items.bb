@@ -425,7 +425,7 @@ Function CreateItem.Items(name$, tempname$, x#, y#, z#, r%=0,g%=0,b%=0,a#=1.0,in
 	ResetEntity i\collider		
 	PositionEntity(i\collider, x, y, z, True)
 	RotateEntity (i\collider, 0, Rand(360), 0)
-	If NTF_GameModeFlag<>3 Then
+	If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 		i\dist = EntityDistance(Collider, i\collider)
 	Else
 		i\dist = EntityDistance(Players[mp_I\PlayerID]\Collider, i\collider) ;TODO item distance squared?

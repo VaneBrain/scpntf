@@ -87,6 +87,10 @@ Function UpdateEvent_Cont_106(e.Events)
 	EndIf
 	
 	If PlayerRoom = e\room And e\room\NPC[0]<>Null Then
+		If TaskExists(TASK_CONTAIN106) Then
+			EndTask(TASK_CONTAIN106)
+			BeginTask(TASK_106RECALL)
+		EndIf
 		
 		ShouldPlay = 66
 		
@@ -130,11 +134,7 @@ Function UpdateEvent_Cont_106(e.Events)
 		
 		If e\EventState = 0 Then 
 			If SoundTransmission And Rand(100)=1 Then
-				If e\SoundCHN2 = 0 Then
-					LoadEventSound(e,"SFX\Character\LureSubject\Idle"+Rand(1,6)+".ogg",1)
-					e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
-				EndIf
-				If ChannelPlaying(e\SoundCHN2) = False Then
+				If e\SoundCHN2 = 0 Lor ChannelPlaying(e\SoundCHN2) = False Then
 					LoadEventSound(e,"SFX\Character\LureSubject\Idle"+Rand(1,6)+".ogg",1)
 					e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 				EndIf
@@ -155,11 +155,7 @@ Function UpdateEvent_Cont_106(e.Events)
 			EndIf
 		ElseIf e\EventState = 1 ;bone broken
 			If SoundTransmission And e\EventState3 < 2000 Then 
-				If e\SoundCHN2 = 0 Then 
-					LoadEventSound(e,"SFX\Character\LureSubject\Sniffling.ogg",1)
-					e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
-				EndIf
-				If ChannelPlaying(e\SoundCHN2) = False Then
+				If e\SoundCHN2 = 0 Lor ChannelPlaying(e\SoundCHN2) = False Then
 					LoadEventSound(e,"SFX\Character\LureSubject\Sniffling.ogg",1)
 					e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 				EndIf
@@ -215,6 +211,10 @@ Function UpdateEvent_Cont_106(e.Events)
 					
 					If e\EventState2 = True Then ;magnets off -> 106 caught
 						Contained106 = True
+						If TaskExists(TASK_106RECALL) Then
+							PlayAnnouncement("SFX\Character\MTF\Announc106Contain.ogg")
+							EndTask(TASK_106RECALL)
+						EndIf	
 					Else ;magnets off -> 106 comes out and attacks
 						PositionEntity(Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 						
@@ -267,5 +267,5 @@ Function UpdateEvent_Cont_106(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1
+;~F#1#44
 ;~C#Blitz3D

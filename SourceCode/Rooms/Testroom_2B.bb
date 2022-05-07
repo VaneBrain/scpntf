@@ -38,7 +38,7 @@ Function UpdateEvent_Testroom_2B(e.Events)
 	Local pvt%,distSquared#
 	
 	If PlayerRoom = e\room	
-		If Curr173\Idle = 0 Then 
+		If Curr173\Idle = SCP173_ACTIVE Then 
 			If e\EventState = 0 Then
 				If e\room\RoomDoors[0]\open = True
 					PositionEntity(Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
@@ -92,5 +92,5 @@ Function UpdateEvent_Testroom_2B(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1#24
+;~F#1
 ;~C#Blitz3D

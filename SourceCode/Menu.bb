@@ -129,7 +129,7 @@ Function UpdateMainMenu()
 				Steam_Shutdown()
 				End
 			EndIf
-		ElseIf NTF_GameModeFlag<>3 Then
+		ElseIf gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 			;Singleplayer Pause Menu Opened
 			If DrawButtonMenu3D(x, y, width, height, Upper(GetLocalString("Menu", "resume")), True, False, True, i) Then
 				MenuOpen = False
@@ -262,7 +262,7 @@ Function UpdateMainMenu()
 			co\CurrButtonSub[MainMenuTab] = 0
 			Select MainMenuTab
 				Case MenuTab_NewGame
-					PutINIValue(gv\OptionFile, "options", "intro enabled", IntroEnabled%)
+					SaveOptionsINI()
 					MainMenuTab = MenuTab_Singleplayer
 					LoadSaveGames()
 				Case MenuTab_Options_Graphics,MenuTab_Options_Audio,MenuTab_Options_Controls,MenuTab_Options_Advanced;,MenuTab_Options_Multiplayer ;save the options
@@ -394,6 +394,17 @@ Function UpdateMainMenu()
 				EndIf	
 				
 				;IntroEnabled = DrawTick(x + 280 * MenuScale, y + 110 * MenuScale, IntroEnabled, False, 3, MainMenuTab)
+				temp = False
+				If gopt\SingleplayerGameMode = GAMEMODE_CLASSIC Then
+					temp = True
+				EndIf
+				temp = DrawTick(x + 280 * MenuScale, y + 110 * MenuScale, temp, False, 3, MainMenuTab)
+				If temp Then
+					gopt\SingleplayerGameMode = GAMEMODE_CLASSIC
+				Else
+					gopt\SingleplayerGameMode = GAMEMODE_DEFAULT
+				EndIf
+				
 				IntroEnabled = False
 				
 				For i = SAFE To ESOTERIC
@@ -457,7 +468,7 @@ Function UpdateMainMenu()
 					
 					SeedRnd GenerateSeedNumber(RandomSeed)
 					
-					NTF_GameModeFlag = 0
+					gopt\GameMode = gopt\SingleplayerGameMode
 					MainMenuOpen = False
 					
 					Local SameFound% = 0 ; TODO put this in a func
@@ -490,7 +501,7 @@ Function UpdateMainMenu()
 					FlushMouse()
 					FlushJoy()
 					
-					PutINIValue(gv\OptionFile, "options", "intro enabled", IntroEnabled%)
+					SaveOptionsINI()
 				EndIf
 				
 				;[End Block]
@@ -1213,7 +1224,7 @@ Function UpdateMainMenu()
 					InitMission(0)
 					LoadEntities()
 					LoadAllSounds()
-					NTF_GameModeFlag = 1
+					gopt\GameMode = GAMEMODE_UNKNOWN
 					InitMissionGameMode(0)
 					MainMenuOpen = False
 					FlushKeys()
@@ -1589,7 +1600,7 @@ Function UpdateMainMenu()
 					If mp_O\TimeOut < 1 Then mp_O\TimeOut = 1
 					If mp_O\TimeOut > 30 Then mp_O\TimeOut = 30
 					CreateServer()
-					NTF_GameModeFlag = 2
+					gopt\GameMode = GAMEMODE_MULTIPLAYER ;TEST
 					SaveMPOptions()
 					
 					;If mp_I\Server Then
@@ -1763,7 +1774,7 @@ Function UpdateMainMenu()
 	
 	EntityAlpha m_I\Sprite,m_I\SpriteAlpha
 	
-	If NTF_GameModeFlag = -1 Then
+	If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 		If Steam_SeekLobbyUpper() <> 0 Then
 			If mp_O\PlayerName = "" Then mp_O\PlayerName = "Player"
 			Delete Each MenuButton
@@ -1881,6 +1892,10 @@ Function RenderMainMenu()
 				EndIf	
 				
 				;Text(x + 20 * MenuScale, y + 110 * MenuScale, GetLocalString("Menu","enable_intro")+":")
+				Text(x + 20 * MenuScale, y + 110 * MenuScale, GetLocalString("Menu","classic_mode")+":")
+				If MouseOn(x + 280 * MenuScale, y + 110 * MenuScale, 20 * MenuScale, 20 * MenuScale)
+					DrawOptionsTooltip("classic_mode_txt")
+				EndIf
 				
 				Text (x + 20 * MenuScale, y + 150 * MenuScale, GetLocalString("Menu","difficulty")+":")
 				For i = SAFE To ESOTERIC
@@ -4240,6 +4255,11 @@ Function DrawOptionsTooltip(option$,value#=0,ingame%=False)
 			txt = GetLocalStringR("Options", "consoleenabletxt", KeyName[KEY_CONSOLE])
 		Case "showfps"
 			txt = GetLocalString("Options", "showfpstxt")
+			;[End Block]
+		;Singleplayer options
+			;[Block]
+		Case "classic_mode_txt"
+			txt = GetLocalString("Menu", "classic_mode_txt")
 			;[End Block]
 		;Multiplayer options
 			;[Block]

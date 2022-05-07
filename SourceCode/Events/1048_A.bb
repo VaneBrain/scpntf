@@ -95,7 +95,7 @@ Function UpdateEvent_1048_A(e.Events)
 		End Select 
 		
 		If (e <> Null) Then
-			If PlayerRoom <> e\room Or (GodMode) Then
+			If PlayerRoom <> e\room Lor GodMode Then
 				If e\EventState3>0 Then
 					e\EventState3 = e\EventState3+FPSfactor
 					

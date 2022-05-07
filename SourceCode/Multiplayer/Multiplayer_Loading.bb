@@ -261,7 +261,7 @@ Function CreateMPGame()
 	
 	DrawLoading(6, False, mp_I\Gamemode\name)
 	
-	NTF_GameModeFlag = 3
+	gopt\GameMode = GAMEMODE_MULTIPLAYER
 	
 	HideDistance# = 15.0
 	
@@ -874,7 +874,7 @@ Function NullMPGame(nomenuload%=False,playbuttonsfx%=True)
 	
 	DeleteModStuff()
 	
-	NTF_GameModeFlag = -1
+	gopt\GameMode = gopt\SingleplayerGameMode
 	
 ;	Delete Each AchievementMsg
 ;	CurrAchvMSGID = 0

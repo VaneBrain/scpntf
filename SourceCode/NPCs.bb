@@ -118,7 +118,6 @@ Type NPCs
 	
 	Field Gun.NPCGun
 	
-	Field ContainmentState%
 	Field NPCRoom.Rooms
 	
 	;Multiplayer Variables
@@ -2241,11 +2240,6 @@ Function UpdateNPCs()
 			Case NPCtypeSci	;------------------------------------------------------------------------------------------------------------------
 				;This will be added in future versions
 				;UpdateNPCtypeScientist(n)
-			Case NPCtypeMTFTrailer
-				;[Block]
-				RotateEntity n\obj,-90.0,EntityYaw(n\Collider),0.0,True
-				PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
-				;[End block]
 			Case NPCtypeD9341 ;------------------------------------------------------------------------------------------------------------------
 				;[Block]
 				RotateEntity(n\Collider, 0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
@@ -3613,7 +3607,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			If mp_I\Gamemode <> Null Then
 				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
 					CreateConsoleMsg("SCP-008 infected human cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
-				Else If mp_I\Gamemode\ID = Gamemode_Waves Then
+				ElseIf mp_I\Gamemode\ID = Gamemode_Waves Then
 					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				EndIf
 			Else
@@ -3623,8 +3617,9 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				n\State = 1
 				consoleMSG = "SCP-008 infected human spawned."
 			EndIf
+			
 		Case "049", "scp049", "scp-049"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-049 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype049, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3633,10 +3628,8 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie"
-			If mp_I\Gamemode <> Null Then
-				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
-					CreateConsoleMsg("SCP-049-2 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
-				EndIf
+			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+				CreateConsoleMsg("SCP-049-2 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
 			Else	
 				n.NPCs = CreateNPC(NPCtypeZombie, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				n\State = 1
@@ -3644,7 +3637,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "066", "scp066", "scp-066"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-066 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype066, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3652,7 +3645,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "096", "scp096", "scp-096"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-096 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype096, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3662,7 +3655,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "106", "scp106", "scp-106", "larry"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-106 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeOldMan, EntityX(Collider), EntityY(Collider) - 0.5, EntityZ(Collider))
@@ -3671,17 +3664,17 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "173", "scp173", "scp-173", "statue"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-173 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype173, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				Curr173 = n
-				If (Curr173\Idle = 3) Then Curr173\Idle = False
+				If (Curr173\Idle = SCP173_DISABLED) Then Curr173\Idle = SCP173_ACTIVE
 				consoleMSG = "SCP-173 spawned."
 			EndIf
 			
 		Case "372", "scp372", "scp-372"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-372 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype372, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3689,7 +3682,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "513-1", "5131", "scp513-1", "scp-513-1"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-513-1 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype5131, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3708,7 +3701,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf
 			
 		Case "966", "scp966", "scp-966"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-966 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype966, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3716,17 +3709,15 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a"
-			If mp_I\Gamemode <> Null Then
-				If mp_I\Gamemode\ID = Gamemode_Waves Then
-					n.NPCs = CreateNPC(NPCtype1048a, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-					consoleMSG = "SCP-1048-a instance spawned."
-				EndIf
+			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Waves Then
+				n.NPCs = CreateNPC(NPCtype1048a, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+				consoleMSG = "SCP-1048-a instance spawned."
 			Else
 				CreateConsoleMsg("SCP-1048-A cannot be spawned with the console. Sorry!", 255, 0, 0)
 			EndIf
 			
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-1499-1 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3734,7 +3725,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "class-d", "classd", "d"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("D-Class cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeD, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3742,7 +3733,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf
 			
 		Case "guard"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Guard cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeGuard, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3750,7 +3741,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "mtf"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("MTF unit cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeMTF, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3758,7 +3749,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "apache", "helicopter"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Apache cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeApache, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3770,7 +3761,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			consoleMSG = "SCP-035 tentacle spawned."
 			
 		Case "clerk"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Clerk cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeClerk, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3778,7 +3769,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "d2","aggressive_d","classd2","class-d2"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Aggressive Class-D cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeD2, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3786,7 +3777,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "scientist","sci"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Scientist cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeSci, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3794,7 +3785,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "076","scp-076","scp-076-2","scp076","scp076-2"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-076-2 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype076, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3802,7 +3793,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 			EndIf	
 			
 		Case "guard2","eguard","elite guard","guard elite"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Elite Guard cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeEGuard, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3810,7 +3801,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				n\State = 0
 			EndIf	
 		Case "killableguard","kg","killguard","killg","kguard"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("Killable Guard cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtypeKGuard, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
@@ -3818,30 +3809,23 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				n\State = 0
 			EndIf	
 		Case "035", "scp-035", "scp035"
-			If mp_I\Gamemode <> Null Then
-				If mp_I\Gamemode\ID = Gamemode_Waves Then
-					n.NPCs = CreateNPC(NPCtype035, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-					consoleMSG = "SCP-035 spawned."
-				EndIf
+			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Waves Then
+				n.NPCs = CreateNPC(NPCtype035, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+				consoleMSG = "SCP-035 spawned."
 			Else
 				CreateConsoleMsg("SCP-035 cannot be spawned in Singleplayer. Sorry!", 255, 0, 0)
 			EndIf	
 		Case "682", "scp-682", "scp682"
-			If NTF_GameModeFlag = 3 Then
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				CreateConsoleMsg("SCP-682 cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
 			Else
 				n.NPCs = CreateNPC(NPCtype682, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				consoleMSG = "SCP-682 spawned."
 			EndIf	
 		Case "457", "scp-457", "scp457"
-			If mp_I\Gamemode <> Null Then
-				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
-					CreateConsoleMsg("SCP-457 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
-				Else
-					n.NPCs = CreateNPC(NPCtype457, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-					consoleMSG = "SCP-457 spawned."
-				EndIf
-			Else	
+			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+				CreateConsoleMsg("SCP-457 cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+			Else
 				n.NPCs = CreateNPC(NPCtype457, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				consoleMSG = "SCP-457 spawned."
 			EndIf	

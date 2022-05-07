@@ -6,9 +6,9 @@ Function UpdateGUI()
 	Local x2#,y2#,z2#
 	Local n%, xtemp, ytemp, strtemp$, projY#, scale#
 	
-	Local e.Events, it.Items
+	Local e.Events, it.Items, np.NPCs, ne.NewElevator
 	
-	If d_I\ClosestButton <> 0 And d_I\SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And (Not PlayerInNewElevator)
+	If d_I\ClosestButton <> 0 And d_I\SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And (Not PlayerInNewElevator) Then
 		temp% = CreatePivot()
 		PositionEntity temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera)
 		PointEntity temp, d_I\ClosestButton
@@ -23,14 +23,40 @@ Function UpdateGUI()
 		
 		DrawImage(HandIcon, opt\GraphicWidth / 2 + Sin(yawvalue) * (opt\GraphicWidth / 3) - 32, opt\GraphicHeight / 2 - Sin(pitchvalue) * (opt\GraphicHeight / 3) - 32)
 		
-		Local ne.NewElevator
-		
-		If keyhituse
+		If keyhituse Then
 			If d_I\ClosestDoor <> Null Then 
 				If d_I\ClosestDoor\Code <> "" Lor (d_I\ClosestDoor\dir=DOOR_ELEVATOR_3FLOOR And d_I\ClosestButton=d_I\ClosestDoor\buttons[0]) Then
-					d_I\SelectedDoor = d_I\ClosestDoor
-					co\KeyPad_CurrButton = 0
-					co\WaitTimer = 0
+					temp = True
+					For ne = Each NewElevator
+						If ne\door = d_I\ClosestDoor Then
+							For np = Each NPCs
+								If np\NPCtype = NPCtype173 And np\Idle = SCP173_BOXED Then
+									If Abs(EntityX(np\Collider) - EntityX(ne\obj, True)) >= 280.0 * RoomScale + (0.015 * FPSfactor) Lor Abs(EntityZ(np\Collider) - EntityZ(ne\obj, True)) >= 280.0 * RoomScale + (0.015 * FPSfactor) Then
+										temp = 2
+									EndIf
+								EndIf
+								If np\NPCtype = NPCtypeMTF And np\HP > 0 Then
+									If Abs(EntityX(np\Collider) - EntityX(ne\obj, True)) >= 280.0 * RoomScale + (0.015 * FPSfactor) Lor Abs(EntityZ(np\Collider) - EntityZ(ne\obj, True)) >= 280.0 * RoomScale + (0.015 * FPSfactor) Then
+										temp = False
+										Exit
+									EndIf
+								EndIf
+							Next
+							Exit
+						EndIf
+					Next
+					
+					If temp = 1 Then
+						d_I\SelectedDoor = d_I\ClosestDoor
+						co\KeyPad_CurrButton = 0
+						co\WaitTimer = 0
+					ElseIf temp = 2 Then
+						Msg = GetLocalString("Doors", "elevator_wait_173")
+						MsgTimer = 70 * 5
+					Else
+						Msg = GetLocalString("Doors", "elevator_wait")
+						MsgTimer = 70 * 5
+					EndIf
 				ElseIf d_I\ClosestDoor\dir=DOOR_ELEVATOR_3FLOOR And d_I\ClosestButton=d_I\ClosestDoor\buttons[1] Then
 					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 					For ne = Each NewElevator
@@ -3417,7 +3443,7 @@ Function DrawGUI()
 End Function
 
 Function DrawGunsInHUD()
-	Local isMultiplayer% = (NTF_GameModeFlag = 3)
+	Local isMultiplayer% = (gopt\GameMode = GAMEMODE_MULTIPLAYER)
 	Local g.Guns
 	Local x# = 50, x2# = 150
 	Local y# = 50

@@ -357,7 +357,7 @@ Function UpdateNPCtype096(n.NPCs)
 				EndIf
 				
 				angle = WrapAngle(DeltaYaw(n\Collider, Camera))
-				If (Not NoTarget) And n\ContainmentState<=0 Then
+				If (Not NoTarget) Then ;And n\ContainmentState<=0 Then
 					If angle<55 Lor angle>360-55 Then
 						CameraProject Camera,EntityX(n\Collider), EntityY(Collider)+5.8*0.2-0.25, EntityZ(n\Collider)
 						

@@ -9,6 +9,7 @@ Const MTF_SPLIT_UP = 5
 Const MTF_SEARCH = 6
 Const MTF_HEAL = 7
 Const MTF_TOTARGET = 8
+Const MTF_TESLA = 9
 ;Containment constants
 Const MTF_GOTOSCP = 1
 ;MTF Designation constants
@@ -60,7 +61,11 @@ Function UpdateNPCtypeMTF(n.NPCs)
 	n\BlinkTimer = Max(n\BlinkTimer-FPSfactor,0.0)
 	If n\BlinkTimer = 0.0 Then
 		If n\State = MTF_CONTAIN173 Then
-			PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\BLINKING.ogg"),n,True)
+			If n\PrevState = MTF_UNIT_MEDIC Then
+				PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\Medic_Blinking"+Rand(1,3)+".ogg"),n,True)
+			Else
+				PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\Regular_Blinking"+Rand(1,3)+".ogg"),n,True)
+			EndIf
 		EndIf
 		n\BlinkTimer = 70.0*Rnd(5,8)
 	EndIf
@@ -89,53 +94,96 @@ Function UpdateNPCtypeMTF(n.NPCs)
 		If n\State = MTF_FOLLOWPLAYER Lor n\State = MTF_HEAL Lor n\State = MTF_SEARCH Then
 			;Spotting other NPCs
 			SmallestNPCDist# = 0.0 : CurrentNPCDist# = 0.0
+			n\Target = Null
 			For n2 = Each NPCs
 				If n2\NPCtype <> n\NPCtype And n2\HP > 0 And IsTarget(n, n2) Then
 					SeeNPC = OtherNPCSeesMeNPC(n2, n)
 					If SeeNPC And EntityVisible(n\Collider, n2\Collider) Then
 						CurrentNPCDist = EntityDistanceSquared(n\Collider, n2\Collider)
 						If SmallestNPCDist = 0.0 Lor SmallestNPCDist > CurrentNPCDist Then
-							SmallestNPCDist = CurrentNPCDist
-							n\Target = n2
+							temp = True
+							
+							If n2\NPCtype = NPCtype173 And Curr173\Idle > SCP173_STATIONARY Then
+								temp = False
+							EndIf
+							
+							If temp Then
+								SmallestNPCDist = CurrentNPCDist
+								n\Target = n2
+							EndIf
 						EndIf
 					EndIf
 				EndIf
 			Next
-			For n2 = Each NPCs
-				If n2 = n\Target Then
-					If n\State = MTF_SEARCH Then
-						SetNPCFrame(n, 1383)
-					EndIf
-					n\State = MTF_CONTACT
-					VoiceLine = ""
-					Select n2\NPCtype
-						Case NPCtypeD2
-							VoiceLine = "Stop" + Rand(1,6)
-						Case NPCtypeZombie
-							VoiceLine = "049\Player0492_1"
-						Case NPCtype008
-							;VoiceLine = "008\Spotted" ;Todo: Voice line required
-						Case NPCtype939
-							;VoiceLine = "939\Spotted" ;Todo: Voice line required
-						Case NPCtypeOldMan
-							VoiceLine = "106\Spotted" + Rand(1,4)
-							n\State = MTF_FLEE
-						Case NPCtype173
-							VoiceLine = "173\Spotted" + Rand(1,2)
-							n\State = MTF_CONTAIN173
-						Case NPCtype049
-							VoiceLine = "049\Spotted" + Rand(1,5)
-							n\State = MTF_FLEE
-						Case NPCtype096
-							VoiceLine = "096\Spotted" + Rand(1,2)
-							n\State = MTF_FLEE
-					End Select
-					If VoiceLine <> "" Then
-						PlayMTFSound(LoadTempSound("SFX\Character\MTF\" + VoiceLine + ".ogg"), n, True)
-					EndIf
-					Exit
+			
+			If n\Target <> Null Then
+				If n\State = MTF_SEARCH Then
+					SetNPCFrame(n, 1383)
 				EndIf
-			Next
+				n\State = MTF_CONTACT
+				VoiceLine = ""
+				Select n\Target\NPCtype
+					Case NPCtypeD2
+						If n\PrevState = MTF_UNIT_MEDIC Then
+							VoiceLine = "D-Class\Medic_Spotted" + Rand(1,6)
+						Else
+							VoiceLine = "D-Class\Regular_Spotted" + Rand(1,6)
+						EndIf
+					Case NPCtypeZombie
+						If n\PrevState = MTF_UNIT_MEDIC Then
+							VoiceLine = "Zombie\Medic_049-2"
+						Else
+							VoiceLine = "Zombie\Regular_049-2"
+						EndIf	
+					Case NPCtype008
+						If n\PrevState = MTF_UNIT_MEDIC Then
+							VoiceLine = "Zombie\Medic_008-1"
+						Else
+							VoiceLine = "Zombie\Regular_008-1"
+						EndIf	
+					Case NPCtype939
+						;VoiceLine = "939\Spotted" ;Todo: Voice line required
+					Case NPCtypeOldMan
+						If n\PrevState = MTF_UNIT_MEDIC Then
+							If Rand(1,10) = 1 Then
+								VoiceLine = "106\Medic_Extra1"
+							Else	
+								VoiceLine = "106\Medic_Spotted" + Rand(1,4)
+							EndIf	
+						Else
+							VoiceLine = "106\Regular_Spotted" + Rand(1,4)
+						EndIf
+						n\State = MTF_FLEE
+					Case NPCtype173
+						If Curr173\Idle = SCP173_ACTIVE And Curr173\IdleTimer <= 0.0 Then
+							If n\PrevState = MTF_UNIT_MEDIC Then
+								VoiceLine = "173\Medic_Spotted" + Rand(1,4)
+							Else
+								VoiceLine = "173\Regular_Spotted" + Rand(1,4)
+							EndIf
+							Curr173\Idle = SCP173_STATIONARY
+							Curr173\IdleTimer = 70*30
+						EndIf
+						n\State = MTF_CONTAIN173
+					Case NPCtype049
+						If n\PrevState = MTF_UNIT_MEDIC Then
+							VoiceLine = "049\Medic_Spotted" + Rand(1,4)
+						Else
+							VoiceLine = "049\Regular_Spotted" + Rand(1,4)
+						EndIf
+						n\State = MTF_FLEE
+					Case NPCtype096
+						If n\PrevState = MTF_UNIT_MEDIC Then
+							VoiceLine = "096\Medic_Spotted" + Rand(1,4)
+						Else
+							VoiceLine = "096\Regular_Spotted" + Rand(1,4)
+						EndIf
+						n\State = MTF_FLEE
+				End Select
+				If VoiceLine <> "" Then
+					PlayMTFSound(LoadTempSound("SFX\Character\MTF\" + VoiceLine + ".ogg"), n, True)
+				EndIf
+			EndIf
 		EndIf
 		
 		Select n\State
@@ -161,7 +209,7 @@ Function UpdateNPCtypeMTF(n.NPCs)
 					
 					n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj, Collider)
 					RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
-					If EntityDistanceSquared(n\Collider, Collider)<PowTwo(1.0 - (0.5 * n\State = MTF_HEAL)) Then
+					If EntityDistanceSquared(n\Collider, Collider) < PowTwo(1.0 - (0.5 * n\State = MTF_HEAL)) Then
 						If n\CurrSpeed <= 0.01 Then
 							n\CurrSpeed = 0.0
 							AnimateNPC(n, 962, 1259, 0.3)
@@ -178,20 +226,6 @@ Function UpdateNPCtypeMTF(n.NPCs)
 						MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
 					EndIf
 				Else
-					For e = Each Events
-						If e <> Null And e\EventName = "room2_tesla" Then
-							If Abs(EntityX(n\Collider)-EntityX(e\room\obj,True))<4.0 And Abs(EntityZ(n\Collider)-EntityZ(e\room\obj,True))<4.0 Then
-								If e\EventState2 <= 70*3.5 Then
-									n\Idle = 70*10
-									PlayMTFSound(LoadTempSound("SFX\Character\MTF\Tesla0.ogg"), n)
-									e\EventState2 = 70*100
-									e\EventState3 = e\EventState3 + 140
-									Exit
-								EndIf
-							EndIf
-						EndIf
-					Next
-					
 					v3d_1 = CreateVector3D(962, 1259, 0.3)
 					v3d_2 = CreateVector3D(1496, 1524, 0.3)
 					NPC_GoTo(n, v3d_1, v3d_2, Collider, 0.7)
@@ -199,13 +233,13 @@ Function UpdateNPCtypeMTF(n.NPCs)
 					Delete v3d_2
 				EndIf
 				
-				If Curr173\Idle = SCP173_STATIONARY Then
-					v3d_1 = CreateVector3D(79, 309, 0.3)
-					v3d_2 = CreateVector3D(488, 522, 0.3)
-					NPC_GoTo(n, v3d_1, v3d_2, Collider, 0.7)
-					Delete v3d_1
-					Delete v3d_2
-				EndIf
+;				If Curr173\Idle = SCP173_STATIONARY Then
+;					v3d_1 = CreateVector3D(79, 309, 0.3)
+;					v3d_2 = CreateVector3D(488, 522, 0.3)
+;					NPC_GoTo(n, v3d_1, v3d_2, Collider, 0.7)
+;					Delete v3d_1
+;					Delete v3d_2
+;				EndIf
 				
 				If PlayerDistSquared > PowTwo(16) Then
 					Local shortestDist# = 10000.0
@@ -244,52 +278,43 @@ Function UpdateNPCtypeMTF(n.NPCs)
 				;[End Block]
 			Case MTF_CONTAIN173
 				;[Block]
-				For n2 = Each NPCs
-					If n2<>n Then
-						If n2\NPCtype = n\NPCtype Then
-							If n2\State = MTF_CONTAIN173 Then
-								If EntityDistanceSquared(n\Collider,Curr173\Collider)<PowTwo(7.0) And EntityDistanceSquared(n2\Collider,Curr173\Collider)<PowTwo(7.0) Then
-									If EntityVisible(n\Collider,Curr173\Collider) And EntityVisible(n2\Collider,Curr173\Collider) Then
-										Curr173\Idle = SCP173_STATIONARY
-										If EntityDistanceSquared(Collider, Curr173\Collider)<PowTwo(7) Then
-											If EntityInView(Curr173\Collider, Camera) Then
-												Curr173\ContainmentState = SCP173_NOMOVE
-											EndIf
-										EndIf
-										Exit
-									EndIf
-								EndIf
-							ElseIf EntityDistanceSquared(Collider, Curr173\Collider)<PowTwo(7) And NPCSeesEntity(n, Curr173\Collider) Then
-								If EntityInView(Curr173\Collider, Camera) Then
-									Curr173\Idle = SCP173_STATIONARY
-									Exit
-								EndIf
-							Else
-								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-								MoveEntity n\Collider, 0, 0, -n\CurrSpeed * FPSfactor
-								AnimateNPC(n, 488, 522, -n\CurrSpeed*30)
+				AnimateNPC(n, 962, 1259, 0.3)
+				
+				n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj, Curr173\obj)
+				RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
+				
+				mtfd\Enabled = False
+				
+				If Curr173\Idle <> SCP173_STATIONARY Then
+					n\State = MTF_FOLLOWPLAYER
+				EndIf
+				
+				If Curr173\IdleTimer > 0.0 Then
+					Curr173\Idle = SCP173_STATIONARY
+					;Yes, the player's collider, LOL
+					If EntityDistance(Curr173\Collider, Collider) < 15.0 And (BlinkTimer < - 16 Lor BlinkTimer > - 6) And (EntityInView(Curr173\obj, Camera) Lor EntityInView(Curr173\obj2, Camera)) Then
+						Curr173\IdleTimer = Max(Curr173\IdleTimer - FPSfactor, 0)
+						If Curr173\IdleTimer <= 0.0 Then
+							mtfd\Enabled = True
+							Curr173\Idle = SCP173_BOXED
+							EndTask(TASK_CONTAIN173)
+							BeginTask(TASK_173TOCHAMBER)
+							PlayPlayerSPVoiceLine("scp173containmentbox" + Rand(1, 2))
+						EndIf
+					Else
+						Local isLooking% = False
+						For n2 = Each NPCs
+							If n2\NPCtype = n\NPCtype And n2\State = MTF_CONTAIN173 And n2\BlinkTimer > 10.0 Then
+								isLooking = True
 								Exit
 							EndIf
+						Next
+						If (Not isLooking) Then
+							Curr173\Idle = SCP173_ACTIVE
+							mtfd\Enabled = True
 						EndIf
 					EndIf
-				Next
-				If Curr173\Idle = SCP173_STATIONARY And Curr173\ContainmentState = SCP173_NOMOVE Then
-					Curr173\IdleTimer = Max(Curr173\IdleTimer-FPSfactor,0)
 				EndIf
-				n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,Curr173\obj)
-				RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
-				;If Curr173\IdleTimer = 0.0 Then
-				;	For n2.NPCs = Each NPCs
-				;		If n2\NPCtype = NPCtype173Box Then
-				;			If EntityDistanceSquared(Curr173\Collider, n2\Collider) < PowTwo(1) Then
-				;				Curr173\Idle = SCP173_CONTAIN
-				;				PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\Box"+Rand(1, 3)+".ogg"), n)
-				;				n\State = MTF_FOLLOWPLAYER
-				;				n\Target = Null
-				;			EndIf
-				;		EndIf
-				;	Next
-				;EndIf
 				;[End Block]
 			Case MTF_CONTACT
 				;[Block]
@@ -309,7 +334,7 @@ Function UpdateNPCtypeMTF(n.NPCs)
 								MoveEntity (pvt,0.8*0.079, 10.0*0.079, 6.0*0.079)
 								
 								ShootTarget(EntityX(pvt), EntityY(pvt), EntityZ(pvt), n, Rnd(0.4,0.8))
-								n\Reload = 7
+								n\Reload = 4.67 ;900 RPM
 							EndIf
 						Else
 							If n\Frame > 1383 Then
@@ -337,7 +362,7 @@ Function UpdateNPCtypeMTF(n.NPCs)
 							MoveEntity (pvt,0.8*0.079, 10.0*0.079, 6.0*0.079)
 							
 							ShootPlayer(EntityX(pvt), EntityY(pvt), EntityZ(pvt), Rnd(0.4,0.8))
-							n\Reload = 10
+							n\Reload = 4.67 ;900 RPM
 						EndIf
 					Else
 						If n\Frame > 1383 Then
@@ -358,7 +383,7 @@ Function UpdateNPCtypeMTF(n.NPCs)
 					CurrentNPCDist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 				EndIf
 				
-				If n\Target <> Null And CurrentNPCDist < PowTwo(35) Then
+				If n\Target <> Null And CurrentNPCDist < 35.0 Then
 					If CurrentNPCDist < PowTwo(2) Then
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 						MoveEntity n\Collider, 0, 0, -n\CurrSpeed * FPSfactor
@@ -367,11 +392,11 @@ Function UpdateNPCtypeMTF(n.NPCs)
 						AnimateNPC(n,488,522,-0.5)
 						n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,n\Target\obj)
 						RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
-						If n\Reload = 0 Then
-							n\SoundChn2 = PlaySound2(LoadTempSound("SFX\Guns\P90\shoot"+Rand(1,4)+".ogg"), Camera, n\Collider, 35)
-							ShootTarget(0, 0, 0, n, Rnd(0.4,0.8))
-							n\Reload = 7
-						EndIf
+;						If n\Reload = 0 Then
+;							n\SoundChn2 = PlaySound2(LoadTempSound("SFX\Guns\P90\shoot"+Rand(1,4)+".ogg"), Camera, n\Collider, 35)
+;							ShootTarget(0, 0, 0, n, Rnd(0.4,0.8))
+;							n\Reload = 4.67 ;900 RPM
+;						EndIf
 					Else
 						v3d_1 = CreateVector3D(79, 309, 0.3)
 						v3d_2 = CreateVector3D(488, 522, 0.3)
@@ -392,28 +417,16 @@ Function UpdateNPCtypeMTF(n.NPCs)
 				Delete v3d_2
 				
 				If n\IdleTimer = 0.0 Then
+					If n\PrevState = MTF_UNIT_MEDIC Then
+						PlayMTFSound(LoadTempSound("SFX\Character\MTF\Medic_SearchComplete"+Rand(1,4)+".ogg"),n,True)
+					Else
+						PlayMTFSound(LoadTempSound("SFX\Character\MTF\Regular_SearchComplete"+Rand(1,4)+".ogg"),n,True)
+					EndIf
 					n\State = MTF_FOLLOWPLAYER
 				EndIf
 				;[End Block]
 			Case MTF_SPLIT_UP
 				;[Block]
-				For e = Each Events
-					If e <> Null Then
-						If e\EventName = "room2_tesla" Then
-							If Abs(EntityX(n\Collider)-EntityX(e\room\obj,True))<4.0 Then
-								If Abs(EntityZ(n\Collider)-EntityZ(e\room\obj,True))<4.0 Then
-									If e\EventState2 <= 70*3.5 Then
-										n\Idle = 70*10
-										PlayMTFSound(LoadTempSound("SFX\Character\MTF\Tesla0.ogg"), n)
-										e\EventState2 = 70*100
-										e\EventState3=e\EventState3+140
-										Exit
-									EndIf
-								EndIf
-							EndIf
-						EndIf
-					EndIf
-				Next
 				v3d_1 = CreateVector3D(962, 1259, 0.3)
 				v3d_2 = CreateVector3D(1496, 1524, 0.3)
 				NPC_GoToRoom(n, v3d_1, v3d_2, 0.7)
@@ -441,6 +454,13 @@ Function UpdateNPCtypeMTF(n.NPCs)
 					MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
 				EndIf
 				pvt = FreeEntity_Strict(pvt)
+				;[End Block]
+			Case MTF_TESLA
+				;[Block]
+				AnimateNPC(n, 1260, 1375, 0.25, False)
+				If n\Frame = 1375 Then
+					n\State = MTF_FOLLOWPLAYER
+				EndIf
 				;[End Block]
 			Case STATE_SCRIPT
 				;[Block]
@@ -474,6 +494,10 @@ Function UpdateNPCtypeMTF(n.NPCs)
 			FreeSound_Strict n\Sound
 			n\Sound = 0
 		EndIf
+	EndIf
+	
+	If n\HP <= 0 Then
+		mtfd\Enabled = False
 	EndIf
 	
 	;Play step sounds
@@ -572,4 +596,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
+;~F#1#99#F2#100#191#19D#1B6#1CC
 ;~C#Blitz3D

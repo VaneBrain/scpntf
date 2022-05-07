@@ -11,7 +11,7 @@ Function SaveGame(file$, newzone%=-1)
 	GameSaved = True
 	
 	Local i%, j%
-	Local it.Items, itt.ItemTemplates, g.Guns, t.NewTask
+	Local it.Items, itt.ItemTemplates, g.Guns, t.NewTask, n.NPCs
 	
 	If FileType(file) <> 2 Then
 		CreateDir(file)
@@ -193,6 +193,74 @@ Function SaveGame(file$, newzone%=-1)
 	Next
 	WriteByte f, 0
 	
+	;Write MTF NPCs into player data memory if they are alive (as they follow the player)
+	For n = Each NPCs
+		If (n\NPCtype = NPCtypeMTF And n\HP > 0) Lor (n\NPCtype = NPCtype173 And n\Idle = SCP173_BOXED) Then
+			WriteByte f, 1
+			
+			DebugLog("Saving NPC " +n\NVName+ " (ID "+n\ID+")")
+			
+			WriteByte f, n\NPCtype
+			
+			WriteFloat f, EntityX(n\Collider,True)
+			WriteFloat f, EntityY(n\Collider,True)
+			WriteFloat f, EntityZ(n\Collider,True)
+			
+			WriteFloat f, EntityPitch(n\Collider)
+			WriteFloat f, EntityYaw(n\Collider)
+			WriteFloat f, EntityRoll(n\Collider)
+			
+			WriteFloat f, n\State
+			WriteFloat f, n\State2
+			WriteFloat f, n\State3
+			WriteInt f, n\PrevState
+			
+			WriteByte f, n\Idle
+			WriteFloat f, n\IdleTimer
+			WriteFloat f, n\LastDist
+			WriteInt f, n\LastSeen
+			
+			WriteInt f, n\CurrSpeed
+			
+			WriteFloat f, n\Angle
+			
+			WriteFloat f, n\Reload
+			
+			WriteInt f, n\ID
+			If n\Target <> Null Then
+				WriteInt f, n\Target\ID		
+			Else
+				WriteInt f, 0
+			EndIf
+			
+			WriteFloat f, n\EnemyX
+			WriteFloat f, n\EnemyY
+			WriteFloat f, n\EnemyZ
+			
+			WriteString f, n\texture
+			
+			WriteFloat f, AnimTime(n\obj)
+			
+			WriteInt f, n\IsDead
+			WriteFloat f, n\PathX
+			WriteFloat f, n\PathZ
+			WriteInt f, n\HP
+			WriteString f, n\Model
+			WriteFloat f, n\ModelScaleX#
+			WriteFloat f, n\ModelScaleY#
+			WriteFloat f, n\ModelScaleZ#
+			WriteInt f, n\TextureID
+			
+			If n\Gun <> Null Then
+				WriteInt f, n\Gun\ID
+				WriteInt f, n\Gun\Ammo
+			Else
+				WriteInt f, GUN_UNARMED
+			EndIf
+		EndIf
+	Next
+	WriteByte f, 0
+	
 	For i = 0 To MaxItemAmount-1
 		If Inventory[i] <> Null Then
 			WriteInt f, Inventory[i]\ID
@@ -266,67 +334,72 @@ Function SaveZoneData(file$)
 	
 	temp = 0
 	For  n.NPCs = Each NPCs
-		temp = temp +1
+		If (n\NPCtype <> NPCtypeMTF Lor n\HP <= 0) And (n\NPCtype <> NPCtype173 Lor n\Idle <> SCP173_BOXED) Then
+			temp = temp + 1
+		EndIf
 	Next
 	
 	WriteInt f, temp
 	For n.NPCs = Each NPCs
-		DebugLog("Saving NPC " +n\NVName+ " (ID "+n\ID+")")
-		
-		WriteByte f, n\NPCtype
-		WriteFloat f, EntityX(n\Collider,True)
-		WriteFloat f, EntityY(n\Collider,True)
-		WriteFloat f, EntityZ(n\Collider,True)
-		
-		WriteFloat f, EntityPitch(n\Collider)
-		WriteFloat f, EntityYaw(n\Collider)
-		WriteFloat f, EntityRoll(n\Collider)
-		
-		WriteFloat f, n\State
-		WriteFloat f, n\State2
-		WriteFloat f, n\State3
-		WriteInt f, n\PrevState
-		
-		WriteByte f, n\Idle
-		WriteFloat f, n\LastDist
-		WriteInt f, n\LastSeen
-		
-		WriteInt f, n\CurrSpeed
-		
-		WriteFloat f, n\Angle
-		
-		WriteFloat f, n\Reload
-		
-		WriteInt f, n\ID
-		If n\Target <> Null Then
-			WriteInt f, n\Target\ID		
-		Else
-			WriteInt f, 0
-		EndIf
-		
-		WriteFloat f, n\EnemyX
-		WriteFloat f, n\EnemyY
-		WriteFloat f, n\EnemyZ
-		
-		WriteString f, n\texture
-		
-		WriteFloat f, AnimTime(n\obj)
-		
-		WriteInt f, n\IsDead
-		WriteFloat f, n\PathX
-		WriteFloat f, n\PathZ
-		WriteInt f, n\HP
-		WriteString f, n\Model
-		WriteFloat f, n\ModelScaleX#
-		WriteFloat f, n\ModelScaleY#
-		WriteFloat f, n\ModelScaleZ#
-		WriteInt f, n\TextureID
-		
-		If n\Gun <> Null Then
-			WriteInt f, n\Gun\ID
-			WriteInt f, n\Gun\Ammo
-		Else
-			WriteInt f, GUN_UNARMED
+		If (n\NPCtype <> NPCtypeMTF Lor n\HP <= 0) And (n\NPCtype <> NPCtype173 Lor n\Idle <> SCP173_BOXED) Then
+			DebugLog("Saving NPC " +n\NVName+ " (ID "+n\ID+")")
+			
+			WriteByte f, n\NPCtype
+			WriteFloat f, EntityX(n\Collider,True)
+			WriteFloat f, EntityY(n\Collider,True)
+			WriteFloat f, EntityZ(n\Collider,True)
+			
+			WriteFloat f, EntityPitch(n\Collider)
+			WriteFloat f, EntityYaw(n\Collider)
+			WriteFloat f, EntityRoll(n\Collider)
+			
+			WriteFloat f, n\State
+			WriteFloat f, n\State2
+			WriteFloat f, n\State3
+			WriteInt f, n\PrevState
+			
+			WriteByte f, n\Idle
+			WriteFloat f, n\IdleTimer
+			WriteFloat f, n\LastDist
+			WriteInt f, n\LastSeen
+			
+			WriteInt f, n\CurrSpeed
+			
+			WriteFloat f, n\Angle
+			
+			WriteFloat f, n\Reload
+			
+			WriteInt f, n\ID
+			If n\Target <> Null Then
+				WriteInt f, n\Target\ID		
+			Else
+				WriteInt f, 0
+			EndIf
+			
+			WriteFloat f, n\EnemyX
+			WriteFloat f, n\EnemyY
+			WriteFloat f, n\EnemyZ
+			
+			WriteString f, n\texture
+			
+			WriteFloat f, AnimTime(n\obj)
+			
+			WriteInt f, n\IsDead
+			WriteFloat f, n\PathX
+			WriteFloat f, n\PathZ
+			WriteInt f, n\HP
+			WriteString f, n\Model
+			WriteFloat f, n\ModelScaleX#
+			WriteFloat f, n\ModelScaleY#
+			WriteFloat f, n\ModelScaleZ#
+			WriteInt f, n\TextureID
+			
+			If n\Gun <> Null Then
+				WriteInt f, n\Gun\ID
+				WriteInt f, n\Gun\Ammo
+			Else
+				WriteInt f, GUN_UNARMED
+			EndIf
 		EndIf
 	Next
 	
@@ -628,7 +701,7 @@ Function LoadPlayerData(file$, f%)
 	Local version$ = ""
 	
 	Local x#, y#, z#, i%, j%, temp%, temp2%, strtemp$
-	Local g.Guns, itt.ItemTemplates, it2.Items, it.Items, t.NewTask
+	Local g.Guns, itt.ItemTemplates, it2.Items, it.Items, t.NewTask, n.NPCs
 	
 	AccessCode = Int(ReadString(f))
 	
@@ -803,6 +876,101 @@ Function LoadPlayerData(file$, f%)
 		temp = ReadByte(f)
 	Wend
 	
+	temp = ReadByte(f)
+	While temp
+		Local NPCtype% = ReadByte(f)
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		n.NPCs = CreateNPC(NPCtype, x, y, z)
+		
+		If n\NPCtype = NPCtype173 Then
+			If Curr173 <> Null Then
+				RemoveNPC(Curr173)
+			EndIf
+			Curr173 = n
+		EndIf
+		
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		RotateEntity(n\Collider, x, y, z)
+		
+		n\State = ReadFloat(f)
+		n\State2 = ReadFloat(f)
+		n\State3 = ReadFloat(f)
+		n\PrevState = ReadInt(f)
+		
+		n\Idle = ReadByte(f)
+		n\IdleTimer = ReadFloat(f)
+		n\LastDist = ReadFloat(f)
+		n\LastSeen = ReadInt(f)
+		
+		n\CurrSpeed = ReadInt(f)
+		n\Angle = ReadFloat(f)
+		n\Reload = ReadFloat(f)
+		
+		ForceSetNPCID(n, ReadInt(f))
+		n\TargetID = ReadInt(f)
+		
+		DebugLog("Loading NPC " +n\NVName+ " (ID "+n\ID+")")
+		
+		n\EnemyX = ReadFloat(f)
+		n\EnemyY = ReadFloat(f)
+		n\EnemyZ = ReadFloat(f)
+		
+		n\texture = ReadString(f)
+		If n\texture <> "" Then
+			tex = LoadTexture_Strict (n\texture)
+			TextureBlend(tex,5)
+			EntityTexture n\obj, tex
+		EndIf
+		
+		Local frame# = ReadFloat(f)
+		Select NPCtype
+			Case NPCtypeOldMan, NPCtypeD, NPCtype096, NPCtypeMTF, NPCtypeGuard, NPCtype049, NPCtypeZombie, NPCtypeClerk, NPCtypeD2
+				SetAnimTime(n\obj, frame)
+		End Select
+		
+		n\Frame = frame
+		
+		n\IsDead = ReadInt(f)
+		n\PathX = ReadFloat(f)
+		n\PathZ = ReadFloat(f)
+		n\HP = ReadInt(f)
+		n\Model = ReadString(f)
+		n\ModelScaleX# = ReadFloat(f)
+		n\ModelScaleY# = ReadFloat(f)
+		n\ModelScaleZ# = ReadFloat(f)
+		If n\Model <> ""
+			n\obj = FreeEntity_Strict(n\obj)
+			n\obj = LoadAnimMesh_Strict(n\Model)
+			ScaleEntity n\obj,n\ModelScaleX,n\ModelScaleY,n\ModelScaleZ
+			SetAnimTime n\obj,frame
+		EndIf
+		n\TextureID = ReadInt(f)
+		If n\TextureID > 0
+			ChangeNPCTextureID(n.NPCs,n\TextureID-1)
+			SetAnimTime(n\obj,frame)
+		EndIf
+		
+		Local GunID% = ReadInt(f)
+		If GunID <> GUN_UNARMED Then
+			If n\Gun = Null Lor n\Gun\ID <> GunID Then
+				SwitchNPCGun(n, GunID)
+			EndIf
+			Local GunAmmo% = ReadInt(f)
+			If n\Gun <> Null Then
+				n\Gun\Ammo = GunAmmo
+			EndIf
+		ElseIf n\Gun <> Null Then
+			RemoveNPCGun(n)
+		EndIf
+		
+		temp = ReadByte(f)
+	Wend
+	
 	For i = 0 To MaxItemAmount-1
 		temp = ReadInt(f)
 		If temp > -1 Then
@@ -953,6 +1121,7 @@ Function LoadGame(file$, zoneToLoad%=-1)
 		n\PrevState = ReadInt(f)
 		
 		n\Idle = ReadByte(f)
+		n\IdleTimer = ReadFloat(f)
 		n\LastDist = ReadFloat(f)
 		n\LastSeen = ReadInt(f)
 		
@@ -1731,7 +1900,7 @@ Function LoadGameQuick(file$)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	z = ReadFloat(f)	
+	z = ReadFloat(f)
 	PositionEntity(Collider, x, y+0.05, z)
 	;ResetEntity(Collider)
 	
@@ -1746,6 +1915,10 @@ Function LoadGameQuick(file$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	RotateEntity(Collider, x, y, 0, 0)
+	
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
 	
 	LoadPlayerData(file, f)
 	
@@ -1766,10 +1939,6 @@ Function LoadGameQuick(file$)
 ;		Next
 ;	Next
 	;[End Block]
-	
-	For n.NPCs = Each NPCs
-		RemoveNPC(n)
-	Next
 	
 	temp = ReadInt(f)
 	For i = 1 To temp
@@ -1801,6 +1970,7 @@ Function LoadGameQuick(file$)
 		n\PrevState = ReadInt(f)
 		
 		n\Idle = ReadByte(f)
+		n\IdleTimer = ReadFloat(f)
 		n\LastDist = ReadFloat(f)
 		n\LastSeen = ReadInt(f)
 		
@@ -2666,4 +2836,5 @@ Function LoadMap(file$)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#1#136#141#1A0#3EE#407#436#4BB#56A#6B0#784#809#9D2#9E6#9F4#A22#A32#A51
 ;~C#Blitz3D

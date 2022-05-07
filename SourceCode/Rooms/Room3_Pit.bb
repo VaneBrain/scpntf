@@ -141,5 +141,5 @@ Function UpdateEvent_Room3_Pit_1048(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1#19#39
+;~F#1#19
 ;~C#Blitz3D

@@ -904,7 +904,7 @@ End Function
 
 Function UpdateMPMenu()
 	CatchErrors("Uncaught (UpdateMenu)")
-	Local x%, y%, width%, height%
+;	Local x%, y%, width%, height%
 	
 	If MenuOpen
 		ShowEntity m_I\Sprite
@@ -1595,7 +1595,7 @@ Function UpdatePlayerList()
 				Steam_PushByte(PACKET_KICK)
 				Steam_PushByte(SERVER_MSG_KICK_KICKED)
 				Steam_PushString(pll\Reason)
-				Steam_SendPacketToUser(Players[pll\Moderation]\SteamIDUpper, Players[pll\Moderation]\SteamIDLower)
+				Steam_SendPacketToUser(Players[pll\Moderation]\SteamIDUpper, Players[pll\Moderation]\SteamIDLower, k_EP2PSendUnreliable)
 				DeletePlayerAsServer(Steam_GetPlayerIDUpper(), Steam_GetPlayerIDLower(), pll\Moderation, "user_kicked")
 				pll\Moderation = -1
 			EndIf
@@ -1604,7 +1604,7 @@ Function UpdatePlayerList()
 				Steam_PushByte(PACKET_KICK)
 				Steam_PushByte(SERVER_MSG_KICK_BANNED)
 				Steam_PushString(pll\Reason)
-				Steam_SendPacketToUser(Players[pll\Moderation]\SteamIDUpper, Players[pll\Moderation]\SteamIDLower)
+				Steam_SendPacketToUser(Players[pll\Moderation]\SteamIDUpper, Players[pll\Moderation]\SteamIDLower, k_EP2PSendUnreliable)
 				AddBan(Players[pll\Moderation]\SteamIDUpper, Players[pll\Moderation]\SteamIDLower, pll\Reason)
 				DeletePlayerAsServer(Steam_GetPlayerIDUpper(), Steam_GetPlayerIDLower(), pll\Moderation, "user_banned")
 				pll\Moderation = -1

@@ -8,40 +8,12 @@ Const ITEMTYPE_AMMO = 3
 Function InitMPItemTemplates()
 	Local it.ItemTemplates,it2.ItemTemplates
 	
-	it = CreateItemTemplate("Ballistic Vest", "vest", "GFX\items\vest.b3d", "GFX\items\INVvest.jpg", "", 0.02,"GFX\items\Vest.png")
-	it\sound = 2
-	;it\fastPickable = True
-	it = CreateItemTemplate("Heavy Ballistic Vest", "finevest", "GFX\items\vest.b3d", "GFX\items\INVvest.jpg", "", 0.022,"GFX\items\Vest.png")
-	it\sound = 2
-	;it\fastPickable = True
-	
+	it = CreateItemTemplate("Ballistic Vest", "vest", "GFX\items\vest.b3d", "GFX\items\INVvest.jpg", "", 0.02,"GFX\items\Vest.png") : it\sound = 2
 	it = CreateItemTemplate("First Aid Kit", "firstaid", "GFX\items\firstaid.x", "GFX\items\INVfirstaid.jpg", "", 0.05)
 	it = CreateItemTemplate("Small First Aid Kit", "finefirstaid", "GFX\items\firstaid.x", "GFX\items\INVfirstaid.jpg", "", 0.03)
 	it = CreateItemTemplate("Blue First Aid Kit", "firstaid2", "GFX\items\firstaid.x", "GFX\items\INVfirstaid2.jpg", "", 0.03, "GFX\items\firstaidkit2.jpg")
-	
 	it = CreateItemTemplate("Syringe", "syringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005) : it\sound = 2
-	
-;	it = CreateItemTemplate("USP Tactical", "usp", "GFX\weapons\USP_Tactical_Worldmodel.b3d", "GFX\weapons\INVusp.jpg", "", 0.02)
-;	it\isGun% = True
-;	it\sound = 66
-;	it = CreateItemTemplate("Silenced USP Tactical", "usp", "GFX\weapons\USP_Tactical_Worldmodel_Silenced.b3d", "GFX\weapons\INVusp_silenced.jpg", "", 0.02)
-;	it\isGun% = True
-;	it\sound = 66
-;	it = CreateItemTemplate("FN P90", "p90", "GFX\weapons\P90_Worldmodel.b3d", "GFX\weapons\INVp90.jpg", "", 0.02)
-;	it\isGun% = True
-;	it\sound = 66
-;	it = CreateItemTemplate("MP5K", "mp5k", "GFX\weapons\MP5K_Worldmodel.b3d", "GFX\items\INVfreezer.jpg", "", 0.003)
-;	it\isGun% = True
-;	it\sound = 66
-;	it = CreateItemTemplate("Crowbar", "crowbar", "Unused\GFX\items\Crowbar_Worldmodel.b3d", "GFX\items\INVfreezer.jpg", "", 0.03)
-;	it\isGun% = True
-;	it\sound = 66
-;	it = CreateItemTemplate("M9 Beretta", "m9", "Unused\GFX\items\M9_Beretta_Worldmodel.b3d", "GFX\items\INVfreezer.jpg", "", 0.02)
-;	it\isGun% = True
-;	it\sound = 66
-;	CreateItemTemplate("Silencer", "silencer", "GFX\weapons\Silencer.b3d","GFX\weapons\INVsilencer.jpg","",0.02)
 	CreateItemTemplate("Ammo Crate", "ammocrate", "GFX\items\ammo_crate.x", "GFX\items\INVfreezer.jpg", "", 0.01)
-	
 	CreateItemTemplate("Fuse", "fuse", "GFX\items\fuse.b3d", "GFX\items\INVfuse.jpg", "", 0.025)
 	
 	For it = Each ItemTemplates

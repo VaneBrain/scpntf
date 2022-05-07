@@ -464,7 +464,7 @@ Function DeleteGuns()
 End Function
 
 Function UpdateGuns()
-	Local isMultiplayer% = (NTF_GameModeFlag = 3) ;True if it's multiplayer, otherwise False
+	Local isMultiplayer% = (gopt\GameMode = GAMEMODE_MULTIPLAYER) ;True if it's multiplayer, otherwise False
 	Local g.Guns,g2.Guns,p.Particles,n.NPCs,pl.Player,i%
 	Local shooting% = False
 	Local currGun.Guns
@@ -2261,7 +2261,7 @@ End Function
 Function IsPlayerOutside()
 	Local e.Events
 	
-	If NTF_GameModeFlag=3 Then Return False
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then Return False
 	
 	If PlayerRoom\RoomTemplate\Name = "gate_a_topside" Then Return True
 	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then Return True

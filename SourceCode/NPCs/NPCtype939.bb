@@ -75,7 +75,7 @@ End Function
 Function UpdateNPCtype939(n.NPCs)
 	Local dist#,prevFrame#,temp%,angle#
 	
-	If (Not n\IsDead)
+	If (Not n\IsDead) Then
 		Select n\State
 			Case 0
 				AnimateNPC(n, 290,405,0.1)
@@ -89,26 +89,26 @@ Function UpdateNPCtype939(n.NPCs)
 					AnimateNPC(n, 175,297,0.22,False)
 					If n\Frame=>296 Then n\State = 2
 				EndIf
-					
+				
 				n\LastSeen = 0
-					
+				
 				MoveEntity n\Collider, 0,0,n\CurrSpeed*FPSfactor						
-					
+				
 			Case 2
 				n\State2 = Max(n\State2, (n\PrevState-3))
-					
+				
 				If PlayerRoom\RoomTemplate\Name = "room3_storage" Then
 					dist = EntityDistance(n\Collider, PlayerRoom\Objects[n\State2])
 				Else
 					dist = EntityDistance(n\Collider, Collider)
 				EndIf
-					
+				
 				n\CurrSpeed = CurveValue(n\Speed*0.3*Min(dist,1.0), n\CurrSpeed, 10.0)
 				MoveEntity n\Collider, 0,0,n\CurrSpeed*FPSfactor 
-					
+				
 				prevFrame = n\Frame
 				AnimateNPC(n, 644,683,28*n\CurrSpeed) ;walk
-					
+				
 				If (prevFrame<664 And n\Frame=>664) Lor (prevFrame>673 And n\Frame<654) Then
 					PlaySound2(StepSFX(4, 0, Rand(0,3)), Camera, n\Collider, 12.0)
 					If Rand(10)=1 Then
@@ -120,31 +120,30 @@ Function UpdateNPCtype939(n.NPCs)
 						EndIf
 						If temp Then
 							If n\Sound <> 0 Then FreeSound_Strict n\Sound : n\Sound = 0
-								n\Sound = LoadSound_Strict("SFX\SCP\939\"+(n\ID Mod 3)+"Lure"+Rand(1,10)+".ogg")
+							n\Sound = LoadSound_Strict("SFX\SCP\939\"+(n\ID Mod 3)+"Lure"+Rand(1,10)+".ogg")
 							PlayNPCSound(n, n\Sound)
 						EndIf
 					EndIf
 				EndIf
-					
-					
+				
+				
 				If PlayerRoom\RoomTemplate\Name = "room3_storage" Then
 					PointEntity n\obj, PlayerRoom\Objects[n\State2]
 				Else
 					PointEntity n\obj, n\Collider
 				EndIf
 				RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj),EntityYaw(n\Collider),20.0), 0
-					
-					
+				
 				If dist<0.4 Then
 					n\State2 = n\State2 + 1
 					If n\State2 > n\PrevState Then n\State2 = (n\PrevState-3)
 					n\State = 1
 				EndIf
-					
+				
 			Case 3
 				If EntityVisible(Collider, n\Collider) Then
 					If n\Sound2 = 0 Then n\Sound2 = LoadSound_Strict("SFX\General\Slash1.ogg")
-						
+					
 					n\EnemyX = EntityX(Collider)
 					n\EnemyZ = EntityZ(Collider)
 					n\LastSeen = 10*7
@@ -152,34 +151,33 @@ Function UpdateNPCtype939(n.NPCs)
 					
 				If n\LastSeen > 0 And (Not NoTarget) Then
 					prevFrame = n\Frame
-						
+					
 					If (n\Frame=>18.0 And n\Frame<68.0) Then
 						n\CurrSpeed = CurveValue(0, n\CurrSpeed, 5.0)
 						AnimateNPC(n, 18,68,0.5,True)
-							
+						
 						;hasn't hit
 						temp = False
-							
+						
 						If prevFrame < 24 And n\Frame>=24 Then
 							temp = True
 						ElseIf prevFrame < 57 And n\Frame>=57
 							temp = True
 						EndIf
-							
-							If temp Then
-								If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider))<PowTwo(1.5) Then
-									PlayNPCSound(n, n\Sound2)
-									;Injuries = Injuries + Rnd(1.5, 2.5)-WearingVest*0.5
-									If (Not GodMode) Then
-										DamageSPPlayer(Rand(35,55))
-										BlurTimer = 500
-									EndIf
-								Else
-									n\Frame	 = 449
+						
+						If temp Then
+							If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider))<PowTwo(1.5) Then
+								PlayNPCSound(n, n\Sound2)
+								;Injuries = Injuries + Rnd(1.5, 2.5)-WearingVest*0.5
+								If (Not GodMode) Then
+									DamageSPPlayer(Rand(20,30))
+									BlurTimer = 500
 								EndIf
+							Else
+								n\Frame	 = 449
 							EndIf
 						EndIf
-							
+						
 						If (Not IsSPPlayerAlive()) Then 
 							DeathMSG=Chr(34)+"All four (4) escaped SCP-939 specimens have been captured and recontained successfully. "
 							DeathMSG=DeathMSG+"Three (3) of them made quite a mess at Storage Area 6. A cleaning team has been dispatched."+Chr(34)
@@ -469,7 +467,7 @@ Function UpdateNPCtype939MP(n.NPCs)
 								EndIf
 							EndIf
 							If Players[n\ClosestPlayer]\CurrHP > 0 Then
-								DamagePlayer(n\ClosestPlayer,Rand(30,40),Rand(35,55),5)
+								DamagePlayer(n\ClosestPlayer,Rand(20+5*mp_I\Gamemode\Difficulty,30+5*mp_I\Gamemode\Difficulty),Rand(25+5*mp_I\Gamemode\Difficulty,35+5*mp_I\Gamemode\Difficulty),5)
 								If Players[n\ClosestPlayer]\CurrHP <= 0 Then
 									cmsg = AddChatMSG("death_killedby", 0, SERVER_MSG_IS, CHATMSG_TYPE_TWOPARAM_TRANSLATE)
 									cmsg\Msg[1] = Players[n\ClosestPlayer]\Name
@@ -516,7 +514,7 @@ Function UpdateNPCtype939MP(n.NPCs)
 						n\Sound = 0
 					EndIf
 					n\Sound = LoadSound_Strict("SFX\SCP\939\"+((Int(n\State3)-1) Mod 3)+"Attack"+(Int(Ceil(Int(n\State3+2)/3)))+".ogg")
-					n\SoundChn = PlaySound2(n\Sound, Camera, n\Collider, 40)
+					n\SoundChn = PlaySound2(n\Sound, Camera, n\Collider, 20)
 				EndIf
 				If n\Frame >= 278.5 Then
 					n\State = MP939_STATE_DETECTED
@@ -525,7 +523,7 @@ Function UpdateNPCtype939MP(n.NPCs)
 				;[End Block]
 		End Select
 		
-		UpdateSoundOrigin(n\SoundChn, Camera, n\Collider, 40)
+		UpdateSoundOrigin(n\SoundChn, Camera, n\Collider, 20)
 		
 		If n\HP<=0 Then
 			n\IsDead=True

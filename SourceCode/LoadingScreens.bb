@@ -255,7 +255,7 @@ Function DrawLoading(percent%, shortloading=False, customloadingscreen$="")
 			ResetTimingAccumulator()
 			SetFont fo\Font[Font_Default]
 			close = True
-			If NTF_GameModeFlag=3
+			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 				Players[mp_I\PlayerID]\FinishedLoading = True
 			EndIf
 		EndIf

@@ -131,7 +131,7 @@ Function UpdateEvent_Gate_A_Topside(e.Events)
 					RemoveNPC(n)
 				EndIf
 			Next
-			Curr173\Idle = True
+			Curr173\Idle = SCP173_DISABLED
 			
 			CameraFogMode(Camera, 0)
 			SecondaryLightOn = True

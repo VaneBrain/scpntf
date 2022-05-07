@@ -41,7 +41,7 @@ Const WHEEL_MAX_LOOK_ICONS = 4
 ;MTF Dialogue constants
 Const MTF_DIALOGUE_TIMER_MIN = 70*45
 Const MTF_DIALOGUE_TIMER_MAX = 70*120
-Const MTF_DIALOGUE_MAX = 4
+Const MTF_DIALOGUE_MAX = 5
 Const MTF_DIALOGUE_NUM_OF_BITS = 2
 
 Type MainPlayer
@@ -118,7 +118,7 @@ Function CreateCommunicationAndSocialWheel()
 	For i = 0 To (WHEEL_MAX-1)
 		mpl\WheelOutput[i] = WHEEL_OUTPUT_UNKNOWN
 	Next
-	If NTF_GameModeFlag = 3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		Players[mp_I\PlayerID]\VoiceLine = WHEEL_OUTPUT_UNKNOWN
 	EndIf
 	
@@ -159,12 +159,12 @@ Function UpdateCommunicationAndSocialWheel()
 	Local voiceLineStr$, commandLineID%
 	
 	;This is only temporary for 0.2.0, will be unlocked for singleplayer in versions afterwards
-	If NTF_GameModeFlag <> 3 Then
+	If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 		Return
 	EndIf
 	
 	;CHECK FOR IMPLEMENTATION
-	If ((NTF_GameModeFlag = 3 And (Not InLobby()) And (Not mp_I\ChatOpen) And (Not IsSpectator(mp_I\PlayerID)) And Players[mp_I\PlayerID]\CurrHP > 0) Lor (NTF_GameModeFlag <> 3 And EndingTimer >= 0 And KillTimer >= 0 And (Not InvOpen) And (Not MenuOpen))) And (Not ConsoleOpen) And (Not IsModerationOpen()) And (Not IsInVote()) Then
+	If ((gopt\GameMode = GAMEMODE_MULTIPLAYER And (Not InLobby()) And (Not mp_I\ChatOpen) And (Not IsSpectator(mp_I\PlayerID)) And Players[mp_I\PlayerID]\CurrHP > 0) Lor (gopt\GameMode <> GAMEMODE_MULTIPLAYER And EndingTimer >= 0 And KillTimer >= 0 And (Not InvOpen) And (Not MenuOpen))) And (Not ConsoleOpen) And (Not IsModerationOpen()) And (Not IsInVote()) Then
 		If KeyDown(kb\CommandWheelKey) Then
 			If mpl\WheelOpened = WHEEL_CLOSED Then
 				MoveMouse viewport_center_x, viewport_center_y
@@ -216,7 +216,7 @@ Function UpdateCommunicationAndSocialWheel()
 			Next
 			If PickedEntity()<>0 Then
 				CreateOverHereParticle(PickedX(), PickedY(), PickedZ())
-				If NTF_GameModeFlag = 3 Then
+				If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 					Players[mp_I\PlayerID]\OverHerePosition = CreateVector3D(PickedX(), PickedY(), PickedZ())
 				EndIf
 			EndIf
@@ -247,7 +247,7 @@ Function UpdateCommunicationAndSocialWheel()
 		Else
 			voiceLineStr = GetPlayerVoiceLine(voiceLine, voiceLineNumber, mp_I\PlayerID)
 		EndIf
-		If NTF_GameModeFlag = 3 Then
+		If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 			If voiceLine <> COMMAND_CANCEL And voiceLine <> (SOCIAL_CANCEL+WHEEL_MAX) Then
 				If ChannelPlaying(Players[mp_I\PlayerID]\Sound_CHN) Then
 					StopChannel(Players[mp_I\PlayerID]\Sound_CHN)
@@ -289,7 +289,7 @@ Function UpdateCommunicationAndSocialWheel()
 			mpl\WheelOutput[5] = COMMAND_CANCEL
 			mpl\WheelOutput[7] = COMMAND_WAITHERE
 			mpl\WheelOutput[8] = COMMAND_HELPME
-			If NTF_GameModeFlag <> 3 Then
+			If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 				mpl\WheelOutput[4] = COMMAND_TESLA
 				mpl\WheelOutput[6] = COMMAND_CAMERA
 			EndIf
@@ -376,7 +376,7 @@ Function UpdateCommunicationAndSocialWheel()
 ;		EndIf
 	EndIf
 	
-	If NTF_GameModeFlag = 3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		For i = 0 To (mp_I\MaxPlayers-1)
 			If Players[i]<>Null Then
 				Players[i]\OverHereSpriteTime = Max(Players[i]\OverHereSpriteTime - FPSfactor, 0.0)
@@ -678,7 +678,7 @@ Function UpdateNightVision()
 	Local dist#
 	
 	;CHECK FOR IMPLEMENTATION
-	If (NTF_GameModeFlag=3 And IsSpectator(mp_I\PlayerID)) Lor (Not mpl\HasNTFGasmask) Then
+	If (gopt\GameMode = GAMEMODE_MULTIPLAYER And IsSpectator(mp_I\PlayerID)) Lor (Not mpl\HasNTFGasmask) Then
 		If mpl\NightVisionEnabled Then
 			TurnNVOff()
 		EndIf
@@ -704,7 +704,7 @@ Function TurnNVOn()
 	
 	AmbientLightRooms(100)
 	EntityColor GasMaskOverlay2,220,30,30
-	If NTF_GameModeFlag=3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		If mp_O\Gamemode\ID = Gamemode_Deathmatch Then
 			CameraFogRange(Camera,CameraFogFar*4,CameraFogFar*5)
 		ElseIf mp_O\Gamemode\ID = Gamemode_Waves Then
@@ -723,7 +723,7 @@ Function TurnNVOff()
 	
 	AmbientLightRooms(0)
 	EntityColor GasMaskOverlay2,255,255,255
-	If NTF_GameModeFlag=3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		If mp_O\Gamemode\ID = Gamemode_Deathmatch Then
 			CameraFogRange(Camera,CameraFogNear,CameraFogFar*5)
 		ElseIf mp_O\Gamemode\ID = Gamemode_Waves Then
@@ -774,6 +774,7 @@ Function CreateSPPlayer()
 	mtfd\Dialogues[1] = %111011
 	mtfd\Dialogues[2] = %111011
 	mtfd\Dialogues[3] = %1011
+	mtfd\Dialogues[4] = %111011
 	
 End Function
 
@@ -782,6 +783,31 @@ Function DestroySPPlayer()
 	Delete psp
 	
 	Delete mtfd
+	
+End Function
+
+Function UpdateSPPlayer()
+	Local n.NPCs
+	Local contain173% = False
+	
+	If Curr173 <> Null And Curr173\Idle = SCP173_STATIONARY And Curr173\IdleTimer > 0.0 Then
+		;Check if at least one MTF unit is alive and looking at 173
+		For n = Each NPCs
+			If n\NPCtype = NPCtypeMTF And (Not n\IsDead) And n\State = MTF_CONTAIN173 Then
+				contain173 = True
+				Exit
+			EndIf
+		Next
+		
+		If contain173 Then
+			If (BlinkTimer <= -6 And (BlinkTimer + FPSfactor) > -6) Then
+				PlayPlayerSPVoiceLine("Blinking" + Rand(1, 2))
+			EndIf
+		Else
+			Curr173\Idle = SCP173_ACTIVE
+			Curr173\IdleTimer = 0.0
+		EndIf
+	EndIf
 	
 End Function
 
@@ -899,9 +925,19 @@ Function PlayNewDialogue(id%, sequence%)
 	
 End Function
 
+Function PlayPlayerSPVoiceLine(voiceLine$)
+	
+	If ChannelPlaying(psp\SoundCHN) Then
+		StopChannel(psp\SoundCHN)
+	EndIf
+	psp\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Player\Voice\" + voiceLine + ".ogg"))
+	
+End Function
+
 ;Inlcuding the PlayerAnimations file
 Include "SourceCode\PlayerAnimations.bb"
 
 ;~IDEal Editor Parameters:
-;~F#2E#47#56#6B#92#17E#200#237#241#25C#283#293#2AC#2BF#2D2#2DD#2FA#302#309#316
+;~F#2E#5A#70#18B#211#248#252#26D#294#2A4#2BE#2D1#2E4#2EF#2FB#30B#32C#333#340#346
+;~F#353#394
 ;~C#Blitz3D

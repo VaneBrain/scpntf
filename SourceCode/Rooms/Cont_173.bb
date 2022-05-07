@@ -1,21 +1,27 @@
 
+Const CONT_173_CHAMBERPIVOT% = 8
+Const CONT_173_DOOR_CHAMBER% = 0
+
 Function FillRoom_Cont_173(r.Rooms)
 	Local d.Doors,de.Decals,sc.SecurityCams
 	Local i
 	
 	;the containment doors
-	r\RoomDoors[1] = CreateDoor(r\zone, r\x + 4000.0 * RoomScale, 384.0*RoomScale, r\z + 1696.0 * RoomScale, 90, r, True, True)
-	r\RoomDoors[1]\locked = False : r\RoomDoors[1]\AutoClose = False
-	r\RoomDoors[1]\dir = 1 : r\RoomDoors[1]\open = True 
-	r\RoomDoors[1]\buttons[0] = FreeEntity_Strict(r\RoomDoors[1]\buttons[0])
-	r\RoomDoors[1]\buttons[1] = FreeEntity_Strict(r\RoomDoors[1]\buttons[1])
-	r\RoomDoors[1]\MTFClose = False
+	r\RoomDoors[CONT_173_DOOR_CHAMBER] = CreateDoor(r\zone, r\x + 4000.0 * RoomScale, 384.0*RoomScale, r\z + 1696.0 * RoomScale, 90, r, True, True)
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\locked = False
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\AutoClose = False
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\dir = 1
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\open = True
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\buttons[0] = FreeEntity_Strict(r\RoomDoors[CONT_173_DOOR_CHAMBER]\buttons[0])
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\buttons[1] = FreeEntity_Strict(r\RoomDoors[CONT_173_DOOR_CHAMBER]\buttons[1])
+	r\RoomDoors[CONT_173_DOOR_CHAMBER]\MTFClose = False
 	
-	r\RoomDoors[2] = CreateDoor(r\zone, r\x + 2704.0 * RoomScale, 384.0*RoomScale, r\z + 624.0 * RoomScale, 90, r, True)
-	r\RoomDoors[2]\AutoClose = False : r\RoomDoors[2]\open = False
-	r\RoomDoors[2]\buttons[0] = FreeEntity_Strict(r\RoomDoors[2]\buttons[0])
-	r\RoomDoors[2]\buttons[1] = FreeEntity_Strict(r\RoomDoors[2]\buttons[1])
-	r\RoomDoors[2]\MTFClose = False
+	d.Doors = CreateDoor(r\zone, r\x + 2704.0 * RoomScale, 384.0*RoomScale, r\z + 624.0 * RoomScale, 90, r, True)
+	d\AutoClose = False
+	d\buttons[0] = FreeEntity_Strict(d\buttons[0])
+	d\buttons[1] = FreeEntity_Strict(d\buttons[1])
+	d\MTFClose = False
+	d\open = True
 	
 	d.Doors = CreateDoor(r\zone, r\x + 1392.0 * RoomScale, 384.0*RoomScale, r\z + 64.0 * RoomScale, 90, r, True)
 	d\AutoClose = False
@@ -81,17 +87,29 @@ Function FillRoom_Cont_173(r.Rooms)
 		EntityParent(r\Objects[i], r\obj)
 	Next
 	
+	r\Objects[CONT_173_CHAMBERPIVOT] = CreatePivot()
+	PositionEntity r\Objects[CONT_173_CHAMBERPIVOT], r\x + 4736.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1692.0 * RoomScale, True
+	EntityParent r\Objects[CONT_173_CHAMBERPIVOT], r\obj
+	
 End Function
 
 Function UpdateEvent_Cont_173(e.Events)
 	
-	If e\EventState = 1 Then
-		If EntityDistanceSquared(Curr173\Collider, Collider)>PowTwo(8.0) Then
-			e\room\RoomDoors[1]\open = False
-			PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
-			e\EventState = 2
-		EndIf
-	EndIf
+	Select e\EventState
+		Case 0
+			If Curr173\Idle = SCP173_BOXED And EntityDistanceSquared(Curr173\Collider, e\room\Objects[CONT_173_CHAMBERPIVOT]) < PowTwo(1.5) Then
+				PlayPlayerSPVoiceLine("scp173contained" + Rand(1, 2))
+				Curr173\Idle = SCP173_CONTAINED
+				e\EventState = 1
+			EndIf
+		Case 1
+			If EntityDistanceSquared(Collider, e\room\Objects[CONT_173_CHAMBERPIVOT]) > PowTwo(8.0) Then
+				UseDoor(e\room\RoomDoors[CONT_173_DOOR_CHAMBER], False)
+				PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
+				EndTask(TASK_173TOCHAMBER)
+				e\EventState = 2
+			EndIf
+	End Select
 	
 End Function
 
