@@ -226,9 +226,9 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 			n\MaxGravity = 0.0
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.2
-			n\obj = CopyEntity(ApacheObj);LoadAnimMesh_Strict("GFX\apache.b3d")
+			n\obj = LoadAnimMesh_Strict("GFX\apache.b3d")
 			
-			n\obj2 = CopyEntity(ApacheRotorObj);LoadAnimMesh_Strict("GFX\apacherotor.b3d",n\obj)
+			n\obj2 = LoadAnimMesh_Strict("GFX\apacherotor.b3d",n\obj)
 			EntityParent n\obj2,n\obj
 			
 			For i = -1 To 1 Step 2
