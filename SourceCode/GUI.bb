@@ -2359,6 +2359,7 @@ Function DrawGUI()
 		
 		SetFont fo\Font%[Font_Digital_Medium]
 		y = opt\GraphicHeight - 55
+		
 		;Health
 		Color 0,0,0
 		Rect(x - 50, y, 30, 30)
@@ -2418,7 +2419,7 @@ Function DrawGUI()
 			Color 0, 0, 0
 			Rect(x - 50, y, 30, 30)
 			
-			If InfiniteStamina Or (StaminaEffect < 1.0) Then
+			If SuperMan Or InfiniteStamina Or (StaminaEffect < 1.0) Then
 				Color 0, 255, 0
 			Else
 				If Stamina <= 0.0 Then
