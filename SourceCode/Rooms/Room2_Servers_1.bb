@@ -111,5 +111,4 @@ Function UpdateEvent_Room2_Servers_1(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1
 ;~C#Blitz3D

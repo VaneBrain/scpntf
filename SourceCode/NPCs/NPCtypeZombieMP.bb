@@ -172,7 +172,7 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 				MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
 				
 				dist = EntityDistanceSquared(n\obj,Players[n\ClosestPlayer]\Collider)
-				If dist<0.5625 Then
+				If dist<=0.6 Then
 					If (Abs(DeltaYaw(n\Collider,Players[n\ClosestPlayer]\Collider))<=60.0) Then
 						n\State = MPZ_STATE_ATTACK
 						If n\NPCtype = NPCtypeGuardZombieMP Then
@@ -219,7 +219,7 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 				EndIf
 				dist = EntityDistanceSquared(n\Collider,Players[n\ClosestPlayer]\Collider)
 				yaw = Abs(DeltaYaw(n\Collider,Players[n\ClosestPlayer]\Collider))
-				If (dist<1.21) Then
+				If (dist<=1.2) Then
 					If (yaw<=60.0) Then
 						If prevFrame < shouldFrame And n\Frame => shouldFrame Then
 							PlaySound2(DamageSFX[Rand(5,8)],Camera,n\Collider)
@@ -237,7 +237,7 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 								EndIf
 							EndIf
 							If Players[n\ClosestPlayer]\CurrHP > 0 Then
-								DamagePlayer(n\ClosestPlayer,Rand(10,14),Rand(20,25),5)
+								DamagePlayer(n\ClosestPlayer,Rand(6+2*mp_I\Gamemode\Difficulty,10+2*mp_I\Gamemode\Difficulty),Rand(10+4*mp_I\Gamemode\Difficulty,14+4*mp_I\Gamemode\Difficulty),5)
 								If Players[n\ClosestPlayer]\CurrHP <= 0 Then
 									cmsg = AddChatMSG("death_killedby", 0, SERVER_MSG_IS, CHATMSG_TYPE_TWOPARAM_TRANSLATE)
 									cmsg\Msg[1] = Players[n\ClosestPlayer]\Name
@@ -252,7 +252,7 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 					If Players[n\ClosestPlayer]\Collider=0 Lor Players[n\ClosestPlayer]\CurrHP<=0 Then
 						n\State = MPZ_STATE_WANDER
 					Else
-						If dist>1.0 Then
+						If dist>1.2 Then
 							n\State = MPZ_STATE_DETECTED
 						EndIf
 						If (yaw>60.0) Then
@@ -353,23 +353,17 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 					If prevFrame < 348.5 And n\Frame => 348.5 Lor prevFrame < 638.5 And n\Frame => 638.5 Lor prevFrame < 698.5 And n\Frame => 698.5 Then
 						bone% = FindChild(n\obj,"Bip01_Spine1")
 						If n\State3 = 4 Then
-							Random = Rand(0,5)
+							Random = Rand(0,2)
 							Select Random
-								Case 0, 2, 4
-								;nothing!
-								Case 1
+								Case 0
 									it = CreateItem("First Aid Kit","firstaid",EntityX(bone%,True),EntityY(bone%,True)+0.025,EntityZ(bone%,True))
-									EntityType it\collider, HIT_ITEM
-									it\Dropped = 1
-								Case 3
+								Case 1
 									it = CreateItem("Blue First Aid Kit","firstaid2",EntityX(bone%,True),EntityY(bone%,True)+0.025,EntityZ(bone%,True))
-									EntityType it\collider, HIT_ITEM
-									it\Dropped = 1
-								Case 5
+								Case 2
 									it = CreateItem("Syringe","syringe",EntityX(bone%,True),EntityY(bone%,True)+0.025,EntityZ(bone%,True))
-									EntityType it\collider, HIT_ITEM
-									it\Dropped = 1
 							End Select
+							EntityType it\collider, HIT_ITEM
+							it\Dropped = 1
 						Else
 							Local FusesAmount% = 0
 							Local FusesActivatedAmount% = 0
@@ -387,16 +381,16 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 				EndIf	
 			Else
 				If prevFrame < 392.5 And n\Frame => 392.5 Lor prevFrame < 423.5 And n\Frame => 423.5 Then
+					bone% = FindChild(n\obj,"chest")
 					Random = Rand(0,1)
 					Select Random
 						Case 0
-							;nothing!
+							it = CreateItem("Ballistic Vest","vest",EntityX(bone%,True),EntityY(bone%,True),EntityZ(bone%,True))
 						Case 1	
-							bone% = FindChild(n\obj,"chest")
 							it = CreateItem("Ammo Crate","ammocrate",EntityX(bone%,True),EntityY(bone%,True),EntityZ(bone%,True))
-							EntityType it\collider, HIT_ITEM
-							it\Dropped = 1
 					End Select
+					EntityType it\collider, HIT_ITEM
+					it\Dropped = 1
 				EndIf
 			EndIf
 		EndIf

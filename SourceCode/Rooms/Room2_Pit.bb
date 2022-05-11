@@ -40,7 +40,7 @@ End Function
 
 Function UpdateEvent_Room2_Pit(e.Events)
 	
-	If Curr173\Idle = 0 Then 
+	If Curr173\Idle = SCP173_ACTIVE Then 
 		If e\room\dist < 8.0  And e\room\dist > 0 Then			
 			If (Not EntityVisible(Curr173\Collider, Camera)) And (Not EntityVisible(e\room\Objects[1], Camera)) Then 
 				PositionEntity(Curr173\Collider, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))

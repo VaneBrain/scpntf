@@ -178,8 +178,8 @@ End Type
 
 InitController()
 
-Const VersionNumber$ = "0.2.4"
-Const CompatibleNumber$ = "0.2.3"
+Const VersionNumber$ = "0.2.5"
+Const CompatibleNumber$ = "0.2.5"
 
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
@@ -937,7 +937,7 @@ Function GlobalGameLoop()
 		
 		SetErrorMsg(3, "GPU: "+GfxDriverName(CountGfxDrivers())+" ("+((TotalVidMem()/1024)-(AvailVidMem()/1024))+" MB/"+(TotalVidMem()/1024)+" MB)")
 		SetErrorMsg(4, "Triangles rendered: "+CurrTrisAmount+", Active textures: "+ActiveTextures()+Chr(10))
-		If NTF_GameModeFlag=0 Then
+		If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 			If PlayerRoom <> Null Then
 				SetErrorMsg(5, "Map seed: "+RandomSeed + ", Room: " + PlayerRoom\RoomTemplate\Name+" (" + Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5) + ", angle: "+PlayerRoom\angle + ")")
 				
@@ -948,7 +948,7 @@ Function GlobalGameLoop()
 					EndIf
 				Next
 			EndIf
-		ElseIf NTF_GameModeFlag=3 Then
+		ElseIf gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 			SetErrorMsg(5, "Map: "+mp_I\MapInList\Name)
 			SetErrorMsg(6, "Gamemode: "+mp_I\Gamemode\name+Chr(10))
 		EndIf
@@ -976,7 +976,7 @@ Function GlobalGameLoop()
 		If MainMenuOpen Then
 			MainLoopMenu()
 		Else
-			If NTF_GameModeFlag<>3 Then
+			If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 				MainLoop()
 			Else
 				If mp_I\PlayState=GAME_SERVER
@@ -1309,6 +1309,7 @@ Function MainLoop()
 					AnimateGuns()
 					UpdateIronSight()
 				EndIf
+				UpdateSPPlayer()
 			Else
 				If ChannelPlaying(ChatSFXCHN) Then StopChannel(ChatSFXCHN)
 				HideEntity g_I\GunPivot
@@ -1353,11 +1354,11 @@ Function MainLoop()
 		
 		If InfiniteStamina% Then Stamina = Min(100, Stamina + (100.0-Stamina)*0.01*FPSfactor)
 		
-		If NTF_GameModeFlag=1
+		If gopt\GameMode = GAMEMODE_UNKNOWN Then
 			UpdateMissionEvents()
 			UpdateMissionEnding()
 		EndIf
-		If FPSfactor=0
+		If FPSfactor = 0 Then
 			UpdateWorld(0)
 		Else
 			UpdateWorld()
@@ -1456,7 +1457,7 @@ Function MainLoop()
 				SelectedMonitor = Null
 				BlurTimer = Abs(KillTimer*5)
 				KillTimer=KillTimer-(FPSfactor*0.8)
-				If KillTimer < - 360 And (NTF_GameModeFlag<>1) Then 
+				If KillTimer < - 360 And (gopt\GameMode <> GAMEMODE_UNKNOWN) Then 
 					MenuOpen = True
 					If SelectedEnding <> "" Then EndingTimer = Min(KillTimer,-0.1)
 				EndIf
@@ -1511,7 +1512,7 @@ Function MainLoop()
 		
 		UpdateGUI()
 		
-		If NTF_GameModeFlag<>1
+		If gopt\GameMode <> GAMEMODE_UNKNOWN Then
 			If InteractHit(KEY_SAVE,CK_Save) Then
 				If SelectedDifficulty\saveType = SAVEANYWHERE Then
 					RN$ = PlayerRoom\RoomTemplate\Name$
@@ -3050,7 +3051,7 @@ Function MouseLook()
 		
 		RotateEntity Camera, WrapAngle(user_camera_pitch + Rnd(-CameraShake, CameraShake)), WrapAngle(EntityYaw(Collider) + Rnd(-CameraShake, CameraShake)), roll ; Pitch the user;s camera up And down.
 		
-		If NTF_GameModeFlag<>3
+		If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 			If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 				If EntityY(Collider)<2000*RoomScale Lor EntityY(Collider)>2608*RoomScale Then
 					RotateEntity Camera, WrapAngle(EntityPitch(Camera)),WrapAngle(EntityYaw(Camera)), roll+WrapAngle(Sin(MilliSecs()/150.0)*30.0) ; Pitch the user;s camera up And down.
@@ -3158,7 +3159,7 @@ Function MouseLook()
 		EntityTexture(Fog, FogTexture)
 	EndIf
 	
-	If NTF_GameModeFlag<>3 Then
+	If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 		For i = 0 To 5
 			If SCP1025state[i]>0 Then
 				Select i
@@ -3616,6 +3617,7 @@ Function LoadEntities()
 	ParticleTextures[8] = LoadTexture_Strict("GFX\particle.png",1+2,2)
 	ParticleTextures[9] = LoadAnimTexture("GFX\fog_textures.png",1+2,256,256,0,4)
 	ParticleTextures[12] = LoadTexture_Strict("GFX\WaterParticle3.png",1+2,2)
+	ParticleTextures[13] = LoadTexture_Strict("GFX\fire_particle.png",1+2,2)
 	
 	SetChunkDataValues()
 	
@@ -4075,7 +4077,7 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	
 	Contained106 = False
 	;Probably useless
-	If Curr173 <> Null Then Curr173\Idle = False
+	If Curr173 <> Null Then Curr173\Idle = SCP173_ACTIVE
 	
 	MTFtimer = 0
 	For i = 0 To 9
@@ -4211,10 +4213,10 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	
 	DeleteModStuff()
 	
-	If NTF_GameModeFlag% = 1
+	If gopt\GameMode = GAMEMODE_UNKNOWN
 		DeleteMission()
 	EndIf
-	NTF_GameModeFlag = -1
+	gopt\GameMode = gopt\SingleplayerGameMode
 	
 ;	Delete Each AchievementMsg
 ;	CurrAchvMSGID = 0
@@ -5745,6 +5747,8 @@ Function SaveOptionsINI()
 	SaveController()
 	SaveKeyBinds()
 	
+	PutINIValue(gv\OptionFile, "game options", "game mode", gopt\SingleplayerGameMode)
+	
 End Function
 
 Function Graphics3DExt%(width%,height%,depth%=32,mode%=2)
@@ -6519,7 +6523,7 @@ Function UpdateRichPresence()
 		BlitzcordSetSmallImage("")
 		BlitzcordSetActivityDetails("In Main Menu")
 		BlitzcordSetActivityState("")
-	ElseIf NTF_GameModeFlag = 3 Then
+	ElseIf gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		Select mp_I\Gamemode\ID
 			Case Gamemode_Waves
 				Steam_SetRichPresence("map", mp_I\MapInList\Name)
@@ -6536,7 +6540,7 @@ Function UpdateRichPresence()
 		BlitzcordSetSmallImage("logo")
 		BlitzcordSetActivityDetails(mp_I\Gamemode\name+" ("+mp_I\PlayerCount+" of "+mp_I\MaxPlayers+" players)")
 		BlitzcordSetActivityState(mp_I\MapInList\Name)
-	ElseIf NTF_GameModeFlag = 0 Then
+	Else
 		Steam_SetRichPresence("difficulty", SelectedDifficulty\name)
 		Steam_SetRichPresence("seed", RandomSeed)
 		Steam_SetRichPresence("steam_display", "#Status_Singleplayer")

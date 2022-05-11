@@ -155,7 +155,7 @@ Function UpdateEvent_Gate_A_Intro(e.Events)
 			EndIf
 		Next
 		Curr106\Idle = True
-		Curr173\Idle = True
+		Curr173\Idle = SCP173_DISABLED
 		PositionEntity Curr173\Collider,0,-20,0
 		CameraFogRange Camera, 5,30
 		CameraFogColor (Camera,200,200,200)

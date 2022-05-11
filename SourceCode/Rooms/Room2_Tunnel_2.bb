@@ -12,7 +12,7 @@ End Function
 Function UpdateEvent_Room2_Tunnel_2(e.Events)
 	
 	If PlayerRoom = e\room Then
-		If Curr173\Idle > 1 Then
+		If Curr173\Idle <> SCP173_ACTIVE Then
 			RemoveEvent(e)
 			Return
 		Else		
@@ -39,14 +39,14 @@ Function UpdateEvent_Room2_Tunnel_2(e.Events)
 			PlaySound_Strict LoadTempSound("SFX\ambient\general\ambient6.ogg")
 			PositionEntity(Curr173\Collider, EntityX(e\room\obj), 0.6, EntityZ(e\room\obj))
 			ResetEntity(Curr173\Collider)					
-			Curr173\Idle = True		
+			Curr173\Idle = SCP173_STATIONARY
 		EndIf
 		LightBlink = 1.0
 		e\EventState = e\EventState + FPSfactor
 	ElseIf e\EventState <> 0 Then
 		BlinkTimer = BLINKFREQ
 		
-		Curr173\Idle = False
+		Curr173\Idle = SCP173_ACTIVE
 		RemoveEvent(e)
 	EndIf
 	

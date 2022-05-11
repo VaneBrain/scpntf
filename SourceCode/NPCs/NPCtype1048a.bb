@@ -9,7 +9,7 @@ Const MP1048a_STATE_ATTACK = 2
 
 Function CreateNPCtype1048aMP(n.NPCs)
 	
-	n\CollRadius = 0.05
+	n\CollRadius = 0.15
 	n\Collider = CreatePivot()
 	EntityRadius n\Collider, n\CollRadius, 0.15
 	EntityType n\Collider, HIT_NPC_MP
@@ -118,7 +118,7 @@ Function UpdateNPCtype1048aMP(n.NPCs)
 				
 				If mp_I\Gamemode\EnemyCount <= MinEnemyLeft Then
 					If n\BlinkTimer <= 0.0 Then
-						CreateOverHereParticle(EntityX(n\Collider),EntityY(n\Collider)+0.5,EntityZ(n\Collider))
+						CreateOverHereParticle(EntityX(n\Collider),EntityY(n\Collider)+0.1,EntityZ(n\Collider))
 						n\BlinkTimer = 70*5
 					Else
 						n\BlinkTimer = n\BlinkTimer - FPSfactor
@@ -158,7 +158,7 @@ Function UpdateNPCtype1048aMP(n.NPCs)
 				AnimateNPC(n, 1, 201, 0.5, False)
 				If prevFrame < 4.0 And n\Frame >= 4.0 Then
 					n\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
-					n\SoundChn = PlaySound2(n\Sound,Camera,n\Collider,80)
+					n\SoundChn = PlaySound2(n\Sound,Camera,n\Collider,20)
 				EndIf
 				If n\Frame > 6.0 Then
 					dist = EntityDistanceSquared(n\Collider,Players[mp_I\PlayerID]\Collider)
@@ -200,7 +200,7 @@ Function UpdateNPCtype1048aMP(n.NPCs)
 				;[End Block]
 		End Select
 		
-		UpdateSoundOrigin(n\SoundChn, Camera, n\Collider, 80)
+		UpdateSoundOrigin(n\SoundChn, Camera, n\Collider, 20)
 		
 		If n\HP<=0 Then
 			n\IsDead=True
@@ -216,7 +216,7 @@ Function UpdateNPCtype1048aMP(n.NPCs)
 			FreeSound_Strict n\Sound
 			n\Sound = 0
 		EndIf
-		PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"),Camera,n\Collider,50)
+		PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"),Camera,n\Collider)
 		p.Particles = CreateParticle(EntityX(n\Collider),EntityY(n\Collider)+0.2,EntityZ(n\Collider),5,0.25,0.0)
 		EntityColor p\obj,100,100,100
 		RotateEntity p\pvt,0,0,Rnd(360)

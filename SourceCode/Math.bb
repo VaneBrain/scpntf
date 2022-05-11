@@ -258,12 +258,12 @@ End Function
 ; Find mesh extents
 Function GetMeshExtents(Mesh%)
 	Local s%, surf%, surfs%, v%, verts%, x#, y#, z#
-	Local minx# = INFINITY
-	Local miny# = INFINITY
-	Local minz# = INFINITY
-	Local maxx# = -INFINITY
-	Local maxy# = -INFINITY
-	Local maxz# = -INFINITY
+	Local minx# = Infinity
+	Local miny# = Infinity
+	Local minz# = Infinity
+	Local maxx# = -Infinity
+	Local maxy# = -Infinity
+	Local maxz# = -Infinity
 	
 	surfs = CountSurfaces(Mesh)
 	

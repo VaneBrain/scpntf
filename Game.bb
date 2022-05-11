@@ -14,8 +14,6 @@
 
 CheckForDlls()
 
-;This file needs to be created inside the SourceCode folder and named "Key.bb" and has to contain a variable named "Key" with a value. Example:
-;Global ENCRYPTION_KEY$ = "MyKey"
 Include "SourceCode/Key.bb"
 
 Include "SourceCode/SteamConstants.bb"
@@ -49,6 +47,16 @@ Type Options
 	Field HoldToCrouch%
 End Type
 
+Const GAMEMODE_UNKNOWN% = -1
+Const GAMEMODE_DEFAULT% = 0
+Const GAMEMODE_CLASSIC% = 1
+Const GAMEMODE_MULTIPLAYER% = 2
+
+Type GameOptions
+	Field SingleplayerGameMode%
+	Field GameMode%
+End Type
+
 ;Include the controls file
 Include "SourceCode\Controls.bb"
 
@@ -75,12 +83,13 @@ Function CheckForDlls()
 	Local InitErrorStr$ = ""
 	
 	If FileSize("Blitzcord.dll")=0 Then InitErrorStr=InitErrorStr+ "Blitzcord.dll"+Chr(13)+Chr(10)
-	If FileSize("discord_game_sdk.dll")=0 Then InitErrorStr=InitErrorStr+ "discord_game_sdk.dll"+Chr(13)+Chr(10)
+	If FileSize("BlitzHash.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzHash.dll"+Chr(13)+Chr(10)
 	If FileSize("BlitzMovie.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzMovie.dll"+Chr(13)+Chr(10)
 	If FileSize("BlitzSteamworks.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzSteamworks.dll"+Chr(13)+Chr(10)
-	If FileSize("steam_api.dll")=0 Then InitErrorStr=InitErrorStr+ "steam_api.dll"+Chr(13)+Chr(10)
 	If FileSize("d3dim700.dll")=0 Then InitErrorStr=InitErrorStr+ "d3dim700.dll"+Chr(13)+Chr(10)
+	If FileSize("discord_game_sdk.dll")=0 Then InitErrorStr=InitErrorStr+ "discord_game_sdk.dll"+Chr(13)+Chr(10)
 	If FileSize("fmod.dll")=0 Then InitErrorStr=InitErrorStr+ "fmod.dll"+Chr(13)+Chr(10)
+	If FileSize("steam_api.dll")=0 Then InitErrorStr=InitErrorStr+ "steam_api.dll"+Chr(13)+Chr(10)
 	
 	If Len(InitErrorStr)>0 Then
 		RuntimeError "The following DLLs were not found in the game directory:"+Chr(13)+Chr(10)+Chr(13)+Chr(10)+InitErrorStr
@@ -127,6 +136,9 @@ Function InitOptions()
 	opt\HoldToCrouch% = GetINIInt(gv\OptionFile, "options", "hold to crouch", 1)
 	
 	LoadResolutions()
+	
+	gopt\SingleplayerGameMode = GetINIInt(gv\OptionFile, "game options", "game mode", GAMEMODE_DEFAULT)
+	gopt\GameMode = gopt\SingleplayerGameMode
 	
 End Function
 

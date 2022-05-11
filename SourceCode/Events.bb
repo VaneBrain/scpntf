@@ -291,16 +291,24 @@ Function InitEvents()
 	CreateEvent("gate_a_intro","gate_a_intro",0)
 	CreateEvent("room2_maintenance","room2_maintenance",0)
 	CreateEvent("cont_457","cont_457",0)
-	If NTF_GameModeFlag<>1 Then ;Disable SZL when playing mission mode
+	If gopt\GameMode <> GAMEMODE_UNKNOWN Then ;Disable SZL when playing mission mode
 		;CreateEvent("checkpoints","checkpoint_ez",0,1.0)
-		CreateEvent("checkpoint_ez_106","checkpoint_ez",0,1.0)
+		If gopt\GameMode = GAMEMODE_CLASSIC Then
+			CreateEvent("checkpoints","checkpoint_ez",0,1.0)
+		Else
+			CreateEvent("checkpoint_ez_106","checkpoint_ez",0,1.0)
+		EndIf
 		CreateEvent("checkpoints","checkpoint_lcz",0,1.0)
 		CreateEvent("checkpoints","checkpoint_hcz",0,1.0)
 	EndIf
 	CreateEvent("area_076","area_076", 0)
-	CreateEvent("cont_173", "cont_173", 0)
 	CreateEvent("room2_offices_5", "room2_offices_5", 0)
-	CreateEvent("room1_sewers", "room1_sewers", 0)
+	
+	e = CreateEvent("room1_sewers", "room1_sewers", 0)
+	If e <> Null And gopt\GameMode <> GAMEMODE_DEFAULT Then
+		e\EventState = 8
+		e\EventState2 = 1.0
+	EndIf
 	
 	CreateEvent("testmap","testmap",0)
 	

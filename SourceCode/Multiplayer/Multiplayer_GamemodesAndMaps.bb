@@ -797,7 +797,7 @@ Function CreateFuseBox.FuseBox(model$, Position.Vector3D, Rotation.Vector3D, Sca
 	EntityType fb\obj,HIT_MAP
 	SetAnimTime fb\obj,1
 	
-	If NTF_GameModeFlag = 3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		fb\OverHereSprite = CreateSprite()
 		Local tex% = LoadTexture_Strict("GFX\menu\communication_wheel\look_fuse.png",1+2)
 		ScaleSprite fb\OverHereSprite,0.125,0.125
@@ -816,7 +816,7 @@ Function UpdateFuseBoxes()
 	Local fb.FuseBox
 	Local dist#
 	
-	If NTF_GameModeFlag = 3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		For fb = Each FuseBox
 			If fb\fuses < MaxFuseAmount And Players[mp_I\PlayerID]\Item <> Null And Players[mp_I\PlayerID]\Item\itemtemplate\tempname = "fuse" And (Not Players[mp_I\PlayerID]\Item\isDeleted) Then
 				dist = EntityDistanceSquared(Camera, fb\obj)
@@ -1063,7 +1063,7 @@ Function CreateButtonGen.ButtonGen(model$, Position.Vector3D, Rotation.Vector3D,
 	EntityType bg\obj,HIT_MAP
 	bg\id = id
 	
-	If NTF_GameModeFlag = 3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		bg\OverHereSprite = CreateSprite()
 		Local tex% = LoadTexture_Strict("GFX\menu\communication_wheel\look_use.png",1+2)
 		ScaleSprite bg\OverHereSprite,0.125,0.125
@@ -1164,7 +1164,7 @@ Function CreateLeverGen.LeverGen(model$, model_handle$, Position.Vector3D, Rotat
 	lg\angle = angle
 	lg\id = id
 	
-	If NTF_GameModeFlag = 3 Then
+	If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 		lg\OverHereSprite = CreateSprite()
 		Local tex% = LoadTexture_Strict("GFX\menu\communication_wheel\look_use.png",1+2)
 		ScaleSprite lg\OverHereSprite,0.125,0.125

@@ -613,7 +613,7 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 				temp3=ReadFloat(f)*RoomScale
 				temp2s$ =ReadString(f)
 				
-				If NTF_GameModeFlag<>3 And (Not MainMenuOpen) Then
+				If gopt\GameMode <> GAMEMODE_MULTIPLAYER And (Not MainMenuOpen) Then
 					If temp1<>0 Lor temp2<>0 Lor temp3<>0 Then 
 						Local ts.TempScreens = New TempScreens	
 						ts\x = temp1
@@ -630,7 +630,7 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 				temp2=ReadFloat(f)*RoomScale
 				temp3=ReadFloat(f)*RoomScale
 				
-				If (Not MainMenuOpen) And NTF_GameModeFlag<>3 Then
+				If (Not MainMenuOpen) And gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 					Local w.TempWayPoints = New TempWayPoints
 					w\roomtemplate = rt
 					w\x = temp1
@@ -654,9 +654,9 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 					g%=Int(Piece(lcolor,2," "))*intensity
 					b%=Int(Piece(lcolor,3," "))*intensity
 					
-					If (Not MainMenuOpen) And NTF_GameModeFlag<>3 Then
+					If (Not MainMenuOpen) And gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 						AddTempLight(rt, temp1,temp2,temp3, 2, range, r,g,b)
-					ElseIf (Not MainMenuOpen) And NTF_GameModeFlag=3 Then
+					ElseIf (Not MainMenuOpen) And gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 						AddLightMPMap(mp_I\Map,temp1,temp2,temp3,2,range,r,g,b)
 					ElseIf MainMenuOpen Then
 						AddLightMenu3D(temp1,temp2,temp3,2,range,r,g,b)
@@ -684,13 +684,13 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 					innercone = ReadInt(f)
 					outercone = ReadInt(f)
 					
-					If (Not MainMenuOpen) And NTF_GameModeFlag<>3 Then
+					If (Not MainMenuOpen) And gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 						Local lt.LightTemplates = AddTempLight(rt, temp1,temp2,temp3, 2, range, r,g,b)
 						lt\pitch = pitch
 						lt\yaw = yaw
 						lt\innerconeangle = innercone
 						lt\outerconeangle = outercone
-					ElseIf (Not MainMenuOpen) And NTF_GameModeFlag=3 Then
+					ElseIf (Not MainMenuOpen) And gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 						AddLightMPMap(mp_I\Map,temp1,temp2,temp3,3,range,r,g,b)
 						RotateEntity mp_I\Map\Lights[mp_I\Map\LightAmount-1],pitch,yaw,0
 						LightConeAngles(mp_I\Map\Lights[mp_I\Map\LightAmount-1],innercone,outercone)
@@ -707,7 +707,7 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 				;[Block]
 				temp1i=0
 				
-				If (Not MainMenuOpen) And NTF_GameModeFlag<>3 Then
+				If (Not MainMenuOpen) And gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 					If rt<>Null Then
 						For j = 0 To MaxRoomEmitters-1
 							If rt\TempSoundEmitter[j]=0 Then
@@ -722,7 +722,7 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 							EndIf
 						Next
 					EndIf
-				ElseIf (Not MainMenuOpen) And NTF_GameModeFlag=3 Then
+				ElseIf (Not MainMenuOpen) And gopt\GameMode = GAMEMODE_MULTIPLAYER Then
 					temp1=ReadFloat(f) : temp2=ReadFloat(f) : temp3=ReadFloat(f)
 					Position = CreateVector3D(temp1*RoomScale, temp2*RoomScale, temp3*RoomScale)
 					
@@ -1670,7 +1670,7 @@ Function LoadRoomMesh(rt.RoomTemplates)
 		;If rt\objPath <> "" Then rt\obj = LoadWorld(rt\objPath, rt) Else rt\obj = CreatePivot()
 	EndIf
 	
-	If (Not rt\obj) Then RuntimeError "Failed to load map file "+Chr(34)+mapfile+Chr(34)+"."
+	If (Not rt\obj) Then RuntimeError "Failed to load map file "+Chr(34)+rt\objPath+Chr(34)+"."
 	
 	CalculateRoomTemplateExtents(rt)
 	
@@ -3526,7 +3526,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 									EndIf
 									
 									TeleportEntity(n\Collider, EntityX(room2,True)+x,(0.1*FPSfactor)+EntityY(room2,True)+(EntityY(n\Collider)-EntityY(room1,True)),EntityZ(room2,True)+z,n\CollRadius,True)
-									If n = Curr173
+									If n = Curr173 Then
 										Curr173\IdleTimer = 10
 									EndIf
 								EndIf
@@ -3624,7 +3624,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 									EndIf
 									
 									TeleportEntity(n\Collider, EntityX(room1,True)+x,(0.1*FPSfactor)+EntityY(room1,True)+(EntityY(n\Collider)-EntityY(room2,True)),EntityZ(room1,True)+z,n\CollRadius,True)
-									If n = Curr173
+									If n = Curr173 Then
 										Curr173\IdleTimer = 10
 									EndIf
 								EndIf

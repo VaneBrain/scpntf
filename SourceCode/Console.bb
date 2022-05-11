@@ -585,14 +585,14 @@ Function UpdateConsole(commandSet%)
 							;[End Block]
 						Case "disable173"
 							;[Block]
-							Curr173\Idle = 3 ;This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of 173 state checks.
+							Curr173\Idle = SCP173_DISABLED
 							HideEntity Curr173\obj
 							HideEntity Curr173\obj2
 							HideEntity Curr173\Collider
 							;[End Block]
 						Case "enable173"
 							;[Block]
-							Curr173\Idle = False
+							Curr173\Idle = SCP173_ACTIVE
 							ShowEntity Curr173\obj
 							ShowEntity Curr173\obj2
 							ShowEntity Curr173\Collider
@@ -831,7 +831,7 @@ Function UpdateConsole(commandSet%)
 							;[Block]
 							GodMode = 1
 							InfiniteStamina = 1
-							Curr173\Idle = 3
+							Curr173\Idle = SCP173_DISABLED
 							Curr106\Idle = True
 							Curr106\State = 200000
 							Contained106 = True
@@ -1302,7 +1302,7 @@ Function UpdateConsole(commandSet%)
 								If SameFound = 2 Then CurrSave\Name = CurrSave\Name + " (" + LowestPossible + ")"
 								
 								ResetControllerSelections()
-								NTF_GameModeFlag = 0
+								gopt\GameMode = gopt\SingleplayerGameMode
 								MainMenuOpen = False
 								Null3DMenu()
 								NTF_CurrZone = Int(StrTemp2)
@@ -1355,7 +1355,7 @@ Function UpdateConsole(commandSet%)
 							InitMission(Int(StrTemp2))
 							LoadEntities()
 							LoadAllSounds()
-							NTF_GameModeFlag = 1
+							gopt\GameMode = GAMEMODE_UNKNOWN
 							InitMissionGameMode(Int(StrTemp2))
 							MainMenuOpen = False
 							FlushKeys()

@@ -528,6 +528,7 @@ Function UpdateNPCtype049(n.NPCs)
 	n\HP = Min(n\HP+FPSfactor*0.5,100)
 	
 End Function
+
 ;~IDEal Editor Parameters:
 ;~F#1#B#1F
 ;~C#Blitz3D

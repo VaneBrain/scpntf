@@ -97,13 +97,13 @@ Function UpdateNPCtypeGuard(n.NPCs)
 							
 							PointEntity pvt, Collider
 							ShootPlayer(EntityX(pvt), EntityY(pvt), EntityZ(pvt), ShootAccuracy, False, instaKillPlayer)
-							n\Reload = 7
+							n\Reload = 4.67 ;900 RPM
 						Else
 							n\CurrSpeed = n\Speed
 						EndIf
 					EndIf
 					
-					If n\Reload > 0 And n\Reload <= 7 Then
+					If n\Reload > 0 And n\Reload <= 4.67 Then ;900 RPM
 						AnimateNPC(n,245,248,0.35,True)
 					Else
 						If n\Frame < 302 Then
@@ -143,7 +143,7 @@ Function UpdateNPCtypeGuard(n.NPCs)
 				PositionEntity(p\pvt, EntityX(n\obj), EntityY(n\obj), EntityZ(n\obj))
 				RotateEntity(p\pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0, True)
 				MoveEntity (p\pvt,0.8*0.079, 10.75*0.079, 6.9*0.079)
-				n\Reload = 7
+				n\Reload = 4.67 ;900 RPM
 			EndIf
 			;[End Block]
 		Case 3 ;follows a path
@@ -276,13 +276,13 @@ Function UpdateNPCtypeGuard(n.NPCs)
 							
 							PointEntity pvt, Collider
 							ShootPlayer(EntityX(pvt), EntityY(pvt), EntityZ(pvt), 1.0, False, instaKillPlayer)
-							n\Reload = 7
+							n\Reload = 4.67 ;900 RPM
 						Else
 							n\CurrSpeed = n\Speed
 						EndIf
 					EndIf
 					
-					If n\Reload > 0 And n\Reload <= 7 Then
+					If n\Reload > 0 And n\Reload <= 4.67 Then ;900 RPM
 						AnimateNPC(n,245,248,0.35,True)
 					Else
 						If n\Frame < 302 Then

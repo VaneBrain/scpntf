@@ -8,6 +8,7 @@ Global gv.GlobalVariables = New GlobalVariables
 Global kb.KeyBinds = New KeyBinds
 Global opt.Options = New Options
 Global aud.AudioControl = New AudioControl
+Global gopt.GameOptions = New GameOptions
 
 ;Global accessors that will only be loaded into memory when necessary
 Global mp_I.MultiplayerInstance

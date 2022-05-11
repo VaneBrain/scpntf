@@ -70,20 +70,19 @@ End Function
 
 Function UpdateEvent_Lockroom_1(e.Events)
 	
-	If e\room\dist < 6.0  And e\room\dist > 0 Then
-		If Curr173\Idle > 1 Then
+	If e\room\dist < 6.0 And e\room\dist > 0 Then
+		If Curr173\Idle <> SCP173_DISABLED Then
 			RemoveEvent(e)
-		Else
-			If (Not EntityInView(Curr173\Collider, Camera)) Lor EntityDistanceSquared(Curr173\Collider, Collider)>PowTwo(15.0) Then 
-				PositionEntity(Curr173\Collider, e\room\x + Cos(225-90 + e\room\angle) * 2, 0.6, e\room\z + Sin(225-90 + e\room\angle) * 2)
-				ResetEntity(Curr173\Collider)
-				RemoveEvent(e)
-			EndIf						
+			Return
+		EndIf
+		If (Not EntityInView(Curr173\Collider, Camera)) Lor EntityDistanceSquared(Curr173\Collider, Collider) > PowTwo(15.0) Then 
+			PositionEntity(Curr173\Collider, e\room\x + Cos(225-90 + e\room\angle) * 2, 0.6, e\room\z + Sin(225-90 + e\room\angle) * 2)
+			ResetEntity(Curr173\Collider)
+			RemoveEvent(e)
 		EndIf
 	EndIf
 	
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#46
 ;~C#Blitz3D

@@ -73,5 +73,5 @@ Function UpdateEvent_Testroom_682(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1#1D
+;~F#1
 ;~C#Blitz3D

@@ -6,14 +6,23 @@ Const TASK_STATUS_END = 2
 Const TASK_RENDER_TIME = 70*5
 
 ;Tasks themselves
+;Intro tasks
 Const TASK_OPENINV = 0
 Const TASK_CLICKKEYCARD = 1
 Const TASK_OPENDOOR = 2
 Const TASK_CHECKPOINT = 3
+;Checkpoint tasks (story mode)
 Const TASK_FIXELEVATOR = 4
+;Sewers tasks (story mode)
 Const TASK_FINDWEAPON = 5
 Const TASK_FINDFUSE = 6
 Const TASK_FINDFUSEBOX = 7
+;Checkpoint tasks (classic mode)
+Const TASK_GOTOZONE = 8
+Const TASK_CONTAIN173 = 9
+Const TASK_CONTAIN106 = 10
+Const TASK_173TOCHAMBER = 11
+Const TASK_106RECALL = 12
 
 Type NewTask
 	Field ID%
@@ -50,6 +59,16 @@ Function BeginTask.NewTask(ID%)
 			t\txt = GetLocalString("Tasks", "find_fuse")
 		Case TASK_FINDFUSEBOX
 			t\txt = GetLocalString("Tasks", "find_fusebox")	
+		Case TASK_GOTOZONE
+			t\txt = GetLocalString("Tasks", "to_zone")
+		Case TASK_CONTAIN173
+			t\txt = GetLocalString("Tasks", "contain_173")
+		Case TASK_CONTAIN106
+			t\txt = GetLocalString("Tasks", "contain_106")
+		Case TASK_173TOCHAMBER
+			t\txt = GetLocalString("Tasks", "173_tochamber")
+		Case TASK_106RECALL
+			t\txt = GetLocalString("Tasks", "106_recall")
 	End Select
 	t\Timer = TASK_RENDER_TIME
 	t\Status = TASK_STATUS_NEW

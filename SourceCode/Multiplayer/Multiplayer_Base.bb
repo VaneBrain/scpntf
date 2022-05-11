@@ -437,14 +437,14 @@ Function ConnectFinal()
 		CatchErrors("Uncaught (ConnectFinal)")
 		Return
 	ElseIf currMSGSync = PACKET_KEY Then
-		secret = ReadShortStringAsBytes()
+		secret = Steam_PullString()
 		
 		Steam_PushByte(PACKET_LOAD)
 		CreateSharedSecret(Players[0]\SteamIDUpper, Players[0]\SteamIDLower, secret)
-		WriteShortStringAsBytes(Key_Encode(ENCRYPTION_KEY, secret))
+		Steam_PushString(Key_Encode(ENCRYPTION_KEY(), secret))
 		Steam_PushString(VersionNumber)
 		Steam_PushString(mp_O\PlayerName)
-		Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)
+		Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower, k_EP2PSendUnreliable)
 		While (Not getconn)
 			getconn = Steam_LoadPacket()
 			Flip
@@ -539,7 +539,7 @@ Function ConnectFinal()
 	;RuntimeError "Player Client Data: " + currMSGSync + ", " + mp_I\PlayerID + ", " + mp_I\TimeOut + ", " + mp_I\MaxPlayers + ", " + mapname + ", " + gamemode
 	Players[mp_I\PlayerID] = New Player
 	LoadingClient(True)
-	NTF_GameModeFlag = 3
+	;TODO: Check if it should be here (Game Mode Flag)
 	
 	CatchErrors("Uncaught (ConnectFinal)")
 End Function
@@ -547,10 +547,10 @@ End Function
 Function ConnectWithNoPassword(UserIDUpper%, UserIDLower%)
 	
 	Steam_PushByte(PACKET_LOAD)
-	WriteShortStringAsBytes("")
+	Steam_PushString("")
 	Steam_PushString(VersionNumber)
 	Steam_PushString(mp_O\PlayerName)
-	Steam_SendPacketToUser(UserIDUpper, UserIDLower)
+	Steam_SendPacketToUser(UserIDUpper, UserIDLower, k_EP2PSendUnreliable)
 	
 End Function
 
@@ -558,10 +558,10 @@ Function ConnectViaPassword()
 	
 	Steam_PushByte(PACKET_AUTHORIZE)
 	Steam_PushString(mp_I\ConnectPassword)
-	WriteShortStringAsBytes(Key_Encode(ENCRYPTION_KEY, FindSharedSecret(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)))
+	Steam_PushString(Key_Encode(ENCRYPTION_KEY(), FindSharedSecret(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)))
 	Steam_PushString(VersionNumber)
 	Steam_PushString(mp_O\PlayerName)
-	Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)
+	Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower, k_EP2PSendUnreliable)
 	
 End Function
 
@@ -576,8 +576,6 @@ Function CheckForConnectingPlayer(currMSGSync%)
 	For giveID = 1 To mp_I\MaxPlayers-1
 		If Players[giveID] <> Null Then
 			If Players[giveID]\SteamIDUpper = IDUpper And Players[giveID]\SteamIDLower = IDLower Then
-				;If Players[giveID]\Connected Then giveID = -1
-				;Exit
 				DebugLog "Player " + giveID + " already exists!"
 				CatchErrors("Uncaught (CheckForConnectingPlayer)")
 				Return -1
@@ -597,12 +595,10 @@ Function CheckForConnectingPlayer(currMSGSync%)
 	EndIf
 	
 	If currMSGSync = PACKET_AUTHORIZE Then
-		;password = ReadLine(mp_I\Server)
 		password = Steam_PullString()
 	EndIf
-	c_key = ReadShortStringAsBytes()
+	c_key = Steam_PullString()
 	version = Steam_PullString()
-	;name = ReadLine(mp_I\Server)
 	name = Steam_PullString()
 	Steam_LoadPacket()
 	
@@ -610,24 +606,18 @@ Function CheckForConnectingPlayer(currMSGSync%)
 		If version = VersionNumber Then
 			If giveID > 0 Then ;server can accept another player
 				If c_key = "" Then
-					secret = CreateSharedSecret(IDUpper, IDLower, Key_StartAuth())
+					secret = CreateSharedSecret(IDUpper, IDLower, Key_GenerateSalt())
 					Steam_PushByte(PACKET_KEY)
-					WriteShortStringAsBytes(secret)
-					Steam_SendPacketToUser(IDUpper, IDLower)
-				ElseIf Key_Encode(c_key, FindSharedSecret(IDUpper, IDLower)) <> ENCRYPTION_KEY Then
+					Steam_PushString(secret)
+					Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
+				ElseIf c_key <> Key_Encode(ENCRYPTION_KEY(), FindSharedSecret(IDUpper, IDLower)) Then
 					Steam_PushByte(PACKET_KICK)
 					Steam_PushByte(SERVER_MSG_KICK_ENCRYPTION)
-					Steam_SendPacketToUser(IDUpper, IDLower)
+					Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
 					DeleteSharedSecret(IDUpper, IDLower)
 				Else
 					If (mp_O\Password = "" Lor (currMSGSync = PACKET_AUTHORIZE And password = mp_O\Password)) Then
 						CreateClientPlayer(giveID, IDUpper, IDLower, name)
-						;WriteByte(mp_I\Server,PACKET_LOAD)
-						;WriteByte(mp_I\Server,giveID) ;give the player their ID
-						;WriteInt(mp_I\Server,mp_I\TimeOut)
-						;WriteByte(mp_I\Server,mp_I\MaxPlayers)
-						;WriteLine(mp_I\Server,mp_I\MapInList\Name)
-						;WriteByte(mp_I\Server,mp_I\Gamemode\ID)
 						Steam_PushByte(PACKET_LOAD)
 						Steam_PushByte(giveID)
 						Steam_PushInt(mp_I\TimeOut)
@@ -639,8 +629,6 @@ Function CheckForConnectingPlayer(currMSGSync%)
 						Select mp_I\Gamemode\ID
 							Case Gamemode_Waves
 								;[Block]
-								;WriteByte(mp_I\Server,mp_I\Gamemode\MaxPhase)
-								;WriteByte(mp_I\Server,mp_I\Gamemode\Difficulty)
 								Steam_PushByte(mp_I\Gamemode\Phase)
 								Steam_PushByte(mp_I\Gamemode\MaxPhase)
 								Steam_PushByte(mp_I\Gamemode\Difficulty)
@@ -650,15 +638,12 @@ Function CheckForConnectingPlayer(currMSGSync%)
 						cmsg = AddChatMSG("user_join", 0, SERVER_MSG_IS, CHATMSG_TYPE_ONEPARAM_TRANSLATE)
 						cmsg\Msg[1] = Players[giveID]\Name
 						
-						;SendUDPMsg mp_I\Server,getconn,UDPMsgPort(mp_I\Server) ;give the message to the player
-						Steam_SendPacketToUser(Players[giveID]\SteamIDUpper, Players[giveID]\SteamIDLower)
+						Steam_SendPacketToUser(Players[giveID]\SteamIDUpper, Players[giveID]\SteamIDLower, k_EP2PSendUnreliable)
 						DeleteSharedSecret(Players[giveID]\SteamIDUpper, Players[giveID]\SteamIDLower)
 						mp_I\PlayerCount=mp_I\PlayerCount+1
 						UpdateServer(Steam_GetPlayerIDLower(), Steam_GetPlayerIDUpper(), mp_I\PlayerCount)
 						id = giveID
 					ElseIf currMSGSync <> PACKET_AUTHORIZE Then
-						;WriteByte mp_I\Server,PACKET_AUTHORIZE
-						;SendUDPMsg mp_I\Server,getconn,UDPMsgPort(mp_I\Server)
 						Local skip% = False
 						For i = 0 To (mp_I\MaxPlayers-1)
 							If Players[i] <> Null Then
@@ -670,36 +655,32 @@ Function CheckForConnectingPlayer(currMSGSync%)
 						Next
 						If (Not skip) Then
 							Steam_PushByte(PACKET_AUTHORIZE)
-							Steam_SendPacketToUser(IDUpper, IDLower)
+							Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
 						EndIf
 					Else
-						;WriteByte mp_I\Server,PACKET_KICK ;kick the player
-						;SendUDPMsg mp_I\Server,getconn,UDPMsgPort(mp_I\Server) ;tell the client to disconnect
 						Steam_PushByte(PACKET_KICK)
 						Steam_PushByte(SERVER_MSG_KICK_PASSWORD)
-						Steam_SendPacketToUser(IDUpper, IDLower)
+						Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
 						DeleteSharedSecret(IDUpper, IDLower)
 					EndIf
 				EndIf
 			Else ;server is full
-				;WriteByte mp_I\Server,PACKET_KICK ;kick the player
-				;SendUDPMsg mp_I\Server,getconn,UDPMsgPort(mp_I\Server) ;tell the client to disconnect
 				Steam_PushByte(PACKET_KICK)
 				Steam_PushByte(SERVER_MSG_KICK_MANYPLAYERS)
-				Steam_SendPacketToUser(IDUpper, IDLower)
+				Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
 				DeleteSharedSecret(IDUpper, IDLower)
 			EndIf
 		Else
 			Steam_PushByte(PACKET_KICK)
 			Steam_PushByte(SERVER_MSG_KICK_VERSION)
-			Steam_SendPacketToUser(IDUpper, IDLower)
+			Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
 			DeleteSharedSecret(IDUpper, IDLower)
 		EndIf
 	Else
 		Steam_PushByte(PACKET_KICK)
 		Steam_PushByte(SERVER_MSG_KICK_BANNED)
 		Steam_PushString(GetBanReason(IDUpper, IDLower))
-		Steam_SendPacketToUser(IDUpper, IDLower)
+		Steam_SendPacketToUser(IDUpper, IDLower, k_EP2PSendUnreliable)
 		DeleteSharedSecret(IDUpper, IDLower)
 	EndIf
 	
@@ -717,14 +698,14 @@ Function Disconnect()
 		For i = 1 To (mp_I\MaxPlayers-1)
 			If Players[i] <> Null Then
 				Steam_PushByte(PACKET_QUIT)
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliable)
 			EndIf
 		Next
 	Else
 		If Players[0]<>Null Then
 			Steam_PushByte(PACKET_QUIT)
 			Steam_PushByte(mp_I\PlayerID)
-			Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)
+			Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower, k_EP2PSendUnreliable)
 		EndIf
 	EndIf
 	
@@ -2161,7 +2142,7 @@ Function SyncServer()
 				If Players[i]\HasPinged Then
 					Steam_PushByte(PACKET_PING)
 					Players[i]\HasPinged = False
-					Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+					Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				EndIf
 				;[End Block]
 				
@@ -2272,7 +2253,7 @@ Function SyncServer()
 						Steam_PushByte(0) ;The user ID is not given
 					EndIf
 				Next
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				;[End Block]
 				
 				;Item syncing (package)
@@ -2292,7 +2273,7 @@ Function SyncServer()
 					Steam_PushFloat(EntityZ(it\collider))
 					Steam_PushFloat(EntityYaw(it\collider))
 				Next
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				;[End Block]
 				
 				;NPC syncing (package)
@@ -2321,7 +2302,7 @@ Function SyncServer()
 						Steam_PushByte(n\ClosestPlayer)
 					EndIf
 				Next
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				;[End Block]
 				
 				;Effects syncing (package)
@@ -2349,7 +2330,7 @@ Function SyncServer()
 					End Select
 				Next
 				
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				;[End Block]
 				
 				;Chat message syncing (package)
@@ -2388,7 +2369,7 @@ Function SyncServer()
 					EndIf
 				Next
 				
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				;[End Block]
 				
 				;Gamemode data that will be sent
@@ -2429,7 +2410,7 @@ Function SyncServer()
 				For j = 0 To (MAX_VOTED_MAPS - 1)
 					Steam_PushString(mp_I\MapsToVote[j])
 				Next
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 				;[End Block]
 				
 				;A packet that will be sent to signal the game has been restarted
@@ -2437,7 +2418,7 @@ Function SyncServer()
 				If mp_I\ResetGame Then
 					Steam_PushByte(PACKET_RELOAD)
 					
-					Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower)
+					Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliable)
 				EndIf
 				;[End Block]
 				
@@ -2555,7 +2536,7 @@ Function SyncClient()
 		;Resend the ping packet, as it assumes that it may have gotten lost
 		Steam_PushByte(PACKET_PING)
 		Steam_PushByte(mp_I\PlayerID)
-		Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)
+		Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 		mp_I\LastPingMillisecs = MilliSecs()
 		mp_I\PingTimer = 0.0
 	EndIf
@@ -2661,7 +2642,7 @@ Function SyncClient()
 	;TODO: Check if this is necessary, as Steam may probably have an own ping system
 	Steam_PushInt(Players[mp_I\PlayerID]\Ping)
 	
-	Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)
+	Steam_SendPacketToUser(Players[0]\SteamIDUpper, Players[0]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
 	
 	If Players[0]\FinishedLoading Then
 		If (MilliSecs()-Players[0]\LastMsgTime>(mp_I\TimeOut*1000)) Then ;disconnect after X seconds of inactivity: assume connection was unexpectedly lost
@@ -2691,29 +2672,8 @@ Function CountdownBeep(timer#,startAt%)
 	EndIf	
 End Function
 
-Function ReadShortStringAsBytes$()
-	Local temp% = Steam_PullByte()
-	Local i%, t$
-	
-	For i = 0 To (temp-1)
-		t = t + Chr(Steam_PullByte())
-	Next
-	
-	Return t
-End Function
-
-Function WriteShortStringAsBytes$(s$)
-	Local i%
-	
-	Steam_PushByte(Len(s))
-	For i = 0 To (Len(s)-1)
-		Steam_PushByte(Asc(Right(s, Len(s) - i)))
-	Next
-	
-End Function
-
 ;~IDEal Editor Parameters:
-;~F#2B#66#72#7E#84#92#9F#AA#B0#C8#DF#F5#101#118#129#141#155#15E#167#177
-;~F#186#1EA#218#222#22D#2BD#2E8#2F6#2FF#3FD#4F2#504#5CA#604#717#742#788#7A9#7C4#80D
-;~F#81C#82A#83E#847#8B4#8C8#8E5#901#928#94C#99B#A41#A4C#A57
+;~F#31#70#7C#88#8E#9C#A9#B4#BA#D2#E9#FF#10B#122#133#14B#15F#168#171#181
+;~F#190#1F4#222#22C#237#276#2B4#2DF#2ED#2F6#3F6#4D6#4ED#4FF#503#5D6#5EB#610#615#730
+;~F#75B#7A1#7C2#7DD#82B#83A#848#85C#865#8D3#8E7#904#920#947#970#9B7#9BF#A67
 ;~C#Blitz3D

@@ -1023,7 +1023,7 @@ End Function
 Function DrawMissionEnding()
 	Local width,height,x,y
 	
-	If NTF_GameModeFlag<>1 Then Return
+	If gopt\GameMode <> GAMEMODE_UNKNOWN Then Return
 	
 	If mi_I\IsEnding Then
 		UpdateMenuControllerSelection(1+(1*(KillTimer<0 Lor mi_I\IsEnding=2)),0,0)
@@ -1065,7 +1065,7 @@ Function DrawMissionEnding()
 				CurrSave = Null
 				InitMission(id)
 				LoadEntities()
-				NTF_GameModeFlag = 1
+				gopt\GameMode = GAMEMODE_UNKNOWN
 				InitMissionGameMode(id)
 				FlushKeys()
 				FlushMouse()

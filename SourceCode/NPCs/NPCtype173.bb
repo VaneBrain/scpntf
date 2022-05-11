@@ -3,11 +3,9 @@
 ;[Block]
 Const SCP173_ACTIVE = 0
 Const SCP173_STATIONARY = 1
-Const SCP173_CONTAIN = 2
-Const SCP173_DISABLED = 3
-;Containment States
-Const SCP173_BOXED = 3
-Const SCP173_NOMOVE = 2
+Const SCP173_BOXED = 2
+Const SCP173_CONTAINED = 3
+Const SCP173_DISABLED = 4
 ;[End Block]
 
 Function CreateNPCtype173(n.NPCs)
@@ -67,9 +65,9 @@ Function UpdateNPCtype173(n.NPCs)
 	Local i
 	Local snd.Sound
 	
-	If Curr173\Idle <> 3 Then
+	If Curr173\Idle <> SCP173_DISABLED Then
 		
-		dist# = EntityDistance(n\Collider, Collider)		
+		dist# = EntityDistance(n\Collider, Collider)
 		
 		n\State3 = 1
 		
@@ -79,7 +77,7 @@ Function UpdateNPCtype173(n.NPCs)
 		PositionEntity(n\obj2, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 		RotateEntity (n\obj2, 0, (EntityYaw(n\Collider)-180)+n\Angle, 0)
 		
-		If n\Idle < SCP173_CONTAIN Then
+		If n\Idle < SCP173_BOXED Then
 			If n\Idle = SCP173_ACTIVE Then
 				Local temp% = False
 				Local move% = True
@@ -205,7 +203,7 @@ Function UpdateNPCtype173(n.NPCs)
 															UseDoor(d,False)
 														EndIf
 														
-														pvt = FreeEntity_strict(pvt)
+														pvt = FreeEntity_Strict(pvt)
 													EndIf
 												EndIf
 											EndIf
@@ -222,84 +220,99 @@ Function UpdateNPCtype173(n.NPCs)
 							n\EnemyZ = 0
 						EndIf
 						
-						;player is not looking and is visible from 173's position -> attack
-						If temp Then
-							n\Angle = DeltaYaw(n\Collider,Camera)
-							For n2.NPCs = Each NPCs
-								dist2# = EntityDistance(n\Collider, n2\Collider)
-								If dist < 0.65 Then
-									If KillTimer >= 0 And (Not GodMode) Then
-										
-										Select PlayerRoom\RoomTemplate\Name
-											Case "lockroom_1", "room2_closets", "cont_895"
-												DeathMSG = Designation+". Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."
-											Case "room2_doors"
-												DeathMSG = Chr(34)+"If I'm not mistaken, one of the main purposes of these rooms was to stop SCP-173 from moving further in the event of a containment breach. "
-												DeathMSG = DeathMSG + "So, who's brilliant idea was it to put A GODDAMN MAN-SIZED VENTILATION DUCT in there?"+Chr(34)
-											Default 
-												DeathMSG = Designation+". Cause of death: Fatal cervical fracture. Assumed to be attacked by SCP-173."
-										End Select
-										
-										If (Not GodMode) Then n\Idle = SCP173_STATIONARY
-										PlaySound_Strict(NeckSnapSFX[Rand(0,2)])
-										If Rand(2) = 1 Then 
-											TurnEntity(Camera, 0, Rand(80,100), 0)
-										Else
-											TurnEntity(Camera, 0, Rand(-100,-80), 0)
-										EndIf
-										Kill()
+						Local stored_dist# = PowTwo(dist)
+						n\Target = Null
+						For n2 = Each NPCs
+							If n2\NPCtype = NPCtypeMTF And n2\HP > 0 Then
+								dist2 = EntityDistanceSquared(n\Collider, n2\Collider)
+								If dist2 < stored_dist Then
+									stored_dist = dist2
+									n\Target = n2
+									If stored_dist < PowTwo(0.65) Then
+										n2\HP = 0
+										PlaySound2(NeckSnapSFX[Rand(0,2)], Camera, n\Collider)
 									EndIf
-								ElseIf dist2 < dist And n2\HP > 0 Then
-									If n2\NPCtype = NPCtypeMTF Then
-										If dist2 < 0.65 Then
-											n2\HP = 0
-											PlaySound2(NeckSnapSFX[Rand(0,2)], Camera, n\Collider)
-											Exit
-										EndIf
-									EndIf
-									PointEntity(n\Collider, n2\Collider)
-									RotateEntity n\Collider, 0, EntityYaw(n\Collider), 0
-									TranslateEntity n\Collider,Cos(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor,0.0,Sin(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor
-								Else
-									PointEntity(n\Collider, Collider)
-									RotateEntity n\Collider, 0, EntityYaw(n\Collider), 0
-									TranslateEntity n\Collider,Cos(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor,0.0,Sin(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor
 								EndIf
-							Next
+							EndIf
+						Next
+						If n\Target <> Null Then
+							PointEntity(n\Collider, n\Target\Collider)
+							RotateEntity n\Collider, 0, EntityYaw(n\Collider), 0
+							TranslateEntity n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * FPSfactor, 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * FPSfactor
+						EndIf
+						
+						;player is not looking and is visible from 173's position -> attack
+						If temp And n\Target = Null Then
+							n\Angle = DeltaYaw(n\Collider, Camera)
+							If dist < 0.65 Then
+								If KillTimer >= 0 And (Not GodMode) Then
+									Select PlayerRoom\RoomTemplate\Name
+										Case "lockroom_1", "room2_closets", "cont_895"
+											DeathMSG = Designation + ". Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."
+										Case "room2_doors"
+											DeathMSG = Chr(34) + "If I'm not mistaken, one of the main purposes of these rooms was to stop SCP-173 from moving further in the event of a containment breach. "
+											DeathMSG = DeathMSG + "So, who's brilliant idea was it to put A GODDAMN MAN-SIZED VENTILATION DUCT in there?" + Chr(34)
+										Default 
+											DeathMSG = Designation + ". Cause of death: Fatal cervical fracture. Assumed to be attacked by SCP-173."
+									End Select
+									
+									If (Not GodMode) Then n\Idle = SCP173_STATIONARY
+									PlaySound_Strict(NeckSnapSFX[Rand(0,2)])
+									If Rand(2) = 1 Then 
+										TurnEntity(Camera, 0, Rand(80,100), 0)
+									Else
+										TurnEntity(Camera, 0, Rand(-100,-80), 0)
+									EndIf
+									Kill()
+								EndIf
+							Else
+								PointEntity(n\Collider, Collider)
+								RotateEntity n\Collider, 0, EntityYaw(n\Collider), 0
+								TranslateEntity n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * FPSfactor, 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * FPSfactor
+							EndIf
 						Else ;player is not visible -> move to the location where he was last seen
 							If n\EnemyX <> 0 Then
 								n\Angle = DeltaYaw(n\Collider,Camera)
 								If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) > PowTwo(0.5) Then
 									AlignToVector(n\Collider, n\EnemyX-EntityX(n\Collider), 0, n\EnemyZ-EntityZ(n\Collider), 3)
 									MoveEntity(n\Collider, 0, 0, n\Speed * FPSfactor)
-									If Rand(500) = 1 Then n\EnemyX = 0 : n\EnemyY = 0 : n\EnemyZ = 0
+									If Rand(500) = 1 Then
+										n\EnemyX = 0
+										n\EnemyY = 0
+										n\EnemyZ = 0
+									EndIf
 								Else
 									n\EnemyX = 0 : n\EnemyY = 0 : n\EnemyZ = 0
 								EndIf
 							Else
 								If Rand(400)=1 Then RotateEntity (n\Collider, 0, Rnd(360), 0)
-								TranslateEntity n\Collider,Cos(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor,0.0,Sin(EntityYaw(n\Collider)+90.0)*n\Speed*FPSfactor
-								n\Angle = Rnd(-120,120)
+								TranslateEntity n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * FPSfactor, 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * FPSfactor
+								n\Angle = Rnd(-120, 120)
 							EndIf
 						EndIf
 					EndIf ; less than 2 rooms away from the player
-					
 				EndIf
-				
 			EndIf ;idle = false
 			
-			PositionEntity(n\Collider, EntityX(n\Collider), Min(EntityY(n\Collider),0.35), EntityZ(n\Collider))
+			PositionEntity(n\Collider, EntityX(n\Collider), Min(EntityY(n\Collider), 0.35), EntityZ(n\Collider))
 			
-		ElseIf n\Idle = 2 Lor n\ContainmentState = SCP173_BOXED ;idle = 2
-			
-			PointEntity n\obj, Collider
-			RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj),EntityYaw(n\Collider),10.0), 0, True								
-			If EntityDistanceSquared(n\Collider, Collider) < PowTwo(1) Then
-				MoveEntity n\Collider, 0, 0, -0.016*FPSfactor*Max(Min((EntityDistanceSquared(n\Collider, Collider)*PowTwo(2)-1.0)*0.5,1.0),-0.5)
-			Else
-				MoveEntity n\Collider, 0, 0, 0.016*FPSfactor*Max(Min((EntityDistanceSquared(n\Collider, Collider)*PowTwo(2)-1.0)*0.5,1.0),-0.5)
+		ElseIf n\Idle = SCP173_BOXED Lor n\Idle = SCP173_CONTAINED Then
+			If n\Idle = SCP173_BOXED Then
+				PointEntity n\obj, Collider
+				RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 10.0), 0, True								
+				If EntityDistanceSquared(n\Collider, Collider) < 1.0 ;PowTwo(1) = 1 / 1*1 = 1 Then
+					MoveEntity n\Collider, 0, 0, -0.016 * FPSfactor * Max(Min((EntityDistanceSquared(n\Collider, Collider) * PowTwo(2) - 1.0) * 0.5, 1.0), -0.5)
+				Else
+					MoveEntity n\Collider, 0, 0, 0.016 * FPSfactor * Max(Min((EntityDistanceSquared(n\Collider, Collider) * PowTwo(2) - 1.0) * 0.5, 1.0), -0.5)
+				EndIf
+				n\GravityMult = 1.0
+				
+				If EntityDistanceSquared(n\Collider, Collider) > PowTwo(HideDistance) Then
+					TeleportEntity(n\Collider, EntityX(Collider), EntityY(Collider) + 0.1, EntityZ(Collider), n\CollRadius)
+					RotateEntity n\Collider, 0, EntityYaw(Collider), 0
+					MoveEntity n\Collider, 0, 0, -0.5
+				EndIf
 			EndIf
-			n\GravityMult = 1.0
 			
 			PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider) + 0.05 + Sin(MilliSecs()*0.08)*0.02, EntityZ(n\Collider))
 			RotateEntity (n\obj, 0, EntityYaw(n\Collider)-180, 0)

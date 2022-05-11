@@ -89,7 +89,7 @@ Function UpdateEvent_Cont_008(e.Events)
 		GiveAchievement(Achv008)=True
 		;container open
 		If e\EventState = 0 Then
-			If Curr173\Idle<2 And EntityDistanceSquared(Curr173\Collider,Collider)>PowTwo(HideDistance) ;Just making sure that 173 is far away enough to spawn him to this room
+			If Curr173\Idle = SCP173_ACTIVE And EntityDistanceSquared(Curr173\Collider,Collider) > PowTwo(HideDistance) ;Just making sure that 173 is far away enough to spawn him to this room
 				PositionEntity Curr173\Collider, EntityX(e\room\Objects[3],True),0.5,EntityZ(e\room\Objects[3],True),True
 				ResetEntity Curr173\Collider
 			EndIf
@@ -110,7 +110,7 @@ Function UpdateEvent_Cont_008(e.Events)
 				
 				If e\EventState2=0 Then
 					ShowEntity e\room\Objects[2]
-					If BlinkTimer<-10 And Curr173\Idle = 0 Then
+					If BlinkTimer<-10 And Curr173\Idle = SCP173_ACTIVE Then
 						PositionEntity Curr173\Collider, EntityX(e\room\Objects[4],True),0.5,EntityZ(e\room\Objects[4],True),True
 						ResetEntity Curr173\Collider
 						

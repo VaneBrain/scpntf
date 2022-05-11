@@ -1089,10 +1089,10 @@ Function DamagePlayer(playerid%,hpdamage%,kevlardamage%,kevlarprotectionrate#=5.
 	If mp_I\PlayState = GAME_CLIENT Then Return
 	
 	If Players[playerid]\CurrKevlar>0 Then
-		Players[playerid]\CurrKevlar = Max(Players[playerid]\CurrKevlar-(kevlardamage*(1+(mp_I\Gamemode\Difficulty*0.5))),0)
-		Players[playerid]\CurrHP = Max(Players[playerid]\CurrHP-((hpdamage/kevlarprotectionrate#)*(1+(mp_I\Gamemode\Difficulty*0.5))),0)
+		Players[playerid]\CurrKevlar = Max(Players[playerid]\CurrKevlar-kevlardamage,0)
+		Players[playerid]\CurrHP = Max(Players[playerid]\CurrHP-(hpdamage/Max(kevlarprotectionrate#,1.0)),0)
 	Else
-		Players[playerid]\CurrHP = Max(Players[playerid]\CurrHP-hpdamage*(1+(mp_I\Gamemode\Difficulty*0.5)),0)
+		Players[playerid]\CurrHP = Max(Players[playerid]\CurrHP-hpdamage,0)
 	EndIf
 	
 End Function

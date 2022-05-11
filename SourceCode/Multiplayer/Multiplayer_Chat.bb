@@ -41,7 +41,7 @@ End Function
 Function AddChatMSG.ChatMSG(first_msg$, playerID%, isServerMSG% = SERVER_MSG_NO, msg_type% = CHATMSG_TYPE_DEFAULT)
 	Local cmsg.ChatMSG
 	
-	If NTF_GameModeFlag <> 3 Then Return
+	If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then Return
 	
 	cmsg = New ChatMSG
 	cmsg\PlayerID = playerID

@@ -25,7 +25,7 @@ End Function
 Function UpdateEvent_Room2_Doors(e.Events)
 	
 	If PlayerRoom = e\room Then
-		If e\EventState = 0 And Curr173\Idle = 0 Then
+		If e\EventState = 0 And Curr173\Idle = SCP173_ACTIVE Then
 			If (Not EntityInView(Curr173\obj, Camera)) Then
 				e\EventState = 1
 				PositionEntity(Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
@@ -38,5 +38,5 @@ Function UpdateEvent_Room2_Doors(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1#17
+;~F#18
 ;~C#Blitz3D
