@@ -1,3 +1,10 @@
+# 另见See also
+[SCP: Nine Tail Fox (Chinese)](https://scpcbgame.cn/ntf.html)
+
+Can you mention this link in store page pls?  XD
+
+There are some video won't render in github
+
 # SCP: Nine-Tailed Fox | Source code
 How to compile
 1. Download and install Blitz3D TSS from here: https://github.com/Saalvage/Blitz3D/releases
@@ -70,13 +77,6 @@ How to compile
     <li><b>团队死亡竞赛（MTF vs CI）：</b>混沌分裂者是一个曾经属于基金会的组织，但他们在创立后不久就消失了。他们对于SCP很大的兴趣，并希望能够利用它们...基金会最大的设施之一目前正面临着不利的形式，他们和这一切有关吗...？<br>为他们而战或保卫设施，站在他们的对立面！</li>
     <li><b>Waves（PvE模式）：</b>一种罕见的、极具攻击性的SCP-008菌株已经感染了设施的大部分生物！带上你的朋友（或者陌生人）一同抵御他们的攻势，同时控制一些收容失效的SCP！</li>
 </ul>
-
-### 另见See also
-[SCP: Nine Tail Fox (Chinese)](https://scpcbgame.cn/ntf.html)
-
-Can you mention this link in store page pls?  XD
-
-There are some video won't render in github
 
 <br>
 

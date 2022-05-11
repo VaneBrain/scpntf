@@ -3985,11 +3985,7 @@ Function RowText(A$, X, Y, W, H, align% = 0, Leading#=1)
 	
 	While Len(A) > 0
 		Local space
-		If Upper(I_Loc\Lang) = Upper("schinese") Then
-			space = Instr(A$, "")
-		Else
-			space = Instr(A$, " ")
-		EndIf
+		If Upper(I_Loc\Lang) = "SCHINESE" Then space = Instr(A$, "") Else space = Instr(A$, " ")
 		If space = 0 Then space = Len(A$)
 		Local temp$ = Left(A$, space)
 		Local trimmed$ = Trim(temp) ;we might ignore a final space 
@@ -4038,7 +4034,8 @@ Function GetLineAmount(A$, W, H, Leading#=1)
 	Local b$
 	
 	While Len(A) > 0
-		Local space = Instr(A$, " ")
+		Local space
+		If Upper(I_Loc\Lang) = "SCHINESE" Then space = Instr(A$, "") Else space = Instr(A$, " ")
 		If space = 0 Then space = Len(A$)
 		Local temp$ = Left(A$, space)
 		Local trimmed$ = Trim(temp) ;we might ignore a final space 

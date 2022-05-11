@@ -14,6 +14,7 @@
 		Austin Norris ("Kest")
 		Brandon Smith
 		Brendan Sussman ("DukeLovesYou")
+		C45
 		Caleb Yu ("Omniary")
 		CDWinters
 		Christian Rieß

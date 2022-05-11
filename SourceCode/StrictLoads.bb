@@ -317,7 +317,7 @@ Function OpenFile_Strict(File$)
 	Local tmp
 
 	If I_Loc\Localized And FileType(I_Loc\LangPath+File$) = 1 Then
-		tmp = OpenFile(I_Loc\LangPath+File$)
+		Return OpenFile(I_Loc\LangPath+File$)
 	EndIf
 	
 	If FileType(File$) <> 1 Then RuntimeError "File " + File$ + " not found."
@@ -605,8 +605,8 @@ End Function
 
 Function LoadFont_Strict(file$, height%)
 	Local tmp
-	If I_Loc\Localized And FileType(I_Loc\LangPath+File$) = 1 Then
-		tmp = LoadFont(I_Loc\LangPath+File$, height%)
+	If I_Loc\Localized And (FileType(I_Loc\LangPath+File$) = 1) Then
+		Return LoadFont(I_Loc\LangPath+File$, height%)	
 	EndIf
 	
 	If FileType(File$) <> 1 Then RuntimeError "Font " + File$ + " not found."

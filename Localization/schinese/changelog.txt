@@ -1,13 +1,43 @@
-v0.2.4
-0.2.3版的存档与该版本兼容
+v0.2.5
 
--Fixed a game crash that can occur when D-Class shoots the player.
--Fixed Continue button still working with incompatible save files.
--Fixed description of Objectives disappearing after loading a save file.
--Fixed player shooting after pressing the elevator button.
--Fixed a bug when player was reloading the weapon while typing in a chat.
--Fixed a game crash that can occur when D-Class shoots the player.
--Fixed Continue button still working with incompatible save files.
--Fixed description of Objectives disappearing after loading a save file.
--Fixed player shooting after pressing the elevator button.
--Fixed a bug when player was reloading the weapon while typing in a chat.
+[单人游戏]
+- 添加了经典模式：
+	* 你可以玩到以下与主故事线不同的事件
+	* 你终于可以收容SCP-173了
+- D级人员的修改：
+	* D级人员有小概率“投降”，但事情不是你想象的那么简单
+	* 将D级人员的生命值从80/100/120降低到60/75/90（Safe/Euclid/Keter难度）
+	* 平衡了D级人员获得的枪支类型概率：
+		* 将获得USP或Beretta的概率从33%升至42%
+		* 将获得P90或MP5K的概率从12%降至6%
+		* 将获得SPAS-12的概率从10%降至4%
+- 修复了SCP-173速度的bug，现在速度应该不变
+- 其他修复和改进
+
+[多人游戏]
+- 降低了网络数据的缓存空间：
+	* 这将防止频繁发送网络缓冲包，例如玩家更新数据包。这将提高游戏性能。
+- 提高了加密传输的安全性
+- 重新平衡了僵尸的物品掉落概率：
+	* 移除了医生/保安/MTF僵尸其中不掉落物品的50%的概率
+	* 医生僵尸掉落急救箱、蓝色急救箱和针筒的概率从16.667%增至33.333%
+	* 添加了保安/MTF僵尸掉落防弹衣的概率，概率为50%
+- 重新平衡了僵尸伤害系统：
+	* 基础伤害（Safe等级的默认值）现在在6至10之间，每个难度增加2点伤害
+	* 基础kevlar伤害现在在10至14之间，每个难度增加4点伤害
+- 重新平衡了SCP-939伤害系统：
+	* 基础伤害（Safe等级的默认值）现在在20至30之间，每个难度增加5点伤害
+	* 基础kevlar伤害现在在25至35之间，每个难度增加5点伤害
+- 降低了SCP-1048-A和SCP-939叫声的范围
+
+[其他]
+- HonestResolv3制作的bug修复和部分改进：
+	* 修复了控制台生成特定SCP导致游戏崩溃的bug
+	* 修复了启用无敌模式导致SCP-939无敌的bug
+	* 现在SCP-939可以在单人模式里生成
+	* 修复启用无互动仍旧可以激活SCP-1048-A的事件
+	* 修复了SCP-1048-A在启用无敌模式后仍可以杀死玩家的bug
+	* 修复了SCP-457在无互动启用后仍试图攻击玩家的bug
+	* 和许多bug修复和改进
+
+----------------------------------------------------------------------------------
