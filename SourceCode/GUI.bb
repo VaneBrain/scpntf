@@ -2344,7 +2344,7 @@ Function DrawGUI()
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		End If
 		
-		If BlinkTimer <= 0.0 Or BlurTimer > 0.0 Or LightFlash > 0.0 Then
+		If BlinkTimer <= 0.0 Or BlurTimer > 0.0 Or LightFlash > 0.0 or LightBlink > 0.0 Then
 			Color 255, 0, 0
 		Else
 			If BlinkEffect < 1.0 Then
