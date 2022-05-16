@@ -399,9 +399,19 @@ Function PickMPItem(item.Items,playerID%)
 										PlayItemPickSoundMP(item,playerID)
 										If mp_I\PlayState=GAME_SERVER Then
 											If g\GunType = GUNTYPE_SHOTGUN Then
-												Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+(1*g\MaxCurrAmmo),g\MaxReloadAmmo)
+												If item\state > 0 Or item\state2 > 0 Then
+													Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+(item\state+item\state2),g\MaxReloadAmmo)
+												Else
+													Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+g\MaxCurrAmmo,g\MaxReloadAmmo)
+												EndIf
 											Else
-												Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+1,g\MaxReloadAmmo)
+												If item\state >= GetWeaponMaxCurrAmmo(g\ID) And item\state2 > 0 Then
+													Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+1+item\state2,g\MaxReloadAmmo)
+												ElseIf item\state2 > 0
+													Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+item\state2,g\MaxReloadAmmo)
+												Else
+													Players[playerID]\ReloadAmmo[i]=Min(Players[playerID]\ReloadAmmo[i]+1,g\MaxReloadAmmo)
+												EndIf
 											EndIf
 										EndIf
 										picked = True
