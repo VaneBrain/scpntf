@@ -2364,18 +2364,20 @@ Function DrawGUI()
 		Color 0,0,0
 		Rect(x - 50, y, 30, 30)
 		
-		If psp\Health > 20 Then
-			Color 255,255,255
+		If psp\Health > 100 Then
+			Color 0, 255, 0
+		ElseIf psp\Health > 20 Then
+			Color 255, 255, 255
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		DrawImage mpl\HealthIcon, x - 50, y
 		
 		If psp\Health > 20
-			Color 0,255,0
+			Color 0, 255, 0
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
 		TextWithAlign x + 30, y + 5, Int(psp\Health), 2
 		
@@ -2383,18 +2385,21 @@ Function DrawGUI()
 		Color 0,0,0
 		Rect(x + 100, y, 30, 30)
 		
-		If psp\Kevlar > 20 Then
-			Color 255,255,255
+		If psp\Kevlar > 100 Then
+			Color 0, 255, 0
+		ElseIf psp\Kevlar > 20 Then
+			Color 255, 255, 255
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
+		
 		Rect(x + 100 - 1, y - 1, 30 + 2, 30 + 2, False)
 		DrawImage mpl\KevlarIcon, x + 100, y
 		
 		If psp\Kevlar > 20
-			Color 0,255,0
+			Color 0, 255, 0
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
 		TextWithAlign x + 180, y + 5, Int(psp\Kevlar), 2
 		

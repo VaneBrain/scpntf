@@ -833,7 +833,7 @@ Function PickItem(item.Items)
 		Select item\itemtemplate\tempname
 			Case "vest"
 				If psp\Kevlar < 100
-					Msg = "You put on the vest and feel slightly encumbered."
+					Msg = "You replaced your kevlar"
 					MsgTimer = 70 * 5
 					PlaySound_Strict LoadTempSound("SFX\Interact\PickUpKevlar.ogg")
 					psp\Kevlar = 100
@@ -844,7 +844,7 @@ Function PickItem(item.Items)
 				EndIf
 			Case "finevest"
 				If psp\Kevlar < 150
-					Msg = "You put on the vest and feel heavily encumbered."
+					Msg = "You replaced your kevlar"
 					MsgTimer = 70 * 5
 					PlaySound_Strict LoadTempSound("SFX\Interact\PickUpKevlar.ogg")
 					psp\Kevlar = 150
