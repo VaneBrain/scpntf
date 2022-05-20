@@ -2322,8 +2322,16 @@ Function DrawGUI()
 		x% = 80
 		y% = opt\GraphicHeight - 95
 		
+		If NoBlink Then
+			BlinkTimer = BLINKFREQ
+		EndIf
+		
 		;Blinking Bar
-		Color 255, 255, 255	
+		If (Not NoBlink) Then
+			Color 255, 255, 255
+		Else
+			Color 0, 255, 0
+		EndIf
 		Rect (x, y, width, height, False)
 		For i = 1 To Int(((width - 2) * (BlinkTimer / (BLINKFREQ))) / 10)
 			DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
@@ -2336,7 +2344,11 @@ Function DrawGUI()
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		End If
 		
-		Color 255, 255, 255
+		If (Not NoBlink) Then
+			Color 255, 255, 255
+		Else
+			Color 0, 255, 0
+		EndIf
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		
 		DrawImage BlinkIcon, x - 50, y
@@ -3474,7 +3486,11 @@ Function DrawGunsInHUD()
 		If g\ID = g_I\HoldingGun Then
 			If (g\GunType <> GUNTYPE_MELEE) Then
 				If pAmmo > 0 Then
-					Color 255,255,255
+					If InstantKill Then
+						Color 0, 255, 0
+					Else
+						Color 255, 255, 255
+					EndIf
 				Else
 					Color 255,0,0
 				EndIf
