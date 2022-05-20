@@ -3486,8 +3486,10 @@ Function DrawGunsInHUD()
 		If g\ID = g_I\HoldingGun Then
 			If (g\GunType <> GUNTYPE_MELEE) Then
 				If pAmmo > 0 Then
-					If InstantKill Then
+					If InstantKill Or DamageMultiplier > 1.0 Then
 						Color 0, 255, 0
+					ElseIf DamageMultiplier < 1.0 Then
+						Color 255, 0, 0
 					Else
 						Color 255, 255, 255
 					EndIf
