@@ -1598,13 +1598,7 @@ Function MainLoop()
 	Wend
 	
 	;Go out of function immediately if the game has been quit
-	If MainMenuOpen Then
-		; Fix for modified speed applying to other saves
-		; Speed resets when the game is exited
-		Speed = 0.018 
-		DamageMultiplier = 1.0
-		Return
-	EndIf
+	If MainMenuOpen Then Return
 	
 	If FPSfactor > 0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then RenderSecurityCams()
 	
@@ -3994,6 +3988,7 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	Local i%, x%, y%, lvl
 	Local itt.ItemTemplates, s.Screens
 	Local rt.RoomTemplates
+	Local g.Guns
 	
 	Local PlayerRoomName$ = PlayerRoom\RoomTemplate\Name
 	Local PlayerRoomZone = NTF_CurrZone
@@ -4068,8 +4063,20 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	Shake = 0
 	LightFlash = 0
 	
+	Speed = 0.018
+	DamageMultiplier = 1.0
+	
+	For g = Each Guns
+		g\Knockback = GetINIFloat("Data\weapons.ini", g\name, "knockback")
+		g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy")
+		g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire")
+	Next
+	
 	GodMode = 0
 	NoClip = 0
+	NoBlink = 0
+	InfiniteAmmo = 0
+	InstantKill = 0
 	WireframeState = 0
 	WireFrame 0
 	WearingGasMask = 0
