@@ -483,7 +483,7 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("******************************")
 									CreateConsoleMsg("Sets the users gun accuracy multiplier.")
 									CreateConsoleMsg("Should be set to a value at 0 or above")
-									CreateConsoleMsg("Higher multiplier = less accuracy")
+									CreateConsoleMsg("Higher multiplier = more accuracy")
 									CreateConsoleMsg("Default is 'default'")
 									CreateConsoleMsg("******************************")
 								Case "setfireratemult"
@@ -491,7 +491,7 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("******************************")
 									CreateConsoleMsg("Sets the users fire rate multiplier.")
 									CreateConsoleMsg("Should be set to a value at 0 or above")
-									CreateConsoleMsg("Higher multiplier = slower firing")
+									CreateConsoleMsg("Higher multiplier = faster firing")
 									CreateConsoleMsg("Default is 'default'")
 									CreateConsoleMsg("******************************")
 								Case "zoneroomlist"
@@ -1436,7 +1436,7 @@ Function UpdateConsole(commandSet%)
 										CreateConsoleMsg("You cannot have a accuracy multiplier less than 0", 255, 0, 0)
 									Else
 										For g = Each Guns
-											g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy") * AccuracyResult
+											g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy") * (Float(1) / AccuracyResult)
 										Next
 										CreateConsoleMsg("Accuracy multiplier set to " + AccuracyResult + "x")
 									EndIf
@@ -1458,7 +1458,7 @@ Function UpdateConsole(commandSet%)
 										CreateConsoleMsg("You cannot have a rate of fire multiplier less than 0", 255, 0, 0)
 									Else
 										For g = Each Guns
-											g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire") * RateOfFireResult
+											g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire") * (Float(1) / RateOfFireResult)
 										Next
 										CreateConsoleMsg("Rate of fire multiplier set to " + RateOfFireResult + "x")
 									EndIf
