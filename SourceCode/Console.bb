@@ -491,7 +491,7 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("******************************")
 									CreateConsoleMsg("Sets the users fire rate multiplier.")
 									CreateConsoleMsg("Should be set to a value at 0 or above")
-									CreateConsoleMsg("Higher multiplier = faster firing")
+									CreateConsoleMsg("Higher multiplier = slower firing")
 									CreateConsoleMsg("Default is 'default'")
 									CreateConsoleMsg("******************************")
 								Case "zoneroomlist"
@@ -1330,12 +1330,12 @@ Function UpdateConsole(commandSet%)
 									Speed = 0.018
 									CreateConsoleMsg("Speed multiplier set to default")
 								Else
-									Local SpeedTemp = Float(StrTemp)
-									If SpeedTemp < 0 Then
+									Local SpeedTemp# = Float(StrTemp)
+									If SpeedTemp < 0.0 Then
 										CreateConsoleMsg("You cannot have a speed multiplier less than 0", 255, 0, 0)
 									Else
 										Speed = SpeedTemp * 0.018
-										CreateConsoleMsg("Speed multiplier set to " + Speed + "x")
+										CreateConsoleMsg("Speed multiplier set to " + SpeedTemp + "x")
 									EndIf
 								EndIf
 							EndIf
@@ -1350,7 +1350,7 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Stamina use multiplier set to default")
 								Else
 									StaminaEffect = Float(StrTemp)
-									If StaminaEffect < 0 Then
+									If StaminaEffect < 0.0 Then
 										StaminaEffect = 1.0
 										CreateConsoleMsg("You cannot have a stamina use multiplier less than 0", 255, 0, 0)
 									Else
@@ -1371,7 +1371,7 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Blinking time multiplier set to default")
 								Else
 									BlinkEffect = Float(StrTemp)
-									If BlinkEffect < 0 Then
+									If BlinkEffect < 0.0 Then
 										BlinkEffect = 1.0
 										CreateConsoleMsg("You cannot have a blink multiplier less than 0", 255, 0, 0)
 									Else
@@ -1390,7 +1390,7 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Damage multiplier set to default")
 								Else
 									DamageMultiplier = Float(StrTemp)
-									If DamageMultiplier < 0 Then
+									If DamageMultiplier < 0.0 Then
 										DamageMultiplier = 1.0
 										CreateConsoleMsg("You cannot have a damage multiplier less than 0", 255, 0, 0)
 									Else
@@ -1403,14 +1403,14 @@ Function UpdateConsole(commandSet%)
 							If StrTemp = "" Then
 								CreateConsoleMsg("Too few parameters. Usage: setknockbackmult (amount)", 255, 0, 0)
 							Else
-								Local KnockbackResult = Float(StrTemp)
+								Local KnockbackResult# = Float(StrTemp)
 								If Lower(StrTemp) = "default" Then
 									For g = Each Guns
 										g\Knockback = GetINIFloat("Data\weapons.ini", g\name, "knockback")
 									Next
 									CreateConsoleMsg("Knockback multiplier set to default")
 								Else
-									If KnockbackResult < 0 Then
+									If KnockbackResult < 0.0 Then
 										CreateConsoleMsg("You cannot have a knockback multiplier less than 0", 255, 0, 0)
 									Else
 										For g = Each Guns
@@ -1425,14 +1425,14 @@ Function UpdateConsole(commandSet%)
 							If StrTemp = "" Then
 								CreateConsoleMsg("Too few parameters. Usage: setaccuracymult (amount)", 255, 0, 0)
 							Else
-								Local AccuracyResult = Float(StrTemp)
+								Local AccuracyResult# = Float(StrTemp)
 								If Lower(StrTemp) = "default" Then
 									For g = Each Guns
 										g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy")
 									Next
 									CreateConsoleMsg("Knockback multiplier set to default")
 								Else
-									If AccuracyResult < 0 Then
+									If AccuracyResult < 0.0 Then
 										CreateConsoleMsg("You cannot have a accuracy multiplier less than 0", 255, 0, 0)
 									Else
 										For g = Each Guns
@@ -1447,14 +1447,14 @@ Function UpdateConsole(commandSet%)
 							If StrTemp = "" Then
 								CreateConsoleMsg("Too few parameters. Usage: setfireratemult (amount)", 255, 0, 0)
 							Else
-								Local RateOfFireResult = Float(StrTemp)
+								Local RateOfFireResult# = Float(StrTemp)
 								If Lower(StrTemp) = "default" Then
 									For g = Each Guns
 										g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire")
 									Next
 									CreateConsoleMsg("Rate of fire multiplier set to default")
 								Else
-									If RateOfFireResult < 0 Then
+									If RateOfFireResult < 0.0 Then
 										CreateConsoleMsg("You cannot have a rate of fire multiplier less than 0", 255, 0, 0)
 									Else
 										For g = Each Guns

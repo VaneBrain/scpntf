@@ -2410,8 +2410,10 @@ Function DrawGUI()
 			Color 0, 0, 0
 			Rect(x - 50, y, 30, 30)
 			
-			If Stamina <= 0.0 Then
+			If Stamina <= 0.0 Or Speed < 0.018 Then
 				Color 255, 0, 0
+			ElseIf Speed > 0.018
+				Color 0, 255, 0
 			Else
 				Color 255, 255, 255
 			EndIf

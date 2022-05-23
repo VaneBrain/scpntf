@@ -1602,6 +1602,7 @@ Function MainLoop()
 		; Fix for modified speed applying to other saves
 		; Speed resets when the game is exited
 		Speed = 0.018 
+		DamageMultiplier = 1.0
 		Return
 	EndIf
 	
