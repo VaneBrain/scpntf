@@ -1838,7 +1838,10 @@ Function UpdateGUI()
 						EndIf
 					Else
 						
-						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
+						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
+							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" Then
+								SelectedItem\state = 101
+							EndIf
 							
 							PlayerX% = Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5)
 							PlayerZ% = Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5)
@@ -1955,7 +1958,7 @@ Function UpdateGUI()
 										EndIf
 									EndIf
 								Next
-								If PlayerRoom\RoomTemplate\Name = "coffin" Then
+								If PlayerRoom\RoomTemplate\Name = "cont_895" Then
 									If CoffinDistance < 8.0 Then
 										dist = Rnd(4.0, 8.0)
 										Color 100, 0, 0
@@ -3266,8 +3269,11 @@ Function DrawGUI()
 						EndIf
 					Else
 						
-						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
-							
+						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
+							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" Then
+								SelectedItem\state = 101
+							EndIf
+
 							PlayerX% = Floor(EntityX(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							PlayerZ% = Floor(EntityZ(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							
@@ -3395,7 +3401,7 @@ Function DrawGUI()
 										EndIf
 									EndIf
 								Next
-								If PlayerRoom\RoomTemplate\Name = "coffin" Then
+								If PlayerRoom\RoomTemplate\Name = "cont_895" Then
 									If CoffinDistance < 8.0 Then
 										dist = Rnd(4.0, 8.0)
 										Color 100, 0, 0
