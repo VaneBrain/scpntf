@@ -113,8 +113,11 @@ Function UpdateNPCtype106(n.NPCs)
 					ShouldPlay = 66
 					If n\Frame<259 Then
 						PositionEntity n\Collider, EntityX(n\Collider), n\PrevY-0.15, EntityZ(n\Collider)
-						PointEntity n\obj, Collider
-						RotateEntity (n\Collider, 0, CurveValue(EntityYaw(n\obj),EntityYaw(n\Collider),100.0), 0, True)
+						
+						If (Not NoTarget) Then
+							PointEntity n\obj, Collider
+							RotateEntity (n\Collider, 0, CurveValue(EntityYaw(n\obj),EntityYaw(n\Collider),100.0), 0, True)
+						EndIf
 						
 						AnimateNPC(n, 110, 259, 0.15, False)
 					Else
@@ -157,8 +160,10 @@ Function UpdateNPCtype106(n.NPCs)
 							
 							n\CurrSpeed = CurveValue(n\Speed,n\CurrSpeed,10.0)
 							
-							PointEntity n\obj, Collider
-							RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 10.0), 0
+							If (Not NoTarget) Then
+								PointEntity n\obj, Collider
+								RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 10.0), 0
+							EndIf
 							
 							If KillTimer >= 0 Then
 								prevFrame# = n\Frame
@@ -199,13 +204,16 @@ Function UpdateNPCtype106(n.NPCs)
 									Wend
 									
 									If n\Path[n\PathLocation]<>Null Then 
-										TranslateEntity n\Collider, 0, ((EntityY(n\Path[n\PathLocation]\obj,True) - 0.11) - EntityY(n\Collider)) / 50.0, 0
+										If (Not NoTarget) Then
+											TranslateEntity n\Collider, 0, ((EntityY(n\Path[n\PathLocation]\obj,True) - 0.11) - EntityY(n\Collider)) / 50.0, 0
 										
-										PointEntity n\obj, n\Path[n\PathLocation]\obj
+											PointEntity n\obj, n\Path[n\PathLocation]\obj
 										
-										dist2# = EntityDistance(n\Collider,n\Path[n\PathLocation]\obj)
+											dist2# = EntityDistance(n\Collider,n\Path[n\PathLocation]\obj)
 										
-										RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), Min(20.0,dist2*10.0)), 0
+											RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), Min(20.0,dist2*10.0)), 0
+										EndIf
+										
 										n\CurrSpeed = CurveValue(n\Speed,n\CurrSpeed,10.0)
 										
 										prevFrame# = AnimTime(n\obj)
@@ -277,7 +285,11 @@ Function UpdateNPCtype106(n.NPCs)
 					If dist > 10 And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gate_a_topside" And n\State <-5 Then ;timer idea by Juanjpro
 						If (Not EntityInView(n\obj,Camera))
 							TurnEntity Collider,0,180,0
-							pick = EntityPick(Collider,5)
+							If (Not NoTarget) Then
+								pick = EntityPick(Collider,5)
+							Else
+								pick = 0
+							EndIf
 							TurnEntity Collider,0,180,0
 							If pick<>0
 								TeleportEntity(n\Collider,PickedX(),PickedY(),PickedZ(),n\CollRadius)
