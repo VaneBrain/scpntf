@@ -1838,7 +1838,7 @@ Function UpdateGUI()
 						EndIf
 					Else
 						
-						If SelectedItem\state > 0 And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
+						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
 							
 							PlayerX% = Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5)
 							PlayerZ% = Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5)
@@ -3266,7 +3266,7 @@ Function DrawGUI()
 						EndIf
 					Else
 						
-						If SelectedItem\state > 0 And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
+						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
 							
 							PlayerX% = Floor(EntityX(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							PlayerZ% = Floor(EntityZ(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
@@ -4408,13 +4408,13 @@ Function UpdateMenu()
 ;			
 ;			If AchievementsMenu>0 Then
 ;				If AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS-1)/12.0) Then 
-;					If DrawButton(x+341*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "â?¶", 2) Then
+;					If DrawButton(x+341*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "ï¿½?ï¿½", 2) Then
 ;						AchievementsMenu = AchievementsMenu+1
 ;						ShouldDeleteGadgets=True
 ;					EndIf
 ;				EndIf
 ;				If AchievementsMenu > 1 Then
-;					If DrawButton(x+41*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "â??", 2) Then
+;					If DrawButton(x+41*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "ï¿½??", 2) Then
 ;						AchievementsMenu = AchievementsMenu-1
 ;						ShouldDeleteGadgets=True
 ;					EndIf
