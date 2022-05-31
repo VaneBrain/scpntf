@@ -521,6 +521,8 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 					temp = 5
 				Case "key6"
 					temp = 6
+				Case "scp005"
+					temp = 7
 				Default 
 					temp = -1
 			End Select
@@ -534,7 +536,6 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 				EndIf
 				Return				
 			ElseIf temp >= d\KeyCard 
-				SelectedItem = Null
 				If showmsg = True Then
 					If d\locked Then
 						PlaySound_Strict KeyCardSFX2
@@ -543,10 +544,15 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 						Return
 					Else
 						PlaySound_Strict KeyCardSFX1
-						Msg = GetLocalString("Doors", "keycard_inserted")
+						If SelectedItem\itemtemplate\tempname <> "scp005" Then
+							Msg = GetLocalString("Doors", "keycard_inserted")
+						Else
+							Msg = GetLocalString("Doors", "scp005_inserted")
+						EndIf
 						MsgTimer = 70 * 7	
 					EndIf
 				EndIf
+				SelectedItem = Null
 			Else
 				SelectedItem = Null
 				If showmsg = True Then 
@@ -565,10 +571,14 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
         ;I can't find any way to produce short circuited boolean expressions so work around this by using a temporary variable - risingstar64
         ;And now we have the capabilities to produce short circuited boolean expressions, oh how far we've come! ~Salvage
         ;If SelectedItem <> Null And ((SelectedItem\itemtemplate\tempname = "hand" And d\KeyCard=-1) Lor (SelectedItem\itemtemplate\tempname = "hand2" And d\KeyCard=-2))
-        If SelectedItem <> Null And (SelectedItem\itemtemplate\tempname = "hand" Lor SelectedItem\itemtemplate\tempname = "hand2") ;TODO
+        If SelectedItem <> Null And (SelectedItem\itemtemplate\tempname = "hand" Lor SelectedItem\itemtemplate\tempname = "hand2" Lor SelectedItem\itemtemplate\tempname = "scp005") ;TODO
             PlaySound_Strict ScannerSFX1
 			If (Instr(Msg,GetLocalString("Doors", "scanner_denied"))=0) Lor (MsgTimer < 70*3) Then
-                Msg = GetLocalString("Doors", "scanner_granted")
+				If SelectedItem\itemtemplate\tempname <> "scp005" Then
+					Msg = GetLocalString("Doors", "scanner_granted")
+				Else
+					Msg = GetLocalString("Doors", "scp005_scanner_granted")
+				EndIf
             EndIf
             MsgTimer = 70 * 10
         Else
