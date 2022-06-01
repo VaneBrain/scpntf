@@ -61,7 +61,7 @@ Function UpdateEvent_Cont_205(e.Events)
 		Else
 			ShouldPlay = 16
 			If (e\EventState<65) Then
-				If (DistanceSquared(EntityX(Collider), EntityX(e\room\Objects[0],True), EntityZ(Collider), EntityZ(e\room\Objects[0],True))<PowTwo(2.0)) Then
+				If (DistanceSquared(EntityX(Collider), EntityX(e\room\Objects[0],True), EntityZ(Collider), EntityZ(e\room\Objects[0],True))<PowTwo(2.0)) And (Not NoTarget) Then
 					PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 					
 					e\EventState = Max(e\EventState, 65)
