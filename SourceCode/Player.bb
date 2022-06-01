@@ -819,13 +819,15 @@ Function IsSPPlayerAlive()
 End Function
 
 Function DamageSPPlayer(amount#, only_health%=False, kevlar_protect_factor#=4.0)
-	
-	If only_health Lor psp\Kevlar = 0.0 Then
-		psp\Health = Max(psp\Health - amount, 0.0)
-	Else
-		psp\Kevlar = Max(psp\Kevlar - amount, 0.0)
-		If kevlar_protect_factor > 0.0 Then
-			psp\Health = Max(psp\Health - amount / kevlar_protect_factor, 0.0)
+
+	If (Not GodMode) Then
+		If only_health Lor psp\Kevlar = 0.0 Then
+			psp\Health = Max(psp\Health - amount, 0.0)
+		Else
+			psp\Kevlar = Max(psp\Kevlar - amount, 0.0)
+			If kevlar_protect_factor > 0.0 Then
+				psp\Health = Max(psp\Health - amount / kevlar_protect_factor, 0.0)
+			EndIf
 		EndIf
 	EndIf
 	
