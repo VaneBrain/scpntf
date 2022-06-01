@@ -189,7 +189,9 @@ Function UpdateEvent_Cont_205(e.Events)
 						DeathMSG = GetLocalStringR("Singleplayer", "cont_205_death", Designation)
 						
 						;Injuries=Injuries+Rnd(0.4,0.8)
-						DamageSPPlayer(Rnd(10,20))
+						If (Not GodMode) Then
+							DamageSPPlayer(Rnd(10,20))
+						EndIf
 						PlaySound_Strict DamageSFX[Rand(2,3)]
 						CameraShake = 0.5
 						

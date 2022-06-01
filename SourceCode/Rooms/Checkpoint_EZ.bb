@@ -27,10 +27,13 @@ Function FillRoom_Checkpoint_EZ(r.Rooms)
 	
 	fb = CreateFuseBox("Fusebox.b3d", CreateVector3D(r\x - 1356.0 * RoomScale, r\y + 632.0 * RoomScale, r\z + 3062.0 * RoomScale), CreateVector3D(0, 180, 0), CreateVector3D(0.4 * RoomScale, 0.4 * RoomScale, 0.4 * RoomScale))
 	EntityParent fb\obj, r\obj
-	fb\fuses = 2
-	
-	it = CreateItem("Fuse", "fuse", r\x - 1075.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 2800.0 * RoomScale)
-	EntityParent(it\collider, r\obj)
+	If gopt\GameMode <> GAMEMODE_CLASSIC Then
+		fb\fuses = 2
+		it = CreateItem("Fuse", "fuse", r\x - 1075.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 2800.0 * RoomScale)
+		EntityParent(it\collider, r\obj)
+	Else
+		fb\fuses = 3
+	EndIf
 	
 	r\Objects[CHECKPOINT_EZ_DOOR_SPARKS_ID] = CreatePivot()
 	PositionEntity r\Objects[CHECKPOINT_EZ_DOOR_SPARKS_ID], r\x - 100.0 * RoomScale, r\y + 5.0 * RoomScale, r\z - 400.0 * RoomScale, True
