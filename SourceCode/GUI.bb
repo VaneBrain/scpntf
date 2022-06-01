@@ -1048,7 +1048,9 @@ Function UpdateGUI()
 						Select Rand(5)
 							Case 1
 								;Injuries = 3.5
-								DamageSPPlayer(80, True)
+								If (Not GodMode) Then
+									DamageSPPlayer(80, True)
+								EndIf
 								Msg = GetLocalString("Items", "strangebottle_1")
 								MsgTimer = 70*7
 							Case 2
@@ -1074,7 +1076,9 @@ Function UpdateGUI()
 								Local roomname$ = PlayerRoom\RoomTemplate\Name
 								If roomname = "dimension1499" Lor roomname = "gatea" Lor (roomname="exit1" And EntityY(Collider)>1040.0*RoomScale) Then
 									;Injuries = 2.5
-									DamageSPPlayer(70, True)
+									If (Not GodMode) Then
+										DamageSPPlayer(70, True)
+									EndIf
 									Msg = GetLocalString("Items", "strangebottle_1")
 									MsgTimer = 70*7
 								Else
@@ -1171,7 +1175,9 @@ Function UpdateGUI()
 											Case 6
 												Msg = GetLocalString("Items", "bluefirstaid_5")
 												;Injuries = 3.5
-												DamageSPPlayer(70, True)
+												If (Not GodMode) Then
+													DamageSPPlayer(70, True)
+												EndIf
 										End Select
 									EndIf
 									
@@ -1271,7 +1277,9 @@ Function UpdateGUI()
 						CameraShakeTimer = GetINIString2(iniStr, loc, "camerashake")
 						;Injuries = Max(Injuries + GetINIInt2(iniStr, loc, "damage"),0);*temp
 						;Bloodloss = Max(Bloodloss + GetINIInt2(iniStr, loc, "blood loss"),0);*temp
-						DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
+						If (Not GodMode) Then
+							DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
+						EndIf
 						strtemp =  GetINIString2(iniStr, loc, "sound")
 						If strtemp<>"" Then
 							PlaySound_Strict LoadTempSound(strtemp)

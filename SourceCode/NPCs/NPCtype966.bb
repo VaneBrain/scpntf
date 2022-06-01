@@ -301,7 +301,9 @@ Function UpdateNPCtype966(n.NPCs)
 						If n\Frame>470.0 And prevFrame<=470.0 Lor n\Frame>500.0 And prevFrame<=500.0 Lor n\Frame>527.0 And prevFrame<=527.0
 							PlayNPCSound(n, LoadTempSound("SFX\General\Slash"+Rand(1,2)+".ogg"))
 							;Injuries = Injuries + Rnd(0.5,1.0)
-							DamageSPPlayer(Rnd(10.0,20.0))
+							If (Not GodMode) Then
+								DamageSPPlayer(Rnd(10.0,20.0))
+							EndIf
 						EndIf	
 					EndIf
 				

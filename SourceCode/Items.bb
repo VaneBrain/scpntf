@@ -974,7 +974,9 @@ Function Update294()
 			;PrevBloodloss = Bloodloss
 			;Injuries = 1.5
 			;Bloodloss = 70
-			DamageSPPlayer(15, True)
+			If (Not GodMode) Then
+				DamageSPPlayer(15, True)
+			EndIf
 			EyeIrritation = 9 * 70
 			
 			pvt = CreatePivot()

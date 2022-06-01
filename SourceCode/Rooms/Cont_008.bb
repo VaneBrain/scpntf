@@ -118,10 +118,12 @@ Function UpdateEvent_Cont_008(e.Events)
 						
 						If (Not WearingHazmat) Then 
 							;Injuries=Injuries+0.1
-							DamageSPPlayer(5)
-							If Infect=0 Then Infect=1
-							Msg = GetLocalString("Singleplayer", "cont_008_1")
-							MsgTimer = 70*8
+							If (Not GodMode) Then
+								DamageSPPlayer(5)
+								If Infect=0 Then Infect=1
+								Msg = GetLocalString("Singleplayer", "cont_008_1")
+								MsgTimer = 70*8
+							EndIf
 						EndIf
 						
 						PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
