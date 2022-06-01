@@ -145,8 +145,8 @@ Function UpdateGUI()
 		Local usedScp005% = False
 		
 		If SelectedItem <> Null And SelectedItem\itemtemplate\tempname = "scp005" Then
+			usedScp005 = True
 			If (Not d_I\SelectedDoor\locked) Then
-				usedScp005 = True
 				PlaySound_Strict ScannerSFX1
 			
 				If d_I\SelectedDoor\Code = Str(AccessCode) Then
@@ -161,264 +161,273 @@ Function UpdateGUI()
 				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
 				Msg = GetLocalString("Doors", "scp005_keypad_granted")
 			Else
+				PlaySound_Strict ScannerSFX2
 				Msg = GetLocalString("Doors", "scp005_keypad_nothing")
 			EndIf
 			MsgTimer = 70 * 5
 		EndIf
 		
-		If shouldDrawHUD And (Not usedScp005) And (Not d_I\SelectedDoor\locked) Then
-			SelectedItem = Null
-			HideEntity g_I\GunPivot
-			If d_I\SelectedDoor\dir<>5 Then
-				pvt = CreatePivot()
-				PositionEntity pvt, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True),EntityZ(d_I\ClosestButton,True)
-				RotateEntity pvt, 0, EntityYaw(d_I\ClosestButton,True)-180,0
-				MoveEntity pvt, 0,0,0.22
-				PositionEntity Camera, EntityX(pvt),EntityY(pvt),EntityZ(pvt)
-				PointEntity Camera, d_I\ClosestButton
-				pvt = FreeEntity_Strict(pvt)
-				
-				CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)+MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
-				projY# = ProjectedY()
-				CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)-MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
-				scale# = (ProjectedY()-projY)/462.0
-				
-				x = opt\GraphicWidth/2-ImageWidth(KeypadHUD)*scale/2
-				y = opt\GraphicHeight/2-ImageHeight(KeypadHUD)*scale/2
-				
-				If KeypadMSG <> "" Then 
-					KeypadTimer = KeypadTimer-FPSfactor2
+		If shouldDrawHUD And (Not usedScp005) Then
+			If d_I\SelectedDoor\locked Then
+				d_I\SelectedDoor = Null
+				SelectedItem = Null
+				PlaySound_Strict ScannerSFX2
+				Msg = GetLocalString("Doors", "door_nothing_keypad")
+				MsgTimer = 70 * 5
+			Else
+				SelectedItem = Null
+				HideEntity g_I\GunPivot
+				If d_I\SelectedDoor\dir<>5 Then
+					pvt = CreatePivot()
+					PositionEntity pvt, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True),EntityZ(d_I\ClosestButton,True)
+					RotateEntity pvt, 0, EntityYaw(d_I\ClosestButton,True)-180,0
+					MoveEntity pvt, 0,0,0.22
+					PositionEntity Camera, EntityX(pvt),EntityY(pvt),EntityZ(pvt)
+					PointEntity Camera, d_I\ClosestButton
+					pvt = FreeEntity_Strict(pvt)
 					
-					If KeypadTimer =<0 Then
-						KeypadMSG = ""
-						d_I\SelectedDoor = Null
-						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
-					EndIf
-				EndIf
-				
-				x = x+44*scale
-				y = y+249*scale
-				
-				For n = 0 To 3
-					For i = 0 To 2
-						xtemp = x+Int(58.5*scale*n)
-						ytemp = y+(67*scale)*i
+					CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)+MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
+					projY# = ProjectedY()
+					CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)-MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
+					scale# = (ProjectedY()-projY)/462.0
+					
+					x = opt\GraphicWidth/2-ImageWidth(KeypadHUD)*scale/2
+					y = opt\GraphicHeight/2-ImageHeight(KeypadHUD)*scale/2
+					
+					If KeypadMSG <> "" Then 
+						KeypadTimer = KeypadTimer-FPSfactor2
 						
-						temp = False
-						If MouseOn(xtemp,ytemp, 54*scale,65*scale) And KeypadMSG = "" Then
-							If MouseUp1 Then 
-								PlaySound_Strict ButtonSFX
+						If KeypadTimer =<0 Then
+							KeypadMSG = ""
+							d_I\SelectedDoor = Null
+							MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
+						EndIf
+					EndIf
+					
+					x = x+44*scale
+					y = y+249*scale
+					
+					For n = 0 To 3
+						For i = 0 To 2
+							xtemp = x+Int(58.5*scale*n)
+							ytemp = y+(67*scale)*i
+							
+							temp = False
+							If MouseOn(xtemp,ytemp, 54*scale,65*scale) And KeypadMSG = "" Then
+								If MouseUp1 Then 
+									PlaySound_Strict ButtonSFX
+									
+									Select (n+1)+(i*4)
+										Case 1,2,3
+											KeypadInput=KeypadInput + ((n+1)+(i*4))
+										Case 4
+											KeypadInput=KeypadInput + "0"
+										Case 5,6,7
+											KeypadInput=KeypadInput + ((n+1)+(i*4)-1)
+										Case 8 ;enter
+											If KeypadInput = d_I\SelectedDoor\Code Then
+												PlaySound_Strict ScannerSFX1
+												
+												If d_I\SelectedDoor\Code = Str(AccessCode) Then
+													GiveAchievement(AchvMaynard)
+												ElseIf d_I\SelectedDoor\Code = "7816"
+													GiveAchievement(AchvHarp)
+												EndIf									
+												
+												d_I\SelectedDoor\locked = 0
+												UseDoor(d_I\SelectedDoor,True)
+												d_I\SelectedDoor = Null
+												MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
+											Else
+												PlaySound_Strict ScannerSFX2
+												KeypadMSG = Upper(GetLocalString("Doors", "keypad_denied"))
+												KeypadTimer = 210
+												KeypadInput = ""	
+											EndIf
+										Case 9,10,11
+											KeypadInput=KeypadInput + ((n+1)+(i*4)-2)
+										Case 12
+											KeypadInput = ""
+									End Select 
+									
+									If Len(KeypadInput)> 4 Then KeypadInput = Left(KeypadInput,4)
+								EndIf
 								
-								Select (n+1)+(i*4)
-									Case 1,2,3
-										KeypadInput=KeypadInput + ((n+1)+(i*4))
-									Case 4
-										KeypadInput=KeypadInput + "0"
-									Case 5,6,7
-										KeypadInput=KeypadInput + ((n+1)+(i*4)-1)
-									Case 8 ;enter
-										If KeypadInput = d_I\SelectedDoor\Code Then
-											PlaySound_Strict ScannerSFX1
-											
-											If d_I\SelectedDoor\Code = Str(AccessCode) Then
-												GiveAchievement(AchvMaynard)
-											ElseIf d_I\SelectedDoor\Code = "7816"
-												GiveAchievement(AchvHarp)
-											EndIf									
-											
-											d_I\SelectedDoor\locked = 0
-											UseDoor(d_I\SelectedDoor,True)
-											d_I\SelectedDoor = Null
-											MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
-										Else
-											PlaySound_Strict ScannerSFX2
-											KeypadMSG = Upper(GetLocalString("Doors", "keypad_denied"))
-											KeypadTimer = 210
-											KeypadInput = ""	
-										EndIf
-									Case 9,10,11
-										KeypadInput=KeypadInput + ((n+1)+(i*4)-2)
-									Case 12
-										KeypadInput = ""
-								End Select 
-								
-								If Len(KeypadInput)> 4 Then KeypadInput = Left(KeypadInput,4)
+							Else
+								temp = False
 							EndIf
 							
-						Else
-							temp = False
-						EndIf
-						
+						Next
 					Next
-				Next
-			Else
-				pvt = CreatePivot()
-				PositionEntity pvt, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True),EntityZ(d_I\ClosestButton,True)
-				RotateEntity pvt, 0, EntityYaw(d_I\ClosestButton,True)-180,0
-				MoveEntity pvt, 0,0,0.3
-				PositionEntity Camera, EntityX(pvt),EntityY(pvt),EntityZ(pvt)
-				PointEntity Camera, d_I\ClosestButton
-				pvt = FreeEntity_Strict(pvt)
-				
-				CameraZoom Camera,1.0
-				
-				CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)+MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
-				projY# = ProjectedY()
-				CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)-MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
-				scale# = (ProjectedY()-projY)/462.0
-				
-				MoveEntity Camera,0.001,0.1672,0
-				
-				x = opt\GraphicWidth/2-ImageWidth(KeypadHUD)*scale/2
-				y = opt\GraphicHeight/2-ImageHeight(KeypadHUD)*scale/2
-				
-				If co\Enabled
-					If co\WaitTimer = 0.0
-						If GetDPadButtonPress()=0
-							co\KeyPad_CurrButton = co\KeyPad_CurrButton - 1
-							PlaySound_Strict co\SelectSFX
-							co\WaitTimer = FPSfactor2
-							If co\KeyPad_CurrButton < 0
-								co\KeyPad_CurrButton = 2
+				Else
+					pvt = CreatePivot()
+					PositionEntity pvt, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True),EntityZ(d_I\ClosestButton,True)
+					RotateEntity pvt, 0, EntityYaw(d_I\ClosestButton,True)-180,0
+					MoveEntity pvt, 0,0,0.3
+					PositionEntity Camera, EntityX(pvt),EntityY(pvt),EntityZ(pvt)
+					PointEntity Camera, d_I\ClosestButton
+					pvt = FreeEntity_Strict(pvt)
+					
+					CameraZoom Camera,1.0
+					
+					CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)+MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
+					projY# = ProjectedY()
+					CameraProject(Camera, EntityX(d_I\ClosestButton,True),EntityY(d_I\ClosestButton,True)-MeshHeight(d_I\ButtonOBJ[BUTTON_NORMAL])*0.015,EntityZ(d_I\ClosestButton,True))
+					scale# = (ProjectedY()-projY)/462.0
+					
+					MoveEntity Camera,0.001,0.1672,0
+					
+					x = opt\GraphicWidth/2-ImageWidth(KeypadHUD)*scale/2
+					y = opt\GraphicHeight/2-ImageHeight(KeypadHUD)*scale/2
+					
+					If co\Enabled
+						If co\WaitTimer = 0.0
+							If GetDPadButtonPress()=0
+								co\KeyPad_CurrButton = co\KeyPad_CurrButton - 1
+								PlaySound_Strict co\SelectSFX
+								co\WaitTimer = FPSfactor2
+								If co\KeyPad_CurrButton < 0
+									co\KeyPad_CurrButton = 2
+								EndIf
+							ElseIf GetDPadButtonPress()=180
+								co\KeyPad_CurrButton = co\KeyPad_CurrButton + 1
+								PlaySound_Strict co\SelectSFX
+								co\WaitTimer = FPSfactor2
+								If co\KeyPad_CurrButton > 2
+									co\KeyPad_CurrButton = 0
+								EndIf
 							EndIf
-						ElseIf GetDPadButtonPress()=180
-							co\KeyPad_CurrButton = co\KeyPad_CurrButton + 1
-							PlaySound_Strict co\SelectSFX
-							co\WaitTimer = FPSfactor2
-							If co\KeyPad_CurrButton > 2
-								co\KeyPad_CurrButton = 0
+							
+							If GetLeftAnalogStickPitch(True) > 0.0
+								co\KeyPad_CurrButton = co\KeyPad_CurrButton - 1
+								PlaySound_Strict co\SelectSFX
+								co\WaitTimer = FPSfactor2
+								If co\KeyPad_CurrButton < 0
+									co\KeyPad_CurrButton = 2
+								EndIf
+							ElseIf GetLeftAnalogStickPitch(True) < 0.0
+								co\KeyPad_CurrButton = co\KeyPad_CurrButton + 1
+								PlaySound_Strict co\SelectSFX
+								co\WaitTimer = FPSfactor2
+								If co\KeyPad_CurrButton > 2
+									co\KeyPad_CurrButton = 0
+								EndIf
+							EndIf
+						Else
+							If co\WaitTimer > 0.0 And co\WaitTimer < 15.0
+								co\WaitTimer = co\WaitTimer + FPSfactor2
+							ElseIf co\WaitTimer >= 15.0
+								co\WaitTimer = 0.0
 							EndIf
 						EndIf
-						
-						If GetLeftAnalogStickPitch(True) > 0.0
-							co\KeyPad_CurrButton = co\KeyPad_CurrButton - 1
-							PlaySound_Strict co\SelectSFX
-							co\WaitTimer = FPSfactor2
-							If co\KeyPad_CurrButton < 0
-								co\KeyPad_CurrButton = 2
-							EndIf
-						ElseIf GetLeftAnalogStickPitch(True) < 0.0
-							co\KeyPad_CurrButton = co\KeyPad_CurrButton + 1
-							PlaySound_Strict co\SelectSFX
-							co\WaitTimer = FPSfactor2
-							If co\KeyPad_CurrButton > 2
-								co\KeyPad_CurrButton = 0
+					EndIf
+					
+					x=x+120*scale
+					y=y+259*scale
+					If (Not co\Enabled)
+						If RectsOverlap(x,y,82*scale,82*scale,MouseX(),MouseY(),0,0)
+							If MouseHit1
+								PlaySound_Strict ButtonSFX
+								StartNewElevator(d_I\SelectedDoor,3)
+								d_I\SelectedDoor = Null
+								ResetInput()
+	;							For g.Guns = Each Guns
+	;								If g\name$ = "p90"
+	;									g\MouseDownTimer# = 15.0
+	;								EndIf
+	;							Next
 							EndIf
 						EndIf
 					Else
-						If co\WaitTimer > 0.0 And co\WaitTimer < 15.0
-							co\WaitTimer = co\WaitTimer + FPSfactor2
-						ElseIf co\WaitTimer >= 15.0
-							co\WaitTimer = 0.0
+						If co\KeyPad_CurrButton = 0
+							If JoyHit(CKM_Press)
+								PlaySound_Strict ButtonSFX
+								StartNewElevator(d_I\SelectedDoor,3)
+								d_I\SelectedDoor = Null
+								ResetInput()
+	;							For g.Guns = Each Guns
+	;								If g\name$ = "p90"
+	;									g\MouseDownTimer# = 15.0
+	;								EndIf
+	;							Next
+							EndIf
+						EndIf
+					EndIf
+					
+					y=y+131*scale
+					If (Not co\Enabled)
+						If RectsOverlap(x,y,82*scale,82*scale,MouseX(),MouseY(),0,0)
+							If MouseHit1
+								PlaySound_Strict ButtonSFX
+								StartNewElevator(d_I\SelectedDoor,2)
+								d_I\SelectedDoor = Null
+								ResetInput()
+	;							For g.Guns = Each Guns
+	;								If g\name$ = "p90"
+	;									g\MouseDownTimer# = 15.0
+	;								EndIf
+	;							Next
+							EndIf
+						EndIf
+					Else
+						If co\KeyPad_CurrButton = 1
+							If JoyHit(CKM_Press)
+								PlaySound_Strict ButtonSFX
+								StartNewElevator(d_I\SelectedDoor,2)
+								d_I\SelectedDoor = Null
+								ResetInput()
+	;							For g.Guns = Each Guns
+	;								If g\name$ = "p90"
+	;									g\MouseDownTimer# = 15.0
+	;								EndIf
+	;							Next
+							EndIf
+						EndIf
+					EndIf
+					
+					y=y+130*scale
+					If (Not co\Enabled)
+						If RectsOverlap(x,y,82*scale,82*scale,MouseX(),MouseY(),0,0)
+							If MouseHit1
+								PlaySound_Strict ButtonSFX
+								StartNewElevator(d_I\SelectedDoor,1)
+								d_I\SelectedDoor = Null
+								ResetInput()
+	;							For g.Guns = Each Guns
+	;								If g\name$ = "p90"
+	;									g\MouseDownTimer# = 15.0
+	;								EndIf
+	;							Next
+							EndIf
+						EndIf
+					Else
+						If co\KeyPad_CurrButton = 2
+							If JoyHit(CKM_Press)
+								PlaySound_Strict ButtonSFX
+								StartNewElevator(d_I\SelectedDoor,1)
+								d_I\SelectedDoor = Null
+								ResetInput()
+	;							For g.Guns = Each Guns
+	;								If g\name$ = "p90"
+	;									g\MouseDownTimer# = 15.0
+	;								EndIf
+	;							Next
+							EndIf
 						EndIf
 					EndIf
 				EndIf
 				
-				x=x+120*scale
-				y=y+259*scale
 				If (Not co\Enabled)
-					If RectsOverlap(x,y,82*scale,82*scale,MouseX(),MouseY(),0,0)
-						If MouseHit1
-							PlaySound_Strict ButtonSFX
-							StartNewElevator(d_I\SelectedDoor,3)
-							d_I\SelectedDoor = Null
-							ResetInput()
-;							For g.Guns = Each Guns
-;								If g\name$ = "p90"
-;									g\MouseDownTimer# = 15.0
-;								EndIf
-;							Next
-						EndIf
+					If MouseHit2 Then
+						d_I\SelectedDoor = Null
+						ResetInput()
 					EndIf
 				Else
-					If co\KeyPad_CurrButton = 0
-						If JoyHit(CKM_Press)
-							PlaySound_Strict ButtonSFX
-							StartNewElevator(d_I\SelectedDoor,3)
-							d_I\SelectedDoor = Null
-							ResetInput()
-;							For g.Guns = Each Guns
-;								If g\name$ = "p90"
-;									g\MouseDownTimer# = 15.0
-;								EndIf
-;							Next
-						EndIf
+					If JoyHit(CKM_Back)
+						PlaySound_Strict ButtonSFX
+						d_I\SelectedDoor = Null
+						ResetInput()
 					EndIf
-				EndIf
-				
-				y=y+131*scale
-				If (Not co\Enabled)
-					If RectsOverlap(x,y,82*scale,82*scale,MouseX(),MouseY(),0,0)
-						If MouseHit1
-							PlaySound_Strict ButtonSFX
-							StartNewElevator(d_I\SelectedDoor,2)
-							d_I\SelectedDoor = Null
-							ResetInput()
-;							For g.Guns = Each Guns
-;								If g\name$ = "p90"
-;									g\MouseDownTimer# = 15.0
-;								EndIf
-;							Next
-						EndIf
-					EndIf
-				Else
-					If co\KeyPad_CurrButton = 1
-						If JoyHit(CKM_Press)
-							PlaySound_Strict ButtonSFX
-							StartNewElevator(d_I\SelectedDoor,2)
-							d_I\SelectedDoor = Null
-							ResetInput()
-;							For g.Guns = Each Guns
-;								If g\name$ = "p90"
-;									g\MouseDownTimer# = 15.0
-;								EndIf
-;							Next
-						EndIf
-					EndIf
-				EndIf
-				
-				y=y+130*scale
-				If (Not co\Enabled)
-					If RectsOverlap(x,y,82*scale,82*scale,MouseX(),MouseY(),0,0)
-						If MouseHit1
-							PlaySound_Strict ButtonSFX
-							StartNewElevator(d_I\SelectedDoor,1)
-							d_I\SelectedDoor = Null
-							ResetInput()
-;							For g.Guns = Each Guns
-;								If g\name$ = "p90"
-;									g\MouseDownTimer# = 15.0
-;								EndIf
-;							Next
-						EndIf
-					EndIf
-				Else
-					If co\KeyPad_CurrButton = 2
-						If JoyHit(CKM_Press)
-							PlaySound_Strict ButtonSFX
-							StartNewElevator(d_I\SelectedDoor,1)
-							d_I\SelectedDoor = Null
-							ResetInput()
-;							For g.Guns = Each Guns
-;								If g\name$ = "p90"
-;									g\MouseDownTimer# = 15.0
-;								EndIf
-;							Next
-						EndIf
-					EndIf
-				EndIf
-			EndIf
-			
-			If (Not co\Enabled)
-				If MouseHit2 Then
-					d_I\SelectedDoor = Null
-					ResetInput()
-				EndIf
-			Else
-				If JoyHit(CKM_Back)
-					PlaySound_Strict ButtonSFX
-					d_I\SelectedDoor = Null
-					ResetInput()
 				EndIf
 			EndIf
 		Else
