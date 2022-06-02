@@ -133,6 +133,8 @@ Function UpdateEvent_Testroom_860(e.Events)
 								
 								e\EventState = 0.0
 								
+								Msg = GetLocalString("Singleplayer", "testroom_860_1_close")
+								MsgTimer = 70 * 5
 							Else
 								PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
 								Msg = GetLocalString("Singleplayer", "testroom_860_1")
