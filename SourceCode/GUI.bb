@@ -237,6 +237,8 @@ Function UpdateGUI()
 												d_I\SelectedDoor\locked = 0
 												UseDoor(d_I\SelectedDoor,True)
 												d_I\SelectedDoor = Null
+												Msg = GetLocalString("Doors", "keypad_granted")
+												MsgTimer = 70 * 5
 												MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
 											Else
 												PlaySound_Strict ScannerSFX2
