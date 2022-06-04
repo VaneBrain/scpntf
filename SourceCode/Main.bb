@@ -5712,6 +5712,7 @@ Function SaveOptionsINI()
 	PutINIValue(gv\OptionFile, "options", "particle amount", ParticleAmount)
 	PutINIValue(gv\OptionFile, "options", "enable vram", SaveTexturesInVRam)
 	PutINIValue(gv\OptionFile, "options", "cubemaps", opt\RenderCubeMapMode)
+	PutINIValue(gv\OptionFile, "options", "skip intro", opt\IntroSkipEnabled%)
 	
 	PutINIValue(gv\OptionFile, "audio", "master volume", opt\MasterVol)
 	PutINIValue(gv\OptionFile, "audio", "music volume", opt\MusicVol)
@@ -6338,40 +6339,43 @@ Function PlayStartupVideos()
 		DebugLog "Scaled: "+ScaledGraphicHeight
 	EndIf
 	
-	Local i, moviefile$
-	For i = 0 To 2
-		Select i
-			Case 0
-				moviefile$ = "GFX\menu\startup_Undertow"
-			Case 1
-				moviefile$ = "GFX\menu\startup_TSS"
-			Case 2
-				moviefile$ = "GFX\menu\startup_NTF"
-		End Select
+	If (Not opt\IntroSkipEnabled) Then
+		Local i, moviefile$
+		For i = 0 To 2
+			Select i
+				Case 0
+					moviefile$ = "GFX\menu\startup_Undertow"
+				Case 1
+					moviefile$ = "GFX\menu\startup_TSS"
+				Case 2
+					moviefile$ = "GFX\menu\startup_NTF"
+			End Select
 		
-		SplashScreenVideo = BlitzMovie_OpenD3D(moviefile$+".wmv", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
+			SplashScreenVideo = BlitzMovie_OpenD3D(moviefile$+".wmv", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
 			
-		If SplashScreenVideo = 0 Then
-			PutINIValue(gv\OptionFile, "options", "play startup video", "false")
-			Return
-		EndIf
+			If SplashScreenVideo = 0 Then
+				PutINIValue(gv\OptionFile, "options", "play startup video", "false")
+				Return
+			EndIf
 		
-		SplashScreenVideo = BlitzMovie_Play()
-		Local SplashScreenAudio = StreamSound_Strict(moviefile$+".ogg",opt\SFXVolume,0)
+			SplashScreenVideo = BlitzMovie_Play()
+			Local SplashScreenAudio = StreamSound_Strict(moviefile$+".ogg",opt\SFXVolume,0)
 		
-		Repeat
+			Repeat
+				Cls
+				BlitzMovie_DrawD3D(0, (RealGraphicHeight/2-ScaledGraphicHeight/2), RealGraphicWidth, ScaledGraphicHeight)
+				Text opt\GraphicWidth / 2, opt\GraphicHeight - 50, GetLocalString("Menu", "intro_skip"), True, True
+				Flip 1
+				Delay 10
+			Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
+		
+			StopStream_Strict(SplashScreenAudio)
+			BlitzMovie_Stop()
+			BlitzMovie_Close()
 			Cls
-			BlitzMovie_DrawD3D(0, (RealGraphicHeight/2-ScaledGraphicHeight/2), RealGraphicWidth, ScaledGraphicHeight)
 			Flip 1
-			Delay 10
-		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
-		
-		StopStream_Strict(SplashScreenAudio)
-		BlitzMovie_Stop()
-		BlitzMovie_Close()
-		Cls
-		Flip 1
-	Next
+		Next
+	EndIf
 	
 	ShowPointer()
 	
