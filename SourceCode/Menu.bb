@@ -980,8 +980,6 @@ Function UpdateMainMenu()
 					y = y + 35*MenuScale
 					opt\ConsoleEnabled = DrawTick(x + 375 * MenuScale, y, opt\ConsoleEnabled,False,3,MainMenuTab,0)
 					
-					y = y + 35*MenuScale
-					opt\IntroSkipEnabled = DrawTick(x + 375 * MenuScale, y, opt\IntroSkipEnabled,False,3,MainMenuTab,0)
 					;[End Block]
 				EndIf
 				;[End Block]
@@ -2362,7 +2360,7 @@ Function RenderMainMenu()
 					;[End Block]
 				ElseIf MainMenuTab = MenuTab_Options_Advanced Then
 					;[Block]
-					height = 175 * MenuScale
+					height = 140 * MenuScale
 					DrawFrame(x, y, width, height)	
 					
 					y = y + 30*MenuScale
@@ -2389,13 +2387,6 @@ Function RenderMainMenu()
 						DrawOptionsTooltip("consoleenable")
 					EndIf
 					
-					y = y + 35*MenuScale
-					
-					Color 255,255,255
-					Text(x + 20 * MenuScale, y, GetLocalString("Options","intro_skip")+":")
-					If MouseAndControllerSelectBox(x+375*MenuScale,y-6*MenuScale,20*MenuScale,20*MenuScale,3,MainMenuTab)
-						DrawOptionsTooltip("introskipenabled")
-					EndIf
 					;[End Block]
 				EndIf
 				;[End Block]	
@@ -4265,8 +4256,6 @@ Function DrawOptionsTooltip(option$,value#=0,ingame%=False)
 		Case "showfps"
 			txt = GetLocalString("Options", "showfpstxt")
 			;[End Block]
-		Case "introskipenabled"
-			txt = GetLocalString("Options", "intro_skip_text")
 		;Singleplayer options
 			;[Block]
 		Case "classic_mode_txt"
