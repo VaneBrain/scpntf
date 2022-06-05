@@ -3627,7 +3627,7 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				If mp_I\Gamemode\ID = Gamemode_Deathmatch Then
 					CreateConsoleMsg("SCP-008 infected human cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
 				ElseIf mp_I\Gamemode\ID = Gamemode_Waves Then
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+					n.NPCs = CreateNPC(NPCtypeZombieMP, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				EndIf
 			Else
 				n.NPCs = CreateNPC(NPCtype008, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
