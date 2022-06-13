@@ -33,6 +33,7 @@
 		Graham Ruruku ("Stealthy Zoroark")
 		Hakkla
 		Haversine
+		HonestResolv3
 		Hunter
 		Inclination
 		Irontaco

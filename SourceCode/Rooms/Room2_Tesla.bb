@@ -109,7 +109,7 @@ Function UpdateEvent_Room2_Tesla(e.Events)
 				EndIf	
 			Case 2 ; Zap state
 				If Abs(EntityX(Collider,True)-EntityX(e\room\Objects[0],True)) < 0.75 And (e\room\angle Mod 180 = 90) Lor Abs(EntityZ(Collider,True)-EntityZ(e\room\Objects[0],True)) < 0.75 And (e\room\angle Mod 180 = 0) Then
-					If EntityDistanceSquared(Collider,e\room\Objects[0]) < PowTwo(300.0*RoomScale) And KillTimer => 0 Then
+					If EntityDistanceSquared(Collider,e\room\Objects[0]) < PowTwo(300.0*RoomScale) And KillTimer => 0 And (Not NoTarget) Then
 						LightFlash = 0.4
 						CameraShake = 1.0
 						Kill()
@@ -135,6 +135,8 @@ Function UpdateEvent_Room2_Tesla(e.Events)
 									Case NPCtype049
 										n\HP = -1000
 										n\State = SCP049_STUNNED
+									Case NPCtypeMTF
+										n\HP = -1
 								End Select
 								If e\room\dist < 8 And EntityInView(e\room\Objects[0],Camera) Then
 									LightFlash = 0.4

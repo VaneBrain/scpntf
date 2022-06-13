@@ -1048,7 +1048,9 @@ Function UpdateGUI()
 						Select Rand(5)
 							Case 1
 								;Injuries = 3.5
-								DamageSPPlayer(80, True)
+								If (Not GodMode) Then
+									DamageSPPlayer(80, True)
+								EndIf
 								Msg = GetLocalString("Items", "strangebottle_1")
 								MsgTimer = 70*7
 							Case 2
@@ -1074,7 +1076,9 @@ Function UpdateGUI()
 								Local roomname$ = PlayerRoom\RoomTemplate\Name
 								If roomname = "dimension1499" Lor roomname = "gatea" Lor (roomname="exit1" And EntityY(Collider)>1040.0*RoomScale) Then
 									;Injuries = 2.5
-									DamageSPPlayer(70, True)
+									If (Not GodMode) Then
+										DamageSPPlayer(70, True)
+									EndIf
 									Msg = GetLocalString("Items", "strangebottle_1")
 									MsgTimer = 70*7
 								Else
@@ -1171,7 +1175,9 @@ Function UpdateGUI()
 											Case 6
 												Msg = GetLocalString("Items", "bluefirstaid_5")
 												;Injuries = 3.5
-												DamageSPPlayer(70, True)
+												If (Not GodMode) Then
+													DamageSPPlayer(70, True)
+												EndIf
 										End Select
 									EndIf
 									
@@ -1271,7 +1277,9 @@ Function UpdateGUI()
 						CameraShakeTimer = GetINIString2(iniStr, loc, "camerashake")
 						;Injuries = Max(Injuries + GetINIInt2(iniStr, loc, "damage"),0);*temp
 						;Bloodloss = Max(Bloodloss + GetINIInt2(iniStr, loc, "blood loss"),0);*temp
-						DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
+						If (Not GodMode) Then
+							DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
+						EndIf
 						strtemp =  GetINIString2(iniStr, loc, "sound")
 						If strtemp<>"" Then
 							PlaySound_Strict LoadTempSound(strtemp)
@@ -1838,7 +1846,10 @@ Function UpdateGUI()
 						EndIf
 					Else
 						
-						If SelectedItem\state > 0 And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
+						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
+							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" Then
+								SelectedItem\state = 101
+							EndIf
 							
 							PlayerX% = Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5)
 							PlayerZ% = Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5)
@@ -1955,7 +1966,7 @@ Function UpdateGUI()
 										EndIf
 									EndIf
 								Next
-								If PlayerRoom\RoomTemplate\Name = "coffin" Then
+								If PlayerRoom\RoomTemplate\Name = "cont_895" Then
 									If CoffinDistance < 8.0 Then
 										dist = Rnd(4.0, 8.0)
 										Color 100, 0, 0
@@ -2323,7 +2334,15 @@ Function DrawGUI()
 		y% = opt\GraphicHeight - 95
 		
 		;Blinking Bar
-		Color 255, 255, 255	
+		If BlinkTimer <= BLINKFREQ / 5 Then
+			Color 255, 0, 0
+		Else
+			If BlinkEffect < 1.0 Then
+				Color 0, 255, 0
+			Else
+				Color 255, 255, 255
+			EndIf
+		EndIf
 		Rect (x, y, width, height, False)
 		For i = 1 To Int(((width - 2) * (BlinkTimer / (BLINKFREQ))) / 10)
 			DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
@@ -2336,29 +2355,40 @@ Function DrawGUI()
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		End If
 		
-		Color 255, 255, 255
+		If BlinkTimer <= 0.0 Or BlurTimer > 0.0 Or LightFlash > 0.0 or LightBlink > 0.0 Then
+			Color 255, 0, 0
+		Else
+			If BlinkEffect < 1.0 Then
+				Color 0, 255, 0
+			Else
+				Color 255, 255, 255
+			EndIf
+		EndIf
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		
 		DrawImage BlinkIcon, x - 50, y
 		
 		SetFont fo\Font%[Font_Digital_Medium]
 		y = opt\GraphicHeight - 55
+		
 		;Health
 		Color 0,0,0
 		Rect(x - 50, y, 30, 30)
 		
-		If psp\Health > 20 Then
-			Color 255,255,255
+		If psp\Health > 100 Then
+			Color 0, 255, 0
+		ElseIf psp\Health > 20 Then
+			Color 255, 255, 255
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		DrawImage mpl\HealthIcon, x - 50, y
 		
 		If psp\Health > 20
-			Color 0,255,0
+			Color 0, 255, 0
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
 		TextWithAlign x + 30, y + 5, Int(psp\Health), 2
 		
@@ -2366,18 +2396,21 @@ Function DrawGUI()
 		Color 0,0,0
 		Rect(x + 100, y, 30, 30)
 		
-		If psp\Kevlar > 20 Then
-			Color 255,255,255
+		If psp\Kevlar > 100 Then
+			Color 0, 255, 0
+		ElseIf psp\Kevlar > 20 Then
+			Color 255, 255, 255
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
+		
 		Rect(x + 100 - 1, y - 1, 30 + 2, 30 + 2, False)
 		DrawImage mpl\KevlarIcon, x + 100, y
 		
 		If psp\Kevlar > 20
-			Color 0,255,0
+			Color 0, 255, 0
 		Else
-			Color 255,0,0
+			Color 255, 0, 0
 		EndIf
 		TextWithAlign x + 180, y + 5, Int(psp\Kevlar), 2
 		
@@ -2385,10 +2418,14 @@ Function DrawGUI()
 		If Stamina < 100.0 And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 			y = opt\GraphicHeight - 55
 			x = (opt\GraphicWidth / 2) - (width / 2) + 20
-			If Stamina <= 20.0 Then
-				Color 255, 0, 0
+			If InfiniteStamina Or (StaminaEffect < 1.0) Then
+				Color 0, 255, 0
 			Else
-				Color 255, 255, 255
+				If Stamina <= 20.0 Then
+					Color 255, 0, 0
+				Else
+					Color 255, 255, 255
+				EndIf
 			EndIf
 			Rect (x, y, width, height, False)
 			For i = 1 To Int(((width - 2) * (Stamina / 100.0)) / 10)
@@ -2398,10 +2435,14 @@ Function DrawGUI()
 			Color 0, 0, 0
 			Rect(x - 50, y, 30, 30)
 			
-			If Stamina <= 0.0 Then
-				Color 255, 0, 0
+			If SuperMan Or InfiniteStamina Or (StaminaEffect < 1.0) Then
+				Color 0, 255, 0
 			Else
-				Color 255, 255, 255
+				If Stamina <= 0.0 Then
+					Color 255, 0, 0
+				Else
+					Color 255, 255, 255
+				EndIf
 			EndIf
 			Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 			If Crouch Then
@@ -3236,8 +3277,11 @@ Function DrawGUI()
 						EndIf
 					Else
 						
-						If SelectedItem\state > 0 And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "coffin") Then
-							
+						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
+							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" Then
+								SelectedItem\state = 101
+							EndIf
+
 							PlayerX% = Floor(EntityX(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							PlayerZ% = Floor(EntityZ(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							
@@ -3365,7 +3409,7 @@ Function DrawGUI()
 										EndIf
 									EndIf
 								Next
-								If PlayerRoom\RoomTemplate\Name = "coffin" Then
+								If PlayerRoom\RoomTemplate\Name = "cont_895" Then
 									If CoffinDistance < 8.0 Then
 										dist = Rnd(4.0, 8.0)
 										Color 100, 0, 0
@@ -4378,13 +4422,13 @@ Function UpdateMenu()
 ;			
 ;			If AchievementsMenu>0 Then
 ;				If AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS-1)/12.0) Then 
-;					If DrawButton(x+341*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "â?¶", 2) Then
+;					If DrawButton(x+341*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "ï¿½?ï¿½", 2) Then
 ;						AchievementsMenu = AchievementsMenu+1
 ;						ShouldDeleteGadgets=True
 ;					EndIf
 ;				EndIf
 ;				If AchievementsMenu > 1 Then
-;					If DrawButton(x+41*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "â??", 2) Then
+;					If DrawButton(x+41*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "ï¿½??", 2) Then
 ;						AchievementsMenu = AchievementsMenu-1
 ;						ShouldDeleteGadgets=True
 ;					EndIf

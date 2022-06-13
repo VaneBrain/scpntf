@@ -369,7 +369,13 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Will play tracks in .ogg/.wav format")
 									CreateConsoleMsg("from "+Chr(34)+"SFX\Music\Custom\"+Chr(34)+".")
 									CreateConsoleMsg("******************************")
-									
+								Case "notarget"
+									CreateConsoleMsg("HELP - notarget")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles notarget, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Prevents NPC's from targeting the player")
+									CreateConsoleMsg("******************************")
 								Default
 									CreateConsoleMsg("There is no help available for that command.",255,150,0)
 							End Select
@@ -885,21 +891,25 @@ Function UpdateConsole(commandSet%)
 							;[End Block]
 						Case "kill","suicide"
 							;[Block]
-							KillTimer = -1
-							Select Rand(4)
-								Case 1
-									DeathMSG = "[REDACTED]"
-								Case 2
-									DeathMSG = Designation+" found dead in Sector [REDACTED]. "
-									DeathMSG = DeathMSG + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
-									DeathMSG = DeathMSG + "Body was sent for autopsy."
-								Case 3
-									DeathMSG = "EXCP_ACCESS_VIOLATION"
-								Case 4
-									DeathMSG = Designation+" found dead in Sector [REDACTED]. "
-									DeathMSG = DeathMSG + "The subject appears to have scribbled the letters "+Chr(34)+"kys"+Chr(34)+" in his own blood beside him. "
-									DeathMSG = DeathMSG + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
-							End Select
+							If (Not GodMode) Then
+								KillTimer = -1
+								Select Rand(4)
+									Case 1
+										DeathMSG = "[REDACTED]"
+									Case 2
+										DeathMSG = Designation+" found dead in Sector [REDACTED]. "
+										DeathMSG = DeathMSG + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
+										DeathMSG = DeathMSG + "Body was sent for autopsy."
+									Case 3
+										DeathMSG = "EXCP_ACCESS_VIOLATION"
+									Case 4
+										DeathMSG = Designation+" found dead in Sector [REDACTED]. "
+										DeathMSG = DeathMSG + "The subject appears to have scribbled the letters "+Chr(34)+"kys"+Chr(34)+" in his own blood beside him. "
+										DeathMSG = DeathMSG + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
+								End Select
+							Else
+								CreateConsoleMsg("You cannot use this command if you have godmode on!", 255, 0, 0)	
+							EndIf
 							;[End Block]
 						Case "playmusic"
 							;[Block]
