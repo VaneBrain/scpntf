@@ -249,7 +249,7 @@ Function MovePlayerServer()
 	Local temp#
 	
 	If (Not MenuOpen) And (Not ConsoleOpen) And (Not InLobby()) And (Not mp_I\ChatOpen) And Players[mp_I\PlayerID]\CurrHP>0 And (Not mp_I\Gamemode\DisableMovement) And (Not IsModerationOpen()) And (Not IsInVote()) Then
-		If KeyDown(KEY_SPRINT) Then
+		If KeyDown(KEY_SPRINT) And (Not KeyDown(KEY_CROUCH)) Then
 			If Players[mp_I\PlayerID]\CurrStamina < 5 Then
 				If ChannelPlaying(BreathCHN)=False Then BreathCHN = PlaySound_Strict(BreathSFX[0])
 			ElseIf Players[mp_I\PlayerID]\CurrStamina < 50

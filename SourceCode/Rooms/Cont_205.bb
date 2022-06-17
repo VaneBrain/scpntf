@@ -61,7 +61,7 @@ Function UpdateEvent_Cont_205(e.Events)
 		Else
 			ShouldPlay = 16
 			If (e\EventState<65) Then
-				If (DistanceSquared(EntityX(Collider), EntityX(e\room\Objects[0],True), EntityZ(Collider), EntityZ(e\room\Objects[0],True))<PowTwo(2.0)) Then
+				If (DistanceSquared(EntityX(Collider), EntityX(e\room\Objects[0],True), EntityZ(Collider), EntityZ(e\room\Objects[0],True))<PowTwo(2.0)) And (Not NoTarget) Then
 					PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 					
 					e\EventState = Max(e\EventState, 65)
@@ -186,23 +186,27 @@ Function UpdateEvent_Cont_205(e.Events)
 					EndIf
 				Case 67
 					If (Rand(150)=1) Then
-						DeathMSG = GetLocalStringR("Singleplayer", "cont_205_death", Designation)
+						If (Not NoTarget) Then
+							DeathMSG = GetLocalStringR("Singleplayer", "cont_205_death", Designation)
 						
-						;Injuries=Injuries+Rnd(0.4,0.8)
-						DamageSPPlayer(Rnd(10,20))
-						PlaySound_Strict DamageSFX[Rand(2,3)]
-						CameraShake = 0.5
+							;Injuries=Injuries+Rnd(0.4,0.8)
+							If (Not GodMode) Then
+								DamageSPPlayer(Rnd(10,20))
+							EndIf
+							PlaySound_Strict DamageSFX[Rand(2,3)]
+							CameraShake = 0.5
 						
-						e\EventState2 = Rnd(-0.1, 0.1)
-						e\EventState3 = Rnd(-0.1, 0.1)
+							e\EventState2 = Rnd(-0.1, 0.1)
+							e\EventState3 = Rnd(-0.1, 0.1)
 						
-						;If (Injuries>5.0) Then 
-						;	Kill()
-						;EndIf
+							;If (Injuries>5.0) Then 
+							;	Kill()
+							;EndIf
 						
-						TranslateEntity(Collider, e\EventState2,0,e\EventState3)
-						e\EventState2 = CurveValue(e\EventState2, 0, 10.0)								
-						e\EventState3 = CurveValue(e\EventState3, 0, 10.0)
+							TranslateEntity(Collider, e\EventState2,0,e\EventState3)
+							e\EventState2 = CurveValue(e\EventState2, 0, 10.0)								
+							e\EventState3 = CurveValue(e\EventState3, 0, 10.0)
+						EndIf
 					EndIf
 				Default
 					If (Rand(3)=1) Then
@@ -228,7 +232,6 @@ Function UpdateEvent_Cont_205(e.Events)
 			e\EventState = 0
 			e\EventStr = ""
 		EndIf
-	
 End Function
 
 ;~IDEal Editor Parameters:

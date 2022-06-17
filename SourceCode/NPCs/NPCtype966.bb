@@ -142,36 +142,38 @@ Function UpdateNPCtype966(n.NPCs)
 					PlayNPCSound(n, LoadTempSound("SFX\SCP\966\Echo"+Rand(1,3)+".ogg"))
 				EndIf
 				
-				angle = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
-				RotateEntity n\Collider,0.0,CurveAngle(angle,EntityYaw(n\Collider),20.0),0.0
+				If (Not NoTarget) Then
+					angle = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
+					RotateEntity n\Collider,0.0,CurveAngle(angle,EntityYaw(n\Collider),20.0),0.0
 				
-				If n\State3<900 Then
-					BlurTimer = ((Sin(MilliSecs()/50)+1.0)*200)/dist
+					If n\State3<900 Then
+						BlurTimer = ((Sin(MilliSecs()/50)+1.0)*200)/dist
 					
-					If (mpl\NightVisionEnabled>0) Then GiveAchievement(Achv966)
+						If (mpl\NightVisionEnabled>0) Then GiveAchievement(Achv966)
 					
-					If (Not Wearing714) And dist<16 Then
-						BlinkEffect = Max(BlinkEffect, 1.5)
-						BlinkEffectTimer = 1000
+						If (Not Wearing714) And dist<16 Then
+							BlinkEffect = Max(BlinkEffect, 1.5)
+							BlinkEffectTimer = 1000
 						
-						StaminaEffect = 2.0
-						StaminaEffectTimer = 1000
+							StaminaEffect = 2.0
+							StaminaEffectTimer = 1000
 						
-						If MsgTimer<=0 Then
-							Select Rand(4)
-								Case 1
-									Msg = "You feel exhausted."
-								Case 2
-									Msg = Chr(34)+"Could really go for a nap now..."+Chr(34)
-								Case 3
-									Msg = Chr(34)+"If I wasn't in this situation I would take a nap somewhere."+Chr(34)
-								Case 4
-									Msg = "You feel restless."
-							End Select
+							If MsgTimer<=0 Then
+								Select Rand(4)
+									Case 1
+										Msg = "You feel exhausted."
+									Case 2
+										Msg = Chr(34)+"Could really go for a nap now..."+Chr(34)
+									Case 3
+										Msg = Chr(34)+"If I wasn't in this situation I would take a nap somewhere."+Chr(34)
+									Case 4
+										Msg = "You feel restless."
+								End Select
 							
-							MsgTimer = 7*70
-						EndIf
-					EndIf							
+								MsgTimer = 7*70
+							EndIf
+						EndIf							
+					EndIf
 				EndIf
 				;[End Block]
 			Case 3,4 ;stare at player
@@ -184,12 +186,14 @@ Function UpdateNPCtype966(n.NPCs)
 					If n\Frame > 456.0 Then n\State = 0
 				EndIf
 				
-				If n\Frame>271.0 And prevFrame<=271.0 Lor n\Frame>414.0 And prevFrame<=414.0 Lor n\Frame>314.0 And prevFrame<=314.0 Lor n\Frame>301.0 And prevFrame<=301.0
-					PlayNPCSound(n, LoadTempSound("SFX\SCP\966\Idle"+Rand(1,3)+".ogg"))
-				EndIf
+				If (Not NoTarget) Then
+					If n\Frame>271.0 And prevFrame<=271.0 Lor n\Frame>414.0 And prevFrame<=414.0 Lor n\Frame>314.0 And prevFrame<=314.0 Lor n\Frame>301.0 And prevFrame<=301.0
+						PlayNPCSound(n, LoadTempSound("SFX\SCP\966\Idle"+Rand(1,3)+".ogg"))
+					EndIf
 				
-				angle = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
-				RotateEntity n\Collider,0.0,CurveAngle(angle,EntityYaw(n\Collider),20.0),0.0
+					angle = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
+					RotateEntity n\Collider,0.0,CurveAngle(angle,EntityYaw(n\Collider),20.0),0.0
+				EndIf
 				;[End Block]
 			Case 5,6,8 ;walking or chasing
 				If n\Frame<580.0 ;start walking
@@ -198,7 +202,7 @@ Function UpdateNPCtype966(n.NPCs)
 					AnimateNPC(n, 580, 628, n\CurrSpeed*25.0)
 					
 								;chasing the player
-					If n\State = 8 And dist<32 Then
+					If n\State = 8 And dist<32 And (Not NoTarget) Then
 						If n\PathTimer <= 0 Then
 							n\PathStatus = FindPath (n, EntityX(Collider,True), EntityY(Collider,True), EntityZ(Collider,True))
 							n\PathTimer = 40*10
@@ -261,52 +265,56 @@ Function UpdateNPCtype966(n.NPCs)
 					MoveEntity n\Collider,0,0,n\CurrSpeed
 				EndIf
 			Case 10 ;attack
-				If n\LastSeen=0
-					PlayNPCSound(n, LoadTempSound("SFX\SCP\966\Echo"+Rand(1,3)+".ogg"))
-					n\LastSeen = 1
-				EndIf
+				If (Not NoTarget) Then
+					If n\LastSeen=0
+						PlayNPCSound(n, LoadTempSound("SFX\SCP\966\Echo"+Rand(1,3)+".ogg"))
+						n\LastSeen = 1
+					EndIf
 				
-				If n\Frame>557.0
-					AnimateNPC(n, 628, 652, 0.25, False)
-					If n\Frame>651.0
-						Select Rand(3)
-							Case 1
-								SetNPCFrame(n, 458)
-							Case 2
-								SetNPCFrame(n, 488)
-							Case 3
-								SetNPCFrame(n, 518)
-						End Select
+					If n\Frame>557.0
+						AnimateNPC(n, 628, 652, 0.25, False)
+						If n\Frame>651.0
+							Select Rand(3)
+								Case 1
+									SetNPCFrame(n, 458)
+								Case 2
+									SetNPCFrame(n, 488)
+								Case 3
+									SetNPCFrame(n, 518)
+							End Select
 						
+						EndIf
+					Else
+						If n\Frame <= 487
+							AnimateNPC(n, 458, 487, 0.3, False)
+							If n\Frame > 486.0 Then n\State = 8
+						ElseIf n\Frame <= 517
+							AnimateNPC(n, 488, 517, 0.3, False)
+							If n\Frame > 516.0 Then n\State = 8
+						ElseIf n\Frame <= 557
+							AnimateNPC(n, 518, 557, 0.3, False)
+							If n\Frame > 556.0 Then n\State = 8
+						EndIf
 					EndIf
-				Else
-					If n\Frame <= 487
-						AnimateNPC(n, 458, 487, 0.3, False)
-						If n\Frame > 486.0 Then n\State = 8
-					ElseIf n\Frame <= 517
-						AnimateNPC(n, 488, 517, 0.3, False)
-						If n\Frame > 516.0 Then n\State = 8
-					ElseIf n\Frame <= 557
-						AnimateNPC(n, 518, 557, 0.3, False)
-						If n\Frame > 556.0 Then n\State = 8
+				
+					If dist<1.0 Then
+						If n\Frame>470.0 And prevFrame<=470.0 Lor n\Frame>500.0 And prevFrame<=500.0 Lor n\Frame>527.0 And prevFrame<=527.0
+							PlayNPCSound(n, LoadTempSound("SFX\General\Slash"+Rand(1,2)+".ogg"))
+							;Injuries = Injuries + Rnd(0.5,1.0)
+							If (Not GodMode) Then
+								DamageSPPlayer(Rnd(10.0,20.0))
+							EndIf
+						EndIf	
 					EndIf
-				EndIf
 				
-				If dist<1.0 Then
-					If n\Frame>470.0 And prevFrame<=470.0 Lor n\Frame>500.0 And prevFrame<=500.0 Lor n\Frame>527.0 And prevFrame<=527.0
-						PlayNPCSound(n, LoadTempSound("SFX\General\Slash"+Rand(1,2)+".ogg"))
-						;Injuries = Injuries + Rnd(0.5,1.0)
-						DamageSPPlayer(Rnd(10.0,20.0))
-					EndIf	
+					n\Angle = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
+					RotateEntity n\Collider, 0, CurveAngle(n\Angle,EntityYaw(n\Collider),30.0),0
 				EndIf
-				
-				n\Angle = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
-				RotateEntity n\Collider, 0, CurveAngle(n\Angle,EntityYaw(n\Collider),30.0),0
 				
 		End Select
 	Else
 		HideEntity n\obj
-		If (Rand(600)=1) Then
+		If (Rand(600)=1) And (Not NoTarget) Then
 			TeleportCloser(n)
 		EndIf
 	EndIf
