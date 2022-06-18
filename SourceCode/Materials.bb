@@ -20,7 +20,7 @@ Function LoadMaterials(file$)
 	Local mat.Materials = Null
 	Local StrTemp$ = ""
 	
-	Local f = OpenFile(file)
+	Local f = OpenFile_Strict(file)
 	
 	While Not Eof(f)
 		TemporaryString = Trim(ReadLine(f))

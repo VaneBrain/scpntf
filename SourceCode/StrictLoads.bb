@@ -185,7 +185,7 @@ End Type
 Function StreamSound_Strict(file$,volume#=1.0,custommode=Mode)
 	Local st.Stream = New Stream
 	
-	If I_Loc\Localized And FileType(I_Loc\LangPath + file$)=1 Then
+	If I_Loc\Localized And FileType(I_Loc\LangPath + file$) = 1 Then
 		st\chn = PlayMusic(I_Loc\LangPath + file$,custommode+TwoD)
 	Else
 		If FileType(file$)<>1
@@ -313,6 +313,21 @@ Function UpdateStreamSoundOrigin(streamHandle%,cam%,entity%,range#=10,volume#=1.
 	EndIf
 End Function
 
+Function OpenFile_Strict(File$)
+	Local tmp
+
+	If I_Loc\Localized And FileType(I_Loc\LangPath+File$) = 1 Then
+		Return OpenFile(I_Loc\LangPath+File$)
+	EndIf
+	
+	If FileType(File$) <> 1 Then RuntimeError "File " + File$ + " not found."
+	tmp = OpenFile(File$)
+
+	If tmp = 0 Then RuntimeError "Failed to load File: "+File$
+	
+	Return tmp 
+End Function
+
 Function LoadMesh_Strict(File$,parent=0)
 	Local tmp%,i%,sf%,b%,t1%,name$,texture%,t2%
 	Local texAlpha% = 0
@@ -321,7 +336,7 @@ Function LoadMesh_Strict(File$,parent=0)
 	
 	DebugLog "Load mesh: "+File
 	
-	If I_Loc\Localized And FileType(I_Loc\LangPath + File$)=1 Then
+	If I_Loc\Localized And FileType(I_Loc\LangPath + File$) = 1 Then
 		tmp = LoadMesh(I_Loc\LangPath + File, parent)
 	EndIf
 	
@@ -485,7 +500,7 @@ Function LoadAnimMesh_Strict(File$,parent=0)
 	
 	DebugLog "Load animated mesh: "+File
 	
-	If I_Loc\Localized And FileType(I_Loc\LangPath + File$)=1 Then
+	If I_Loc\Localized And FileType(I_Loc\LangPath + File$) = 1 Then
 		tmp = LoadAnimMesh(I_Loc\LangPath + File, parent)
 	EndIf
 	
@@ -558,21 +573,24 @@ End Function
 
 ;don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$,flags=1,texdeletetype%=0)
-	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
-	
 	Local tmp
+
+	If I_Loc\Localized And FileType(I_Loc\LangPath+File$) = 1 Then
+		tmp = LoadTextureCheckingIfInCache(I_Loc\LangPath+File$,texdeletetype,flags)
+	EndIf
 	
 	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
 	tmp = LoadTextureCheckingIfInCache(File$,texdeletetype,flags)
-	
+
 	If tmp = 0 Then RuntimeError "Failed to load Texture: "+File$
+	
 	Return tmp 
 End Function   
 
 Function LoadBrush_Strict(file$,flags,u#=1.0,v#=1.0)
 	Local tmp%
-	
-	If I_Loc\Localized And FileType(I_Loc\LangPath + file$)=1 Then
+
+	If I_Loc\Localized And FileType(I_Loc\LangPath + file$) = 1 Then
 		tmp = LoadBrush(I_Loc\LangPath + file, flags, u, v)
 	EndIf
 	
@@ -581,15 +599,21 @@ Function LoadBrush_Strict(file$,flags,u#=1.0,v#=1.0)
 		tmp = LoadBrush(file, flags, u, v)
 		If tmp = 0 Then RuntimeError "Failed to load Brush: " + file
 	EndIf
+
 	Return tmp 
 End Function 
 
 Function LoadFont_Strict(file$, height%)
-	If FileType(file$)<>1 Then RuntimeError "Font " + file$ + " not found."
+	Local tmp
+	If I_Loc\Localized And (FileType(I_Loc\LangPath+File$) = 1) Then
+		Return LoadFont(I_Loc\LangPath+File$, height%)	
+	EndIf
 	
-	tmp = LoadFont(file, height)
+	If FileType(File$) <> 1 Then RuntimeError "Font " + File$ + " not found."
+	tmp = LoadFont(File$, height%)
+
+	If tmp = 0 Then RuntimeError "Failed to load Font: "+File$
 	
-	If tmp = 0 Then RuntimeError "Failed to load Font: " + file$ 
 	Return tmp
 End Function
 

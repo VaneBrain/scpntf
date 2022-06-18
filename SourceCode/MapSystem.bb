@@ -1587,7 +1587,7 @@ Function LoadRoomTemplates(file$)
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
 	
-	Local f = OpenFile(file)
+	Local f = OpenFile_Strict(file)
 	
 	While Not Eof(f)
 		If drawtimer >= 5 Then

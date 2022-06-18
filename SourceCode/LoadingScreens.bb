@@ -25,7 +25,7 @@ Function InitLoadingScreens(filename$)
 	Local ls.LoadingScreens
 	Local file$ = filename
 	
-	Local f = OpenFile(file)
+	Local f = OpenFile_Strict(file)
 	
 	While Not Eof(f)
 		TemporaryString = Trim(ReadLine(f))
