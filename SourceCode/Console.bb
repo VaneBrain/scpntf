@@ -36,7 +36,7 @@ Function UpdateConsole(commandSet%)
 		
 		Local x% = 0, y% = opt\GraphicHeight-300*MenuScale, width% = opt\GraphicWidth, height% = 300*MenuScale-30*MenuScale
 		Local StrTemp$, temp%,  i%
-		Local ev.Events, r.Rooms, it.Items
+		Local ev.Events, r.Rooms, it.Items, g.Guns
 		
 		DrawFrame x,y,width,height+30*MenuScale
 		
@@ -265,6 +265,22 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("- playmusic [clip + .wav/.ogg]")
 									CreateConsoleMsg("- notarget")
 									CreateConsoleMsg("- unlockexits")
+									CreateConsoleMsg("- infiniteammo")
+									CreateConsoleMsg("- instantkill")
+									CreateConsoleMsg("- noblink")
+									CreateConsoleMsg("- sethp")
+									CreateConsoleMsg("- setkevlar")
+									CreateConsoleMsg("- setweaponammo")
+									CreateConsoleMsg("- setreserveammo")
+									CreateConsoleMsg("- setspeedmult")
+									CreateConsoleMsg("- setstaminamult")
+									CreateConsoleMsg("- setblinkmult")
+									CreateConsoleMsg("- setdamagemult")
+									CreateConsoleMsg("- setknockbackmult")
+									CreateConsoleMsg("- setaccuracymult")
+									CreateConsoleMsg("- setfireratemult")
+									CreateConsoleMsg("- zoneroomlist")
+									CreateConsoleMsg("- zoneitemlist")
 								Case "asd"
 									CreateConsoleMsg("HELP - asd")
 									CreateConsoleMsg("******************************")
@@ -369,6 +385,128 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("Will play tracks in .ogg/.wav format")
 									CreateConsoleMsg("from "+Chr(34)+"SFX\Music\Custom\"+Chr(34)+".")
 									CreateConsoleMsg("******************************")
+								Case "infiniteammo"
+									CreateConsoleMsg("HELP - infiniteammo")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles infiniteammo, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Allows the user to shoot any weapon")
+									CreateConsoleMsg("without losing ammo")
+									CreateConsoleMsg("******************************")
+								Case "instantkill"
+									CreateConsoleMsg("HELP - instantkill")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles instantkill, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Allows the user to kill any NPC")
+									CreateConsoleMsg("with one hit/shot")
+									CreateConsoleMsg("******************************")
+								Case "noblink"
+									CreateConsoleMsg("HELP - noblink")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Toggles noblink, unless a valid parameter")
+									CreateConsoleMsg("is specified (on/off).")
+									CreateConsoleMsg("Allows the user to not blink entirely")
+									CreateConsoleMsg("******************************")
+								Case "sethp"
+									CreateConsoleMsg("HELP - sethp")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users current HP.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Default is 100. 0 will kill you")
+									CreateConsoleMsg("******************************")
+								Case "setkevlar"
+									CreateConsoleMsg("HELP - setkevlar")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users current kevlar amount.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Default is 100.")
+									CreateConsoleMsg("******************************")
+								Case "setweaponammo"
+									CreateConsoleMsg("HELP - setweaponammo")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the magazine ammo for a weapon the user specifies.")
+									CreateConsoleMsg("First parameter should be a weapon name (no spaces)")
+									CreateConsoleMsg("Second parameter should be set to a value at 0 or above")
+									CreateConsoleMsg("Default for second parameter is 'default'.")
+									CreateConsoleMsg("******************************")
+								Case "setreserveammo"
+									CreateConsoleMsg("HELP - setreserveammo")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the reserve magazine amount for a weapon the user specifies.")
+									CreateConsoleMsg("First parameter should be a weapon name (no spaces)")
+									CreateConsoleMsg("Second parameter should be set to a value at 0 or above")
+									CreateConsoleMsg("Default for second parameter is 'default'.")
+									CreateConsoleMsg("******************************")
+								Case "setspeedmult"
+									CreateConsoleMsg("HELP - setspeedmult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users speed multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher speed = faster movement")
+									CreateConsoleMsg("Default is 1 or 'default'")
+									CreateConsoleMsg("******************************")
+								Case "setstaminamult"
+									CreateConsoleMsg("HELP - setstaminamult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users stamina multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher multiplier = more stamina usage")
+									CreateConsoleMsg("Default is 1 or 'default'")
+									CreateConsoleMsg("******************************")
+								Case "setblinkmult"
+									CreateConsoleMsg("HELP - setblinkmult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users blinking time multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher multiplier = faster blinking time")
+									CreateConsoleMsg("Default is 1 or 'default'")
+									CreateConsoleMsg("******************************")
+								Case "setdamagemult"
+									CreateConsoleMsg("HELP - setdamagemult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users gun damage multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher multiplier = stronger damage against NPCs")
+									CreateConsoleMsg("Default is 1 or 'default'")
+									CreateConsoleMsg("******************************")
+								Case "setknockbackmult"
+									CreateConsoleMsg("HELP - setknockbackmult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users gun knockback (recoil) multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher multiplier = stronger camera shake and recoil")
+									CreateConsoleMsg("Default is 'default'")
+									CreateConsoleMsg("******************************")
+								Case "setaccuracymult"
+									CreateConsoleMsg("HELP - setaccuracymult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users gun accuracy multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher multiplier = more accuracy")
+									CreateConsoleMsg("Default is 'default'")
+									CreateConsoleMsg("******************************")
+								Case "setfireratemult"
+									CreateConsoleMsg("HELP - setfireratemult")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Sets the users fire rate multiplier.")
+									CreateConsoleMsg("Should be set to a value at 0 or above")
+									CreateConsoleMsg("Higher multiplier = faster firing")
+									CreateConsoleMsg("Default is 'default'")
+									CreateConsoleMsg("******************************")
+								Case "zoneroomlist"
+									CreateConsoleMsg("HELP - zoneroomlist")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Shows the current loaded rooms for the zone you are in.")
+									CreateConsoleMsg("Going to different zones will show different names")
+									CreateConsoleMsg("Room names may be duplicated when displaying")
+									CreateConsoleMsg("******************************")
+								Case "zoneitemlist"
+									CreateConsoleMsg("HELP - zoneitemlist")
+									CreateConsoleMsg("******************************")
+									CreateConsoleMsg("Shows the current loaded items for the zone you are in.")
+									CreateConsoleMsg("Going to different zones will show different items")
+									CreateConsoleMsg("Room items may be duplicated when displaying")
 								Case "notarget"
 									CreateConsoleMsg("HELP - notarget")
 									CreateConsoleMsg("******************************")
@@ -638,6 +776,7 @@ Function UpdateConsole(commandSet%)
 							If SuperMan = True Then
 								CreateConsoleMsg("GOTTA GO FAST")
 							Else
+								Speed = 0.018
 								CreateConsoleMsg("WHOA SLOW DOWN")
 							EndIf
 							;[End Block]
@@ -1033,6 +1172,322 @@ Function UpdateConsole(commandSet%)
 									CreateConsoleMsg("The current room doesn't has any event applied.",255,150,0)
 								EndIf
 							EndIf
+						Case "infiniteammo"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							
+							Select StrTemp
+								Case "on", "1", "true"
+									InfiniteAmmo% = True						
+								Case "off", "0", "false"
+									InfiniteAmmo% = False	
+								Default
+									InfiniteAmmo% = Not InfiniteAmmo%
+							End Select
+							
+							If InfiniteAmmo% = False Then
+								CreateConsoleMsg("INFINITE AMMO OFF")
+							Else
+								CreateConsoleMsg("INFINITE AMMO ON")	
+							EndIf
+						Case "instantkill"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							
+							Select StrTemp
+								Case "on", "1", "true"
+									InstantKill% = True						
+								Case "off", "0", "false"
+									InstantKill% = False	
+								Default
+									InstantKill% = Not InstantKill%
+							End Select
+							
+							If InstantKill% = False Then
+								CreateConsoleMsg("INSTANT KILL OFF")
+							Else
+								CreateConsoleMsg("INSTANT KILL ON")	
+							EndIf
+						Case "noblink"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							
+							Select StrTemp
+								Case "on", "1", "true"
+									NoBlink% = True						
+								Case "off", "0", "false"
+									NoBlink% = False	
+								Default
+									NoBlink% = Not NoBlink%
+							End Select
+							
+							If NoBlink% = False Then
+								CreateConsoleMsg("NO BLINK OFF")
+							Else
+								CreateConsoleMsg("NO BLINK ON")	
+							EndIf
+						Case "sethp"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: sethp (amount)", 255, 0, 0)
+							Else
+								Local HPInt = Int(StrTemp)
+								If HPInt < 0 Then
+									CreateConsoleMsg("You cannot have your health less than 0", 255, 0, 0)
+								ElseIf HPInt = 0 Then
+									Kill()
+								Else
+									psp\Health = HPInt
+								EndIf
+								CreateConsoleMsg("HP set to " + HPInt)
+							EndIf
+						Case "setkevlar"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setkevlar (amount)", 255, 0, 0)
+							Else
+								Local KevlarInt = Int(StrTemp)
+								If KevlarInt < 0 Then
+									CreateConsoleMsg("You cannot have your kevlar less than 0", 255, 0, 0)
+								Else
+									psp\Kevlar = Int(StrTemp)
+								EndIf
+								CreateConsoleMsg("Kevlar set to " + Int(psp\Kevlar))
+							EndIf
+						Case "setweaponammo"
+							args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							Local GunName$ = Piece$(args$, 1, " ")
+							Local MagazineAmount$ = Piece$(args$, 2, " ")
+							Local GunFound = False
+							If GunName = "" Lor MagazineAmount = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setweaponammo (gun) (amount)", 255, 0, 0)
+							Else
+								If MagazineAmount = "default"
+									For g = Each Guns
+										If g\name = GunName Then
+											g\CurrAmmo = GetINIInt("Data\weapons.ini", g\name, "ammo")
+											g\MaxCurrAmmo = GetINIInt("Data\weapons.ini", g\name, "ammo")
+											GunFound = True
+										EndIf
+									Next
+									If GunFound Then
+										CreateConsoleMsg(GunName + " magazine ammo set to default")
+									EndIf
+								Else
+									Local MagazineAmountInt = Int(MagazineAmount)
+									If MagazineAmountInt < 0 Then
+										CreateConsoleMsg("You cannot have a magazine ammount less than 0", 255, 0, 0)
+									Else
+										For g = Each Guns
+											If g\name = GunName Then
+												g\CurrAmmo = MagazineAmountInt
+												g\MaxCurrAmmo = MagazineAmountInt
+												GunFound = True
+											EndIf
+										Next
+										If GunFound Then
+											CreateConsoleMsg(GunName + " magazine ammo set to " + MagazineAmountInt)
+										EndIf
+									EndIf
+								EndIf
+								If (Not GunFound) Then
+									CreateConsoleMsg("Weapon " + GunName + " does not exist", 255, 0, 0)
+								EndIf
+							EndIf
+						Case "setreserveammo"
+							args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							Local GunName2$ = Piece$(args$,1," ")
+							Local ReserveAmount$ = Piece$(args$,2," ")
+							Local GunFound2 = False
+							If GunName2 = "" Lor ReserveAmount = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setreserveammo (gun) (amount)", 255, 0, 0)
+							Else
+								If ReserveAmount = "default"
+									For g = Each Guns
+										If g\name = GunName2 Then
+											g\CurrReloadAmmo = GetINIInt("Data\weapons.ini", g\name, "reload_ammo")
+											g\MaxReloadAmmo = GetINIInt("Data\weapons.ini", g\name, "reload_ammo")
+											GunFound2 = True
+										EndIf
+									Next
+									If GunFound2 Then
+										CreateConsoleMsg(GunName2 + " reserve ammo set to default")
+									EndIf
+								Else
+									Local ReserveAmountInt = Int(ReserveAmount)
+									If ReserveAmountInt < 0 Then
+										CreateConsoleMsg("You cannot have a reserve magazine ammount less than 0", 255, 0, 0)
+									Else
+										For g = Each Guns
+											If g\name = GunName2 Then
+												g\CurrReloadAmmo = ReserveAmountInt
+												g\MaxReloadAmmo = ReserveAmountInt
+												GunFound2 = True
+											EndIf
+										Next
+										If GunFound2 Then
+											CreateConsoleMsg(GunName2 + " reserve ammo set to " + ReserveAmountInt)
+										EndIf
+									EndIf
+								EndIf
+								If (Not GunFound2) Then
+									CreateConsoleMsg("Weapon " + GunName2 + " does not exist", 255, 0, 0)
+								EndIf
+							EndIf
+						Case "setspeedmult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setspeedmult (amount)", 255, 0, 0)
+							Else
+								If Lower(StrTemp) = "default" Then
+									Speed = 0.018
+									CreateConsoleMsg("Speed multiplier set to default")
+								Else
+									Local SpeedTemp# = Float(StrTemp)
+									If SpeedTemp < 0.0 Then
+										CreateConsoleMsg("You cannot have a speed multiplier less than 0", 255, 0, 0)
+									Else
+										Speed = SpeedTemp * 0.018
+										CreateConsoleMsg("Speed multiplier set to " + SpeedTemp + "x")
+									EndIf
+								EndIf
+							EndIf
+						Case "setstaminamult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setstaminamult (amount)", 255, 0, 0)
+							Else
+								If InfiniteStamina Then
+									CreateConsoleMsg("You cannot use this command if you have infinite stamina on!", 255, 0, 0)
+								Else
+									If Lower(StrTemp) = "default" Then
+										StaminaEffect = 1.0
+										StaminaEffectTimer = 2147483647
+										CreateConsoleMsg("Stamina use multiplier set to default")
+									Else
+										StaminaEffect = Float(StrTemp)
+										If StaminaEffect < 0.0 Then
+											StaminaEffect = 1.0
+											CreateConsoleMsg("You cannot have a stamina use multiplier less than 0", 255, 0, 0)
+										Else
+											StaminaEffectTimer = 2147483647
+											CreateConsoleMsg("Stamina use multiplier set to " + StaminaEffect + "x")
+										EndIf
+									EndIf
+								EndIf
+							EndIf
+							
+						Case "setblinkmult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setblinkmult (amount)", 255, 0, 0)
+							Else
+								If Lower(StrTemp) = "default" Then
+									BlinkEffect = 1.0
+									BlinkEffectTimer = 2147483647
+									CreateConsoleMsg("Blinking time multiplier set to default")
+								Else
+									BlinkEffect = Float(StrTemp)
+									If BlinkEffect < 0.0 Then
+										BlinkEffect = 1.0
+										CreateConsoleMsg("You cannot have a blink multiplier less than 0", 255, 0, 0)
+									Else
+										BlinkEffectTimer = 2147483647
+										CreateConsoleMsg("Blinking time multiplier set to " + BlinkEffect + "x")
+									EndIf
+								EndIf
+							EndIf
+						Case "setdamagemult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setdamagemult (amount)", 255, 0, 0)
+							Else
+								If Lower(StrTemp) = "default" Then
+									DamageMultiplier = 1.0
+									CreateConsoleMsg("Damage multiplier set to default")
+								Else
+									DamageMultiplier = Float(StrTemp)
+									If DamageMultiplier < 0.0 Then
+										DamageMultiplier = 1.0
+										CreateConsoleMsg("You cannot have a damage multiplier less than 0", 255, 0, 0)
+									Else
+										CreateConsoleMsg("Damage multiplier set to " + DamageMultiplier + "x")
+									EndIf
+								EndIf
+							EndIf
+						Case "setknockbackmult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setknockbackmult (amount)", 255, 0, 0)
+							Else
+								Local KnockbackResult# = Float(StrTemp)
+								If Lower(StrTemp) = "default" Then
+									For g = Each Guns
+										g\Knockback = GetINIFloat("Data\weapons.ini", g\name, "knockback")
+									Next
+									CreateConsoleMsg("Knockback multiplier set to default")
+								Else
+									If KnockbackResult < 0.0 Then
+										CreateConsoleMsg("You cannot have a knockback multiplier less than 0", 255, 0, 0)
+									Else
+										For g = Each Guns
+											g\Knockback = GetINIFloat("Data\weapons.ini", g\name, "knockback") * KnockbackResult
+										Next
+										CreateConsoleMsg("Knockback multiplier set to " + KnockbackResult + "x")
+									EndIf
+								EndIf
+							EndIf
+						Case "setaccuracymult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setaccuracymult (amount)", 255, 0, 0)
+							Else
+								Local AccuracyResult# = Float(StrTemp)
+								If Lower(StrTemp) = "default" Then
+									For g = Each Guns
+										g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy")
+									Next
+									CreateConsoleMsg("Knockback multiplier set to default")
+								Else
+									If AccuracyResult < 0.0 Then
+										CreateConsoleMsg("You cannot have a accuracy multiplier less than 0", 255, 0, 0)
+									Else
+										For g = Each Guns
+											g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy") * (Float(1) / AccuracyResult)
+										Next
+										CreateConsoleMsg("Accuracy multiplier set to " + AccuracyResult + "x")
+									EndIf
+								EndIf
+							EndIf
+						Case "setfireratemult"
+							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+							If StrTemp = "" Then
+								CreateConsoleMsg("Too few parameters. Usage: setfireratemult (amount)", 255, 0, 0)
+							Else
+								Local RateOfFireResult# = Float(StrTemp)
+								If Lower(StrTemp) = "default" Then
+									For g = Each Guns
+										g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire")
+									Next
+									CreateConsoleMsg("Rate of fire multiplier set to default")
+								Else
+									If RateOfFireResult < 0.0 Then
+										CreateConsoleMsg("You cannot have a rate of fire multiplier less than 0", 255, 0, 0)
+									Else
+										For g = Each Guns
+											g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire") * (Float(1) / RateOfFireResult)
+										Next
+										CreateConsoleMsg("Rate of fire multiplier set to " + RateOfFireResult + "x")
+									EndIf
+								EndIf
+							EndIf
+						Case "zoneroomlist"
+							CreateConsoleMsg("List of all rooms loaded in this current zone:")
+							For r = Each Rooms
+								CreateConsoleMsg("- " + r\roomtemplate.roomtemplates\Name)
+							Next
+						Case "zoneitemlist"
+							CreateConsoleMsg("List of all items loaded in this current zone:")
+							For it = Each Items
+								CreateConsoleMsg("- " + it\itemtemplate\tempname + " | " + it\itemtemplate\name)
+							Next
 							;[End Block]
 ;						Case "giveachievement"
 							;[Block]
