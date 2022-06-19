@@ -2345,8 +2345,8 @@ Function DrawGUI()
 		Else
 			If BlinkEffect < 1.0 Then
 				Color 0, 255, 0
-      Else If BlinkEffect > 1.0 Then
-        Color 255, 0, 0
+			Else If BlinkEffect > 1.0 Then
+				Color 255, 0, 0
 			Else
 				Color 255, 255, 255
 			EndIf
@@ -2370,8 +2370,8 @@ Function DrawGUI()
 		Else
 			If BlinkEffect < 1.0 Then
 				Color 0, 255, 0
-      Else If BlinkEffect > 1.0 Then
-        Color 255, 0, 0
+			Else If BlinkEffect > 1.0 Then
+				Color 255, 0, 0
 			Else
 				Color 255, 255, 255
 			EndIf
@@ -2433,7 +2433,7 @@ Function DrawGUI()
 			If InfiniteStamina Or (StaminaEffect < 1.0) Then
 				Color 0, 255, 0
 			Else
-				If Stamina <= 20.0 Then
+				If Stamina <= 20.0 Or StaminaEffect > 1.0 Then
 					Color 255, 0, 0
 				Else
 					Color 255, 255, 255
@@ -2452,8 +2452,8 @@ Function DrawGUI()
 			Else
 				If Stamina <= 0.0 Or Speed < 0.018 Then
 					Color 255, 0, 0
-        Else If Speed > 0.018 Then
-          Color 0, 255, 0
+				Else If Speed > 0.018 Then
+					Color 0, 255, 0
 				Else
 					Color 255, 255, 255
 				EndIf

@@ -2545,6 +2545,11 @@ Function MovePlayer()
         Stamina = Min(Stamina + 0.15 * FPSfactor*1.25, 100.0)
     EndIf
 	
+	If InfiniteStamina Then
+		StaminaEffect = 1.0
+		StaminaEffectTimer = 2147483647
+	EndIf
+	
 	If StaminaEffectTimer > 0 Then
 		StaminaEffectTimer = StaminaEffectTimer - (FPSfactor/70)
 	Else

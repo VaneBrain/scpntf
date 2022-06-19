@@ -1354,18 +1354,22 @@ Function UpdateConsole(commandSet%)
 							If StrTemp = "" Then
 								CreateConsoleMsg("Too few parameters. Usage: setstaminamult (amount)", 255, 0, 0)
 							Else
-								If Lower(StrTemp) = "default" Then
-									StaminaEffect = 1.0
-									StaminaEffectTimer = 2147483647
-									CreateConsoleMsg("Stamina use multiplier set to default")
+								If InfiniteStamina Then
+									CreateConsoleMsg("You cannot use this command if you have infinite stamina on!", 255, 0, 0)
 								Else
-									StaminaEffect = Float(StrTemp)
-									If StaminaEffect < 0.0 Then
+									If Lower(StrTemp) = "default" Then
 										StaminaEffect = 1.0
-										CreateConsoleMsg("You cannot have a stamina use multiplier less than 0", 255, 0, 0)
-									Else
 										StaminaEffectTimer = 2147483647
-										CreateConsoleMsg("Stamina use multiplier set to " + StaminaEffect + "x")
+										CreateConsoleMsg("Stamina use multiplier set to default")
+									Else
+										StaminaEffect = Float(StrTemp)
+										If StaminaEffect < 0.0 Then
+											StaminaEffect = 1.0
+											CreateConsoleMsg("You cannot have a stamina use multiplier less than 0", 255, 0, 0)
+										Else
+											StaminaEffectTimer = 2147483647
+											CreateConsoleMsg("Stamina use multiplier set to " + StaminaEffect + "x")
+										EndIf
 									EndIf
 								EndIf
 							EndIf
