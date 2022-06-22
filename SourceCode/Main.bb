@@ -1514,7 +1514,7 @@ Function MainLoop()
 					RN$ = PlayerRoom\RoomTemplate\Name$
 					If RN$ = "173" Lor (RN$ = "exit1" And EntityY(Collider)>1040.0*RoomScale) Lor RN$ = "gatea"
 						SetSaveMSG("You cannot save in this location.")
-					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
+					ElseIf (Not CanSave) Lor QuickLoadPercent > -1 Lor PlayerInNewElevator
 						SetSaveMSG("You cannot save at this moment.")
 						If QuickLoadPercent > -1
 							Save_MSG = Save_MSG + " (game is loading)"
