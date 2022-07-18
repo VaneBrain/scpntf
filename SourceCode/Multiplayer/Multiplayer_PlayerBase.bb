@@ -999,6 +999,16 @@ Function AnimatePlayerModelsAndSpectate()
 			EndIf
 			
 			If (Not IsSpectator(i)) And (Players[i]\Team > Team_Unknown) Then ;CHECK FOR IMPLEMENTATION
+				If (Players[i]\obj_lower <> 0 And EntityHidden(Players[i]\obj_lower)) Then
+					ShowEntity Players[i]\obj_lower
+					ShowEntity Players[i]\obj_upper
+					If Players[i]\GunModel <> 0 Then
+						ShowEntity Players[i]\GunModel
+					EndIf
+					If Players[i]\GunModelMuzzleFlash <> 0 Then
+						ShowEntity Players[i]\GunModelMuzzleFlash
+					EndIf
+				EndIf
 				If Players[i]\AnimState_Lower <> prevPlayerAnimationLower Then
 					AnimatePlayerModelLow(Players[i]\obj_lower, Players[i]\AnimState_Lower, animspeed_multiply)
 				EndIf
@@ -1011,11 +1021,11 @@ Function AnimatePlayerModelsAndSpectate()
 					PlayPlayerStepSounds(i, Players[i]\obj_lower, Players[i]\AnimState_Lower)
 				EndIf
 			Else
-				If (Not EntityHidden(Players[i]\obj_lower)) Then
+				If Players[i]\obj_lower <> 0 And (Not EntityHidden(Players[i]\obj_lower)) Then
 					TeleportEntity Players[i]\Collider,0,-10000,0
 					HideEntity Players[i]\obj_lower
 					HideEntity Players[i]\obj_upper
-					If Players[i]\GunModel<>0 Then
+					If Players[i]\GunModel <> 0 Then
 						HideEntity Players[i]\GunModel
 					EndIf
 					If Players[i]\GunModelMuzzleFlash <> 0 Then

@@ -146,9 +146,7 @@ Function UpdateEvent_Cont_970(e.Events)
 					If Inventory[i]<>Null Then RemoveItem(Inventory[i])								
 				Case 5
 					;Injuries = Injuries + 0.3
-					If (Not GodMode) Then
-						DamageSPPlayer(5, True)
-					EndIf
+					DamageSPPlayer(5, True)
 				Case 10
 					de.Decals = CreateDecal(DECAL_BLOODSPLAT2, EntityX(e\room\obj)+Cos(e\room\angle-90)*760*RoomScale, 0.0005, EntityZ(e\room\obj)+Sin(e\room\angle-90)*760*RoomScale,90,Rnd(360),0)
 				Case 14

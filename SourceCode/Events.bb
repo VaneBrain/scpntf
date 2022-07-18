@@ -273,7 +273,6 @@ Function InitEvents()
 	CreateEvent("classd_spawn","room2_4", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room2_5", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room2_tunnel_1", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
-;	CreateEvent("classd_spawn","endroom_1", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","endroom_2", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room2_tunnel_2", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room2_tunnel_3", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
@@ -282,9 +281,12 @@ Function InitEvents()
 	CreateEvent("classd_spawn","room3_2", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room3_3", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room4_1", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
-;	CreateEvent("classd_spawn","room4_ez", 0, 0.8 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room4_2", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	CreateEvent("classd_spawn","room3_tunnel", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
+	If gopt\GameMode = GAMEMODE_CLASSIC Then
+		CreateEvent("classd_spawn","room4_ez", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
+		CreateEvent("classd_spawn","endroom_1", 0, 0.2 + (0.1*SelectedDifficulty\aggressiveNPCs))
+	EndIf	
 	
 	;New events in SCP:NTF
 	CreateEvent("gate_a_entrance","gate_a_entrance",0)
@@ -292,12 +294,7 @@ Function InitEvents()
 	CreateEvent("room2_maintenance","room2_maintenance",0)
 	CreateEvent("cont_457","cont_457",0)
 	If gopt\GameMode <> GAMEMODE_UNKNOWN Then ;Disable SZL when playing mission mode
-		;CreateEvent("checkpoints","checkpoint_ez",0,1.0)
-		If gopt\GameMode = GAMEMODE_CLASSIC Then
-			CreateEvent("checkpoints","checkpoint_ez",0,1.0)
-		Else
-			CreateEvent("checkpoint_ez_106","checkpoint_ez",0,1.0)
-		EndIf
+		CreateEvent("checkpoint_ez_106","checkpoint_ez",0,1.0)
 		CreateEvent("checkpoints","checkpoint_lcz",0,1.0)
 		CreateEvent("checkpoints","checkpoint_hcz",0,1.0)
 	EndIf
@@ -322,7 +319,7 @@ Function RemoveEvent(e.Events)
 End Function
 
 Function UpdateEvents()
-	CatchErrors("Uncaught (UpdateEvents)")
+	CatchErrors("UpdateEvents")
 	Local dist#, i%, temp%, pvt%, strtemp$, j%, k%
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
@@ -343,6 +340,11 @@ Function UpdateEvents()
 	CoffinDistance = 1000.0
 	
 	For e.Events = Each Events
+		If e<>Null Then
+			CatchErrors(Chr(34)+e\EventName+Chr(34)+" event")
+		Else
+			CatchErrors("Deleted event")
+		EndIf
 		Select e\EventName
 			Case "096_spawn"
 				UpdateEvent_096_Spawn(e)
@@ -505,13 +507,6 @@ Function UpdateEvents()
 			Case "toilet_guard"
 				UpdateEvent_Toilet_Guard(e)
 		End Select
-		
-		If e<>Null Then
-			CatchErrors(Chr(34)+e\EventName+Chr(34)+" event")
-		Else
-			CatchErrors("Deleted event")
-		EndIf
-		
 	Next
 	
 	;This here is necessary because the 294 drinks with explosion effect didn't worked anymore - ENDSHN
@@ -549,7 +544,7 @@ Function UpdateEvents()
 			PositionEntity Collider, EntityX(Collider), 200, EntityZ(Collider)
 		EndIf
 	EndIf
-	
+	CatchErrors("UpdateEvents (Uncaught)")
 End Function
 
 ;~IDEal Editor Parameters:

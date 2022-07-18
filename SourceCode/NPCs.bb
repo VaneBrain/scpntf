@@ -1627,7 +1627,7 @@ Function UpdateNPCs()
 												de.Decals = CreateDecal(DECAL_CRACKS, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90, Rand(360), 0)
 												de\Size = 0.3 : UpdateDecals
 												PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
-												If DistanceSquared(EntityX(Collider),EntityX(n\Collider),EntityZ(Collider),EntityZ(n\Collider))<PowTwo(0.8) And (Not GodMode) Then
+												If DistanceSquared(EntityX(Collider),EntityX(n\Collider),EntityZ(Collider),EntityZ(n\Collider))<PowTwo(0.8) Then
 													;Injuries = Injuries + Rnd(0.3,0.5)
 													DamageSPPlayer(Rnd(5.0,10.0), True)
 												EndIf
@@ -1871,9 +1871,7 @@ Function UpdateNPCs()
 										;Miss
 									Else
 										;Injuries = Injuries + Rnd(0.75,1.5)
-										If (Not GodMode) Then
-											DamageSPPlayer(Rnd(15.0,25.0))
-										EndIf
+										DamageSPPlayer(Rnd(15.0,25.0))
 										PlaySound2(LoadTempSound("SFX\General\Slash"+Rand(1,2)+".ogg"), Camera, n\Collider)
 										If (Not IsSPPlayerAlive()) Then
 											Kill()
@@ -1899,9 +1897,7 @@ Function UpdateNPCs()
 										;Miss
 									Else
 										;Injuries = Injuries + Rnd(0.75,1.5)
-										If (Not GodMode) Then
-											DamageSPPlayer(Rnd(15.0,25.0))
-										EndIf
+										DamageSPPlayer(Rnd(15.0,25.0))
 										PlaySound2(LoadTempSound("SFX\General\Slash"+Rand(1,2)+".ogg"), Camera, n\Collider)
 										If (Not IsSPPlayerAlive()) Then
 											Kill()
@@ -2075,10 +2071,8 @@ Function UpdateNPCs()
 									If (Abs(DeltaYaw(n\Collider,Collider))<=60.0)
 										PlaySound_Strict DamageSFX[Rand(5,8)]
 										;Injuries = Injuries+Rnd(0.4,1.0)
-										If (Not GodMode) Then
-											DamageSPPlayer(Rnd(10.0,20.0))
-											Infect = Infect + (1+(1*SelectedDifficulty\aggressiveNPCs))
-										EndIf
+										DamageSPPlayer(Rnd(10.0,20.0))
+										Infect = Infect + (1+(1*SelectedDifficulty\aggressiveNPCs))
 										DeathMSG = Designation+". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA EXPUNGED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
 									EndIf
 								EndIf
@@ -2213,9 +2207,7 @@ Function UpdateNPCs()
 								If EntityDistanceSquared(n\Collider, Collider) < PowTwo(1.1) Then
 									PlaySound_Strict DamageSFX[Rand(5,8)]
 									;Injuries = Injuries+Rnd(0.4,1.0)
-									If (Not GodMode) Then
-										DamageSPPlayer(Rnd(15.0,25.0))
-									EndIf
+									DamageSPPlayer(Rnd(15.0,25.0))
 									DeathMSG = Chr(34)+"SCP-076-2 breached his containment chamber during the containment breach event. We flooded the entire Containment Area 25b in order "
 									DeathMSG = DeathMSG+"to neutralize SCP-076-2. It had been confirmed that "+Designation+" entered the site, but he never came out. We think that he got "
 									DeathMSG = DeathMSG+"killed by SCP-076-2."+Chr(34)
@@ -3542,9 +3534,7 @@ Function MoveToPocketDimension()
 			BlinkTimer = -10
 			
 			;Injuries = Injuries+0.5
-			If (Not GodMode) Then
-				DamageSPPlayer(10.0, True)
-			EndIf
+			DamageSPPlayer(10.0, True)
 			
 			PlayerRoom = r
 			
@@ -3794,15 +3784,6 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				n.NPCs = CreateNPC(NPCtypeD2, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				consoleMSG = "Aggressive Class-D spawned."
 			EndIf	
-			
-		; Not implemented yet
-		;Case "scientist","sci"
-			;If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
-				;CreateConsoleMsg("Scientist cannot be spawned in Multiplayer. Sorry!", 255, 0, 0)
-			;Else
-				;n.NPCs = CreateNPC(NPCtypeSci, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
-				;consoleMSG = "Scientist spawned."
-			;EndIf	
 			
 		Case "076","scp-076","scp-076-2","scp076","scp076-2"
 			If gopt\GameMode = GAMEMODE_MULTIPLAYER Then

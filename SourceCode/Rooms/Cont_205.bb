@@ -8,7 +8,7 @@ Function FillRoom_Cont_205(r.Rooms)
 	r\RoomDoors[0] = CreateDoor(r\zone, r\x - 1392.0 * RoomScale, -128.0 * RoomScale, r\z - 384*RoomScale, 0, r, True, False, 3)
 	r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\open = False
 	r\RoomDoors[0]\buttons[0] = FreeEntity_Strict(r\RoomDoors[0]\buttons[0])
-	r\RoomDoors[0]\buttons[1] = FreeEntity_strict(r\RoomDoors[0]\buttons[1])
+	r\RoomDoors[0]\buttons[1] = FreeEntity_Strict(r\RoomDoors[0]\buttons[1])
 	
 	sc.SecurityCams = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True)
 	sc\angle = 90 : sc\turn = 0
@@ -188,20 +188,13 @@ Function UpdateEvent_Cont_205(e.Events)
 					If (Rand(150)=1) Then
 						If (Not NoTarget) Then
 							DeathMSG = GetLocalStringR("Singleplayer", "cont_205_death", Designation)
-						
-							;Injuries=Injuries+Rnd(0.4,0.8)
-							If (Not GodMode) Then
-								DamageSPPlayer(Rnd(10,20))
-							EndIf
+							
+							DamageSPPlayer(Rnd(10,20))
 							PlaySound_Strict DamageSFX[Rand(2,3)]
 							CameraShake = 0.5
 						
 							e\EventState2 = Rnd(-0.1, 0.1)
 							e\EventState3 = Rnd(-0.1, 0.1)
-						
-							;If (Injuries>5.0) Then 
-							;	Kill()
-							;EndIf
 						
 							TranslateEntity(Collider, e\EventState2,0,e\EventState3)
 							e\EventState2 = CurveValue(e\EventState2, 0, 10.0)								

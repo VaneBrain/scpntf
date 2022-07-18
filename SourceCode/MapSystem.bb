@@ -1694,6 +1694,7 @@ Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True
 Global RemoteDoorOn = True
 Global Contained106 = False
+Global Contained173 = False
 
 Type Rooms
 	Field zone%

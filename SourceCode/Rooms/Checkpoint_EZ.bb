@@ -93,7 +93,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 	Local p.Particles, n.NPCs, fb.FuseBox, de.Decals
 	Local i%, tex%
 	
-	If psp\Checkpoint106Passed Then
+	If psp\Checkpoint106Passed Lor gopt\GameMode = GAMEMODE_CLASSIC Then
 		e\room\RoomDoors[CHECKPOINT_ELEVATOR_DOOR_ID]\locked = False
 		e\room\RoomDoors[CHECKPOINT_AIRLOCK_DOOR1_ID]\open = True
 		e\room\RoomDoors[CHECKPOINT_AIRLOCK_DOOR2_ID]\open = True

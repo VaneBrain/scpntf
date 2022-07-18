@@ -53,7 +53,7 @@ End Function
 Function UpdateEvent_Room2_Closets(e.Events)
 	
 	If e\EventState = 0 Then
-		If PlayerRoom = e\room And Curr173\Idle = SCP173_ACTIVE Then
+		If PlayerRoom = e\room And Curr173 <> Null And Curr173\Idle = SCP173_ACTIVE Then
 			If e\EventStr = "" And QuickLoadPercent = -1
 				QuickLoadPercent = 0
 				QuickLoad_CurrEvent = e

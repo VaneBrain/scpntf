@@ -71,7 +71,7 @@ End Function
 Function UpdateEvent_Lockroom_1(e.Events)
 	
 	If e\room\dist < 6.0 And e\room\dist > 0 Then
-		If Curr173\Idle <> SCP173_DISABLED Then
+		If Curr173 = Null Lor (Curr173 <> Null And Curr173\Idle <> SCP173_ACTIVE) Then
 			RemoveEvent(e)
 			Return
 		EndIf

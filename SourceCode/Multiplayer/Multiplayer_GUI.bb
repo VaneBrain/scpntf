@@ -406,7 +406,7 @@ Function UpdateGUIMP()
 	
 	UpdatePlayerList()
 	
-	If (((Not mp_I\ChatOpen) And InteractHit(1,CK_Pause)) Lor (Steam_GetOverlayUpdated() = 1 And (Not MenuOpen))) And EndingTimer = 0 And (Not InLobby()) And (Not IsModerationOpen()) Then
+	If (((Not mp_I\ChatOpen) And InteractHit(1,CK_Pause)) Lor ((Not InFocus()) And (Not MenuOpen)) Lor (Steam_GetOverlayUpdated() = 1 And (Not MenuOpen))) And EndingTimer = 0 And (Not InLobby()) And (Not IsModerationOpen()) Then
 		If MenuOpen Then
 			If OptionsMenu <> 0 Then SaveOptionsINI()
 			DeleteMenuGadgets()
@@ -476,12 +476,6 @@ Function DrawMPMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
 	Local x%, y%, width%, height%
-	If (Not InFocus()) And (Not InLobby()) Then ;Game is out of focus -> pause the game
-        MenuOpen = True
-        ;PauseSounds()
-        ;Delay 1000 ;Reduce the CPU take while game is not in focus
-    EndIf
-	
 	Local i%
 	
 ;	If KeyDown(15) Then

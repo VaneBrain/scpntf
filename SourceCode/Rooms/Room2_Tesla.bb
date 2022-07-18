@@ -58,7 +58,7 @@ Function UpdateEvent_Room2_Tesla(e.Events)
 				e\SoundCHN = LoopSound2(TeslaIdleSFX,e\SoundCHN,Camera,e\room\Objects[1],4.0,0.5)
 				e\EventState2 = 0
 				If Abs(EntityX(Collider,True)-EntityX(e\room\Objects[0],True)) < 1.0 And (e\room\angle Mod 180 = 90) Lor Abs(EntityZ(Collider,True)-EntityZ(e\room\Objects[0],True)) < 1.0 And (e\room\angle Mod 180 = 0) Then
-					If EntityDistanceSquared(Collider,e\room\Objects[0]) < PowTwo(300.0*RoomScale) And KillTimer => 0 Then
+					If EntityDistanceSquared(Collider,e\room\Objects[0]) < PowTwo(300.0*RoomScale) And KillTimer => 0 And (Not NoTarget) Then
 						e\EventState = 1
 						StopChannel(e\SoundCHN)
 						e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[1],4.0,0.5)
@@ -67,7 +67,7 @@ Function UpdateEvent_Room2_Tesla(e.Events)
 				For n.NPCs = Each NPCs
 					If n\Collider <> 0 And n\IsDead = False And n\HP > 0 And n\NPCtype <> NPCtype966 Then
 						If n\NPCtype = NPCtypeMTF And e\room\NPC[0] = Null Then
-							If Abs(EntityX(n\Collider,True)-EntityX(e\room\Objects[0],True)) < 2.0 And (e\room\angle Mod 180 = 90) Lor Abs(EntityZ(n\Collider,True)-EntityZ(e\room\Objects[0],True)) < 2.0 And (e\room\angle Mod 180 = 0) Then
+							If Abs(EntityX(n\Collider,True)-EntityX(e\room\Objects[0],True)) <= 5.0 And (e\room\angle Mod 180 = 90) Lor Abs(EntityZ(n\Collider,True)-EntityZ(e\room\Objects[0],True)) <= 5.0 And (e\room\angle Mod 180 = 0) Then
 								If EntityDistanceSquared(n\Collider,e\room\Objects[0]) < PowTwo(500.0*RoomScale) Then
 									n\IdleTimer = 70*10
 									n\State = MTF_TESLA
@@ -109,7 +109,7 @@ Function UpdateEvent_Room2_Tesla(e.Events)
 				EndIf	
 			Case 2 ; Zap state
 				If Abs(EntityX(Collider,True)-EntityX(e\room\Objects[0],True)) < 0.75 And (e\room\angle Mod 180 = 90) Lor Abs(EntityZ(Collider,True)-EntityZ(e\room\Objects[0],True)) < 0.75 And (e\room\angle Mod 180 = 0) Then
-					If EntityDistanceSquared(Collider,e\room\Objects[0]) < PowTwo(300.0*RoomScale) And KillTimer => 0 And (Not NoTarget) Then
+					If EntityDistanceSquared(Collider,e\room\Objects[0]) < PowTwo(300.0*RoomScale) And KillTimer => 0 Then
 						LightFlash = 0.4
 						CameraShake = 1.0
 						Kill()
@@ -135,8 +135,6 @@ Function UpdateEvent_Room2_Tesla(e.Events)
 									Case NPCtype049
 										n\HP = -1000
 										n\State = SCP049_STUNNED
-									Case NPCtypeMTF
-										n\HP = -1
 								End Select
 								If e\room\dist < 8 And EntityInView(e\room\Objects[0],Camera) Then
 									LightFlash = 0.4

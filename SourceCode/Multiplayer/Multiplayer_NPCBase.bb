@@ -42,10 +42,17 @@ Function UpdateEnemySpawners()
 			NPCtoSpawnType = -1
 			Local EnemyCount% = 0
 			Local EnemyCount2% = 0
+			Local EnemyCount939% = 0
+			Local EnemyCount1048% = 0
 			For n.NPCs = Each NPCs
 				EnemyCount = EnemyCount + 1
 				If (Not n\IsDead) Then
 					EnemyCount2 = EnemyCount2 + 1
+				EndIf
+				If n\NPCtype = NPCtype939 Then
+					EnemyCount939 = EnemyCount939 + 1
+				ElseIf n\NPCtype = NPCtype1048a Then
+					EnemyCount1048 = EnemyCount1048 + 1
 				EndIf
 			Next
 			
@@ -67,8 +74,8 @@ Function UpdateEnemySpawners()
 							Exit
 						EndIf
 					ElseIf spawn_chance >= 80 And spawn_chance < 90 Then
-						If Instr(ens\enemies,"939")>0 Then
-							If ((Float(mp_I\Gamemode\Phase / 2) / mp_I\Gamemode\MaxPhase > 0.7 And (mp_I\Gamemode\Phase/2) <> mp_I\Gamemode\MaxPhase) Lor mp_I\BossNPC <> Null) Then
+						If Instr(ens\enemies,"939")>0 Then ;On wave 5 (out of 6), on wave 7 (out of 9), on wave 9 (out of 12)
+							If EnemyCount939 < mp_I\PlayerCount+1 And ((Float(mp_I\Gamemode\Phase / 2) / mp_I\Gamemode\MaxPhase > 0.7 And (mp_I\Gamemode\Phase/2) <> mp_I\Gamemode\MaxPhase) Lor mp_I\BossNPC <> Null) Then
 								NPCtoSpawnType = NPCtype939
 							Else
 								NPCtoSpawnType = -1
@@ -76,8 +83,8 @@ Function UpdateEnemySpawners()
 							Exit
 						EndIf
 					Else
-						If Instr(ens\enemies,"1048a")>0 Then
-							If ((Float(mp_I\Gamemode\Phase / 2) / mp_I\Gamemode\MaxPhase > 0.4 And (mp_I\Gamemode\Phase/2) <> mp_I\Gamemode\MaxPhase) Lor mp_I\BossNPC <> Null) Then
+						If Instr(ens\enemies,"1048a")>0 Then ;On wave 3 (out of 6), on wave 4 (out of 9), on wave 5 (out of 12)
+							If EnemyCount1048 < mp_I\PlayerCount*2 And ((Float(mp_I\Gamemode\Phase / 2) / mp_I\Gamemode\MaxPhase > 0.4 And (mp_I\Gamemode\Phase/2) <> mp_I\Gamemode\MaxPhase) Lor mp_I\BossNPC <> Null) Then
 								NPCtoSpawnType = NPCtype1048a
 							Else
 								NPCtoSpawnType = -1

@@ -14,6 +14,9 @@ Const CHATMSG_TYPE_THREEPARAM_TRANSLATE = 4
 Type ChatMSG
 	Field Msg$[MAX_CHATMSG_PARTS]
 	Field MsgType%
+	Field SteamIDUpper%
+	Field SteamIDLower%
+	Field PlayerName$
 	Field PlayerID%
 	Field MsgID%
 	Field IsServerMSG%
@@ -45,6 +48,11 @@ Function AddChatMSG.ChatMSG(first_msg$, playerID%, isServerMSG% = SERVER_MSG_NO,
 	
 	cmsg = New ChatMSG
 	cmsg\PlayerID = playerID
+	If Players[playerID] <> Null Then
+		cmsg\SteamIDLower = Players[playerID]\SteamIDLower
+		cmsg\SteamIDUpper = Players[playerID]\SteamIDUpper
+		cmsg\PlayerName = Players[playerID]\Name
+	EndIf
 	cmsg\Msg[0] = first_msg
 	cmsg\MsgType = msg_type
 	cmsg\IsServerMSG = isServerMSG
@@ -154,14 +162,14 @@ Function RenderChat()
 		If cmsg\PlayerID = 0 Then Color 100,100,255
 		If cmsg\IsServerMSG > SERVER_MSG_NO Then Color 255,255,0
 		If cmsg\IsServerMSG = SERVER_MSG_NO Then
-			Text x, (ChatBaseY + (30.0 * MenuScale) * (ChatMSGAmount - 1)) + ChatExtraSpace, Players[cmsg\PlayerID]\Name + ":"
+			Text x, (ChatBaseY + (30.0 * MenuScale) * (ChatMSGAmount - 1)) + ChatExtraSpace, cmsg\PlayerName + ":"
 		Else
 			Text x, (ChatBaseY + (30.0 * MenuScale) * (ChatMSGAmount - 1)) + ChatExtraSpace, GetLocalString("Chat", "server") + ":"
 		EndIf
 		
 		Color 255,255,255
 		If cmsg\IsServerMSG > SERVER_MSG_NO Then Color 255,255,0
-		Text x, (ChatBaseY + (30.0 * MenuScale) * ChatMSGAmount) + ChatExtraSpace, Steam_FilterText(Players[cmsg\PlayerID]\SteamIDUpper, Players[cmsg\PlayerID]\SteamIDLower, AssembleChatMSG(cmsg))
+		Text x, (ChatBaseY + (30.0 * MenuScale) * ChatMSGAmount) + ChatExtraSpace, Steam_FilterText(cmsg\SteamIDUpper, cmsg\SteamIDLower, AssembleChatMSG(cmsg))
 		ChatMSGAmount = ChatMSGAmount + 2
 		ChatExtraSpace = ChatExtraSpace + 10.0 * MenuScale
 	Next

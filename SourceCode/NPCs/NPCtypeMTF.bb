@@ -10,6 +10,7 @@ Const MTF_SEARCH = 6
 Const MTF_HEAL = 7
 Const MTF_TOTARGET = 8
 Const MTF_TESLA = 9
+Const MTF_TARGET_PLAYER = 10
 ;Containment constants
 Const MTF_GOTOSCP = 1
 ;MTF Designation constants
@@ -57,6 +58,12 @@ Function UpdateNPCtypeMTF(n.NPCs)
 	Local prevX#, prevZ#
 	Local pvt%
 	Local v3d_1.Vector3D, v3d_2.Vector3D
+	
+	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor (IsZombie And n\State <> MTF_TARGET_PLAYER) Then
+		PositionEntity n\Collider, 0, -500, 0
+		ResetEntity n\Collider
+		Return
+	EndIf
 	
 	n\BlinkTimer = Max(n\BlinkTimer-FPSfactor,0.0)
 	If n\BlinkTimer = 0.0 Then
@@ -242,7 +249,7 @@ Function UpdateNPCtypeMTF(n.NPCs)
 ;				EndIf
 				
 				If PlayerDistSquared > PowTwo(16) Then
-					Local shortestDist# = 10000.0
+					Local shortestDist# = 1000000.0
 					Local shortestDistRoom% = -1
 					For i = 0 To 3
 						If PlayerRoom\Adjacent[i] <> Null Then
@@ -349,27 +356,6 @@ Function UpdateNPCtypeMTF(n.NPCs)
 						Delete v3d_1
 						Delete v3d_2
 					EndIf
-				ElseIf IsZombie And psp\Health > 0 Then
-					n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,Collider)
-					RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
-					If n\Frame = 1383 Then
-						If n\Reload = 0 Then
-							n\SoundChn2 = PlaySound2(LoadTempSound("SFX\Guns\P90\shoot" + Rand(1,4) + ".ogg"), Camera, n\Collider, 35)
-							pvt% = CreatePivot()
-							
-							RotateEntity(pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0, True)
-							PositionEntity(pvt, EntityX(n\obj), EntityY(n\obj), EntityZ(n\obj))
-							MoveEntity (pvt,0.8*0.079, 10.0*0.079, 6.0*0.079)
-							
-							ShootPlayer(EntityX(pvt), EntityY(pvt), EntityZ(pvt), Rnd(0.4,0.8))
-							n\Reload = 4.67 ;900 RPM
-						EndIf
-					Else
-						If n\Frame > 1383 Then
-							SetNPCFrame(n, 1375)
-						EndIf
-						AnimateNPC(n,1375,1383,0.2,False)
-					EndIf
 				Else
 					pvt = FreeEntity_Strict(pvt)
 					n\IdleTimer = 70*10
@@ -380,33 +366,33 @@ Function UpdateNPCtypeMTF(n.NPCs)
 			Case MTF_FLEE
 				;[Block]
 				If n\Target <> Null Then
+					mtfd\Enabled = False
 					CurrentNPCDist = EntityDistanceSquared(n\Collider, n\Target\Collider)
-				EndIf
-				
-				If n\Target <> Null And CurrentNPCDist < 35.0 Then
-					If CurrentNPCDist < PowTwo(2) Then
-						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-						MoveEntity n\Collider, 0, 0, -n\CurrSpeed * FPSfactor
-						n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,n\Target\obj)
-						RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
-						AnimateNPC(n,488,522,-0.5)
-						n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,n\Target\obj)
-						RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
-;						If n\Reload = 0 Then
-;							n\SoundChn2 = PlaySound2(LoadTempSound("SFX\Guns\P90\shoot"+Rand(1,4)+".ogg"), Camera, n\Collider, 35)
-;							ShootTarget(0, 0, 0, n, Rnd(0.4,0.8))
-;							n\Reload = 4.67 ;900 RPM
-;						EndIf
+					If CurrentNPCDist < 70.0 Then
+						If CurrentNPCDist < 4 And n\State2 <= 0 Then
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+							MoveEntity n\Collider, 0, 0, -n\CurrSpeed * FPSfactor
+							n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,n\Target\obj)
+							RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
+							AnimateNPC(n,488,522,-0.5)
+						ElseIf CurrentNPCDist => 4 And n\State2 <= 0 Then
+							n\State2 = 70*5
+						Else
+							n\State2 = Max(n\State2 - FPSfactor, 0)
+							v3d_1 = CreateVector3D(79, 309, 0.3)
+							v3d_2 = CreateVector3D(488, 522, 0.3)
+							NPC_GoToRoom(n, v3d_1, v3d_2, 1.0)
+							Delete v3d_1
+							Delete v3d_2
+						EndIf
 					Else
-						v3d_1 = CreateVector3D(79, 309, 0.3)
-						v3d_2 = CreateVector3D(488, 522, 0.3)
-						NPC_GoToRoom(n, v3d_1, v3d_2, 0.7)
-						Delete v3d_1
-						Delete v3d_2
+						mtfd\Enabled = True
+						n\State = MTF_FOLLOWPLAYER
 					EndIf
 				Else
+					mtfd\Enabled = True
 					n\State = MTF_FOLLOWPLAYER
-				EndIf
+				EndIf	
 				;[End block]
 			Case MTF_SEARCH	
 				;[Block]
@@ -460,6 +446,33 @@ Function UpdateNPCtypeMTF(n.NPCs)
 				AnimateNPC(n, 1260, 1375, 0.25, False)
 				If n\Frame = 1375 Then
 					n\State = MTF_FOLLOWPLAYER
+				EndIf
+				;[End Block]
+			Case MTF_TARGET_PLAYER
+				;[Block]
+				If psp\Health > 0 Then
+					n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\obj,Collider)
+					RotateEntity n\Collider, 0, CurveAngle(n\Angle, EntityYaw(n\Collider), 20.0), 0
+					If n\Frame = 1383 Then
+						If n\Reload = 0 Then
+							n\SoundChn2 = PlaySound2(LoadTempSound("SFX\Guns\P90\shoot" + Rand(1,4) + ".ogg"), Camera, n\Collider, 35)
+							pvt% = CreatePivot()
+							
+							RotateEntity(pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0, True)
+							PositionEntity(pvt, EntityX(n\obj), EntityY(n\obj), EntityZ(n\obj))
+							MoveEntity (pvt,0.8*0.079, 10.0*0.079, 6.0*0.079)
+							
+							ShootPlayer(EntityX(pvt), EntityY(pvt), EntityZ(pvt), Rnd(0.4,0.8))
+							n\Reload = 4.67 ;900 RPM
+						EndIf
+					Else
+						If n\Frame > 1383 Then
+							SetNPCFrame(n, 1375)
+						EndIf
+						AnimateNPC(n,1375,1383,0.2,False)
+					EndIf
+				Else
+					AnimateNPC(n, 79, 309, 0.3)
 				EndIf
 				;[End Block]
 			Case STATE_SCRIPT

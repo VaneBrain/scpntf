@@ -150,9 +150,7 @@ Function UpdateNPCtypeZombie(n.NPCs)
 								If (Abs(DeltaYaw(n\Collider,Collider))<=60.0)
 									PlaySound_Strict DamageSFX[Rand(5,8)]
 									;Injuries = Injuries+Rnd(0.4,1.0)
-									If (Not GodMode) Then
-										DamageSPPlayer(Rnd(10.0,20.0))
-									EndIf
+									DamageSPPlayer(Rnd(10.0,20.0))
 									DeathMSG = Designation+". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
 								EndIf
 							EndIf
@@ -166,9 +164,7 @@ Function UpdateNPCtypeZombie(n.NPCs)
 								If (Abs(DeltaYaw(n\Collider,Collider))<=60.0)
 									PlaySound_Strict DamageSFX[Rand(5,8)]
 									;Injuries = Injuries+Rnd(0.4,1.0)
-									If (Not GodMode) Then
-										DamageSPPlayer(Rnd(10.0,20.0))
-									EndIf
+									DamageSPPlayer(Rnd(10.0,20.0))
 									DeathMSG = Designation+". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
 								EndIf
 							EndIf

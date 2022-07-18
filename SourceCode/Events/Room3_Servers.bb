@@ -3,7 +3,7 @@ Function UpdateEvent_Room3_Servers(e.Events)
 	Local temp%
 	
 	If PlayerRoom = e\room Then
-		If e\EventState3=0 And Curr173\Idle = SCP173_ACTIVE Then
+		If e\EventState3=0 And Curr173 <> Null And Curr173\Idle = SCP173_ACTIVE Then
 			If BlinkTimer < -10 Then 
 				temp = Rand(0,2)
 				PositionEntity Curr173\Collider, EntityX(e\room\Objects[temp],True),EntityY(e\room\Objects[temp],True),EntityZ(e\room\Objects[temp],True)
