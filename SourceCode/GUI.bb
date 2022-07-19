@@ -2333,15 +2333,15 @@ Function DrawGUI()
 		x% = 80
 		y% = opt\GraphicHeight - 95
 		
+		If NoBlink Then
+			BlinkTimer = BLINKFREQ
+		EndIf
+		
 		;Blinking Bar
-		If BlinkTimer <= BLINKFREQ / 5 Then
-			Color 255, 0, 0
+		If (Not NoBlink) Then
+			Color 255, 255, 255
 		Else
-			If BlinkEffect < 1.0 Then
-				Color 0, 255, 0
-			Else
-				Color 255, 255, 255
-			EndIf
+			Color 0, 255, 0
 		EndIf
 		Rect (x, y, width, height, False)
 		For i = 1 To Int(((width - 2) * (BlinkTimer / (BLINKFREQ))) / 10)
@@ -2355,14 +2355,10 @@ Function DrawGUI()
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		End If
 		
-		If BlinkTimer <= 0.0 Or BlurTimer > 0.0 Or LightFlash > 0.0 or LightBlink > 0.0 Then
-			Color 255, 0, 0
+		If (Not NoBlink) Then
+			Color 255, 255, 255
 		Else
-			If BlinkEffect < 1.0 Then
-				Color 0, 255, 0
-			Else
-				Color 255, 255, 255
-			EndIf
+			Color 0, 255, 0
 		EndIf
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		
@@ -2435,7 +2431,9 @@ Function DrawGUI()
 			Color 0, 0, 0
 			Rect(x - 50, y, 30, 30)
 			
-			If SuperMan Or InfiniteStamina Or (StaminaEffect < 1.0) Then
+			If Stamina <= 0.0 Or Speed < 0.018 Then
+				Color 255, 0, 0
+			ElseIf Speed > 0.018
 				Color 0, 255, 0
 			Else
 				If Stamina <= 0.0 Then
@@ -3518,7 +3516,13 @@ Function DrawGunsInHUD()
 		If g\ID = g_I\HoldingGun Then
 			If (g\GunType <> GUNTYPE_MELEE) Then
 				If pAmmo > 0 Then
-					Color 255,255,255
+					If InstantKill Or DamageMultiplier > 1.0 Then
+						Color 0, 255, 0
+					ElseIf DamageMultiplier < 1.0 Then
+						Color 255, 0, 0
+					Else
+						Color 255, 255, 255
+					EndIf
 				Else
 					Color 255,0,0
 				EndIf

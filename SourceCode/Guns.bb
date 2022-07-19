@@ -1004,7 +1004,9 @@ Function UpdateGuns()
 								For j=1 To g\Amount_Of_Bullets
 									ShootGun(g)
 								Next
-								pAmmo = pAmmo - 1
+								If (Not InfiniteAmmo) Then
+									pAmmo = pAmmo - 1
+								EndIf
 								pShootState = FPSfactor
 								pReloadState = 0.0
 							EndIf
@@ -1065,7 +1067,9 @@ Function UpdateGuns()
 										For j=1 To g\Amount_Of_Bullets
 											ShootGun(g)
 										Next
-										pAmmo = pAmmo - 1
+										If (Not InfiniteAmmo) Then
+											pAmmo = pAmmo - 1
+										EndIf
 										pShootState = FPSfactor
 										pPressReload = False
 									EndIf
@@ -1092,6 +1096,9 @@ Function UpdateGuns()
 							pReloadState = 0.0
 							pReloadAmmo = pReloadAmmo - 1
 						EndIf
+					EndIf
+					If InfiniteAmmo Then
+						pAmmo = g\MaxCurrAmmo
 					EndIf
 				EndIf
 			EndIf
@@ -1936,12 +1943,20 @@ Function ShootGun(g.Guns)
 					Exit
 				EndIf
 				If ent_pick% = n\HitBox2[j] Then ;Body has been shot, doing damage with g\DamageOnEntity
-					n\HP = n\HP - g\DamageOnEntity
+					If InstantKill Then
+						n\HP = 0
+					Else
+						n\HP = n\HP - (g\DamageOnEntity * DamageMultiplier)
+					EndIf
 					hitNPC = n
 					Exit
 				EndIf
 				If ent_pick% = n\HitBox3[j] Then ;Arms or legs have been shot, doing damage with g\DamageOnEntity/2
-					n\HP = n\HP - (g\DamageOnEntity/2)
+					If InstantKill Then
+						n\HP = 0
+					Else
+						n\HP = n\HP - ((g\DamageOnEntity/2) * DamageMultiplier)
+					EndIf
 					hitNPC = n
 					Exit
 				EndIf

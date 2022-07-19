@@ -372,6 +372,7 @@ Global RefinedItems%
 Global DropSpeed#, HeadDropSpeed#, CurrSpeed#
 Global user_camera_pitch#, side#
 Global Crouch%, CrouchState#
+Global Speed# = 0.018
 
 Global PlayerZone%, PlayerRoom.Rooms
 
@@ -460,6 +461,8 @@ Global DebugHUD%
 Global BlurVolume#, BlurTimer#
 
 Global LightBlink#, LightFlash#
+
+Global DamageMultiplier# = 1.0
 
 Global BumpEnabled% = GetINIInt(gv\OptionFile, "options", "bump mapping enabled", 1)
 Global HUDenabled% = GetINIInt(gv\OptionFile, "options", "HUD enabled", 1)
@@ -678,6 +681,9 @@ Global MonitorTimer# = 0.0, MonitorTimer2# = 0.0, UpdateCheckpoint1%, UpdateChec
 Global PlayerDetected%
 ;Global PrevInjuries#,PrevBloodloss#
 Global NoTarget% = False
+Global NoBlink% = False
+Global InfiniteAmmo% = False
+Global InstantKill% = False
 
 Global NVGImages = LoadAnimImage("GFX\battery.png",64,64,0,2)
 MaskImage NVGImages,255,0,255
@@ -2506,12 +2512,14 @@ End Function
 
 Function MovePlayer()
 	CatchErrors("Uncaught (MovePlayer)")
-	Local Sprint# = 1.0, Speed# = 0.018, i%, angle#
+	Local Sprint# = 1.0, i%, angle#
 	
 	;IsPlayerSprinting% = False
 	
 	If SuperMan Then
-		Speed = Speed * 3
+		If Speed = 0.018 Then
+			Speed = Speed * 3
+		EndIf
 		
 		SuperManTimer=SuperManTimer+FPSfactor
 		
@@ -2526,7 +2534,7 @@ Function MovePlayer()
 			BlurTimer = 500		
 			HideEntity Fog
 		EndIf
-	End If
+	EndIf
 	
 	If DeathTimer > 0 Then
 		DeathTimer=DeathTimer-FPSfactor
@@ -3984,6 +3992,7 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	Local i%, x%, y%, lvl
 	Local itt.ItemTemplates, s.Screens
 	Local rt.RoomTemplates
+	Local g.Guns
 	
 	Local PlayerRoomName$ = PlayerRoom\RoomTemplate\Name
 	Local PlayerRoomZone = NTF_CurrZone
@@ -4058,8 +4067,20 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	Shake = 0
 	LightFlash = 0
 	
+	Speed = 0.018
+	DamageMultiplier = 1.0
+	
+	For g = Each Guns
+		g\Knockback = GetINIFloat("Data\weapons.ini", g\name, "knockback")
+		g\Accuracy = GetINIFloat("Data\weapons.ini", g\name, "accuracy")
+		g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini", g\name, "rate_of_fire")
+	Next
+	
 	GodMode = 0
 	NoClip = 0
+	NoBlink = 0
+	InfiniteAmmo = 0
+	InstantKill = 0
 	WireframeState = 0
 	WireFrame 0
 	WearingGasMask = 0
