@@ -407,7 +407,7 @@ Function UpdateGUI()
 		KeypadMSG = ""
 	EndIf
 	
-	If (InteractHit(1,CK_Pause) Lor (Steam_GetOverlayUpdated() = 1 And (Not (MenuOpen Lor InvOpen)))) And EndingTimer = 0 Then
+	If (InteractHit(1,CK_Pause) Lor ((Not InFocus()) And (Not MenuOpen)) Lor (Steam_GetOverlayUpdated() = 1 And (Not (MenuOpen Lor InvOpen)))) And EndingTimer = 0 Then
 		If MenuOpen And (Not InvOpen) Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
@@ -485,11 +485,10 @@ Function UpdateGUI()
 		y = opt\GraphicHeight / 2 - (height * OtherSize /5 + height * (OtherSize / 5 - 1)) / 2
 		
 		ItemAmount = 0
-		For  n% = 0 To OtherSize - 1
+		For n% = 0 To OtherSize - 1
 			isMouseOn% = False
-			If MouseOn(x, y, width, height) Then isMouseOn = True
-			
-			If isMouseOn Then
+			If MouseOn(x, y, width, height) Then 
+				isMouseOn = True
 				MouseSlot = n
 			EndIf
 			
@@ -510,7 +509,6 @@ Function UpdateGUI()
 								InvOpen = False
 								DoubleClick = False
 							EndIf
-							
 						EndIf
 					Else
 						
@@ -526,7 +524,7 @@ Function UpdateGUI()
 					OtherOpen\SecondInv[n] = SelectedItem
 				EndIf
 				
-			EndIf					
+			EndIf
 			
 			x=x+width + spacing
 			tempX=tempX + 1
@@ -604,7 +602,6 @@ Function UpdateGUI()
 			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
 		EndIf
 		;[End Block]
-		
 	ElseIf InvOpen Then
 		;Beginning Task for keycard
 		If TaskExists(TASK_OPENINV) Then
@@ -1048,9 +1045,7 @@ Function UpdateGUI()
 						Select Rand(5)
 							Case 1
 								;Injuries = 3.5
-								If (Not GodMode) Then
-									DamageSPPlayer(80, True)
-								EndIf
+								DamageSPPlayer(80, True)
 								Msg = GetLocalString("Items", "strangebottle_1")
 								MsgTimer = 70*7
 							Case 2
@@ -1076,9 +1071,7 @@ Function UpdateGUI()
 								Local roomname$ = PlayerRoom\RoomTemplate\Name
 								If roomname = "dimension1499" Lor roomname = "gatea" Lor (roomname="exit1" And EntityY(Collider)>1040.0*RoomScale) Then
 									;Injuries = 2.5
-									If (Not GodMode) Then
-										DamageSPPlayer(70, True)
-									EndIf
+									DamageSPPlayer(70, True)
 									Msg = GetLocalString("Items", "strangebottle_1")
 									MsgTimer = 70*7
 								Else
@@ -1175,9 +1168,7 @@ Function UpdateGUI()
 											Case 6
 												Msg = GetLocalString("Items", "bluefirstaid_5")
 												;Injuries = 3.5
-												If (Not GodMode) Then
-													DamageSPPlayer(70, True)
-												EndIf
+												DamageSPPlayer(70, True)
 										End Select
 									EndIf
 									
@@ -1277,9 +1268,7 @@ Function UpdateGUI()
 						CameraShakeTimer = GetINIString2(iniStr, loc, "camerashake")
 						;Injuries = Max(Injuries + GetINIInt2(iniStr, loc, "damage"),0);*temp
 						;Bloodloss = Max(Bloodloss + GetINIInt2(iniStr, loc, "blood loss"),0);*temp
-						If (Not GodMode) Then
-							DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
-						EndIf
+						DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
 						strtemp =  GetINIString2(iniStr, loc, "sound")
 						If strtemp<>"" Then
 							PlaySound_Strict LoadTempSound(strtemp)
@@ -2142,13 +2131,13 @@ Function UpdateGUI()
 				Default
 					;[Block]
 					;check if the item is an inventory-type object
-					If SelectedItem\invSlots>0 Then
-					DoubleClick = 0
-					MouseHit1 = 0
-					MouseDown1 = 0
-					LastMouseHit1 = 0
+					If SelectedItem\invSlots > 0 Then
+						DoubleClick = 0
+						MouseHit1 = 0
+						MouseDown1 = 0
+						LastMouseHit1 = 0
 						OtherOpen = SelectedItem
-					SelectedItem = Null
+						SelectedItem = Null
 					EndIf
 					
 ;					If SelectedItem\itemtemplate\isGun%
@@ -2236,7 +2225,7 @@ Function DrawGUI()
 	
 	Local e.Events, it.Items
 	
-	If MenuOpen Lor ConsoleOpen Lor d_I\SelectedDoor <> Null Lor InvOpen Lor OtherOpen<>Null Lor EndingTimer < 0 Then
+	If MenuOpen Lor ConsoleOpen Lor d_I\SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor EndingTimer < 0 Then
 		ShowPointer()
 	Else
 		HidePointer()
@@ -2350,13 +2339,8 @@ Function DrawGUI()
 		Color 0, 0, 0
 		Rect(x - 50, y, 30, 30)
 		
-		If EyeIrritation > 0 Then
-			Color 200, 0, 0
-			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
-		End If
-		
-		If (Not NoBlink) Then
-			Color 255, 255, 255
+		If BlinkTimer <= 0.0 Lor BlurTimer > 0.0 Lor LightFlash > 0.0 Lor LightBlink > 0.0 Lor EyeIrritation > 0 Then
+			Color 255, 0, 0
 		Else
 			Color 0, 255, 0
 		EndIf
@@ -2414,7 +2398,7 @@ Function DrawGUI()
 		If Stamina < 100.0 And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 			y = opt\GraphicHeight - 55
 			x = (opt\GraphicWidth / 2) - (width / 2) + 20
-			If InfiniteStamina Or (StaminaEffect < 1.0) Then
+			If InfiniteStamina Lor (StaminaEffect < 1.0) Then
 				Color 0, 255, 0
 			Else
 				If Stamina <= 20.0 Then
@@ -2431,9 +2415,7 @@ Function DrawGUI()
 			Color 0, 0, 0
 			Rect(x - 50, y, 30, 30)
 			
-			If Stamina <= 0.0 Or Speed < 0.018 Then
-				Color 255, 0, 0
-			ElseIf Speed > 0.018
+			If SuperMan Lor InfiniteStamina Lor (StaminaEffect < 1.0) Then
 				Color 0, 255, 0
 			Else
 				If Stamina <= 0.0 Then
@@ -2649,11 +2631,10 @@ Function DrawGUI()
 		y = opt\GraphicHeight / 2 - (height * OtherSize /5 + height * (OtherSize / 5 - 1)) / 2
 		
 		;ItemAmount = 0
-		For  n% = 0 To OtherSize - 1
+		For n% = 0 To OtherSize - 1
 			isMouseOn% = False
-			If MouseOn(x, y, width, height) Then isMouseOn = True
-			
-			If isMouseOn Then
+			If MouseOn(x, y, width, height) Then 
+				isMouseOn = True
 				MouseSlot = n
 				Color 255, 0, 0
 				Rect(x - 1, y - 1, width + 2, height + 2)
@@ -2668,13 +2649,12 @@ Function DrawGUI()
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If isMouseOn Then
-					Color 255, 255, 255	
+					Color 255, 255, 255
+					SetFont(fo\Font[Font_Default])
 					Text(x + width / 2, y + height + spacing - 15, OtherOpen\SecondInv[n]\itemtemplate\name, True)
 				EndIf
 				
 				;ItemAmount=ItemAmount+1
-			Else
-				
 			EndIf					
 			
 			x=x+width + spacing
@@ -2693,14 +2673,10 @@ Function DrawGUI()
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
 					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
 				EndIf
-			Else
-				
 			EndIf
 		EndIf
-		
 		;[End Block]
-		
-	Else If InvOpen Then
+	ElseIf InvOpen Then
 		
 		d_I\SelectedDoor = Null
 		
@@ -3587,11 +3563,6 @@ Function DrawMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
 	Local x%, y%, width%, height%
-	If Not InFocus() Then ;Game is out of focus -> pause the game
-        MenuOpen = True
-        PauseSounds()
-        Delay 1000 ;Reduce the CPU take while game is not in focus
-    EndIf
 	If MenuOpen Then
 		If KillTimer >= 0 Then
 			CameraProjMode Camera, 0

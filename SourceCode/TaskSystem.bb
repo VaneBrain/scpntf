@@ -3,6 +3,7 @@
 Const TASK_STATUS_NEW = 0
 Const TASK_STATUS_ALREADY = 1
 Const TASK_STATUS_END = 2
+Const TASK_STATUS_FAILED = 3
 Const TASK_RENDER_TIME = 70*5
 
 ;Tasks themselves
@@ -93,8 +94,23 @@ Function EndTask(ID%)
 	
 	For t = Each NewTask
 		If t\ID = ID Then
-			If t\Status <> TASK_STATUS_END Then
+			If t\Status <> TASK_STATUS_END And t\Status <> TASK_STATUS_FAILED Then
 				t\Status = TASK_STATUS_END
+				t\Timer = TASK_RENDER_TIME
+			EndIf
+			Exit
+		EndIf
+	Next
+	
+End Function
+
+Function FailTask(ID%)
+	Local t.NewTask
+	
+	For t = Each NewTask
+		If t\ID = ID Then
+			If t\Status <> TASK_STATUS_END And t\Status <> TASK_STATUS_FAILED Then
+				t\Status = TASK_STATUS_FAILED
 				t\Timer = TASK_RENDER_TIME
 			EndIf
 			Exit
@@ -106,21 +122,25 @@ End Function
 Function UpdateTasks()
 	Local t.NewTask
 	Local hasEndTask% = False
+	Local hasFailedTask% = False
 	
 	For t = Each NewTask
-		If t\Status = TASK_STATUS_END Then
+		If t\Status = TASK_STATUS_FAILED Then
+			hasFailedTask = True
+			hasEndTask = False
+		ElseIf t\Status = TASK_STATUS_END And (Not hasFailedTask) Then
 			hasEndTask = True
 			Exit
 		EndIf
 	Next
 	
 	For t = Each NewTask
-		If (hasEndTask And t\Status = TASK_STATUS_END) Lor ((Not hasEndTask) And t\Status = TASK_STATUS_NEW) Then
+		If (hasEndTask And t\Status = TASK_STATUS_END) Lor (hasFailedTask And t\Status = TASK_STATUS_FAILED) Lor ((Not hasEndTask) And (Not hasFailedTask) And t\Status = TASK_STATUS_NEW) Then
 			If t\Timer > 0.0 Then
 				t\Timer = t\Timer - FPSfactor
 				If t\Timer <= 0.0 Then
 					t\Timer = 0.0
-					If t\Status = TASK_STATUS_END Then
+					If t\Status = TASK_STATUS_END Lor t\Status = TASK_STATUS_FAILED Then
 						Delete t
 					Else
 						t\Status = TASK_STATUS_ALREADY
@@ -134,36 +154,39 @@ End Function
 
 Function DrawTasks()
 	Local t.NewTask
-	Local a#, x#, y#, hasNewTask%, hasEndTask%, globalTime#, txt$, atLeastOneTask%
+	Local a#, x#, y#, hasNewTask%, hasEndTask%, hasFailedTask%, globalTime#, txt$, atLeastOneTask%
 	
 	If HUDenabled Lor InvOpen Then
 		hasNewTask = False
 		globalTime = 0.0
 		x = opt\GraphicWidth / 2
 		y = opt\GraphicHeight / 4
+		
 		For t = Each NewTask
-			If t\Status = TASK_STATUS_END Then
+			If t\Status = TASK_STATUS_FAILED Then
+				hasFailedTask = True
+				hasEndTask = False
+				hasNewTask = False
+			ElseIf t\Status = TASK_STATUS_END And (Not hasFailedTask) Then
 				hasEndTask = True
+				hasNewTask = False
+			ElseIf t\Status = TASK_STATUS_NEW And (Not hasEndTask) And (Not hasFailedTask) Then
+				hasNewTask = True
+			EndIf
+		Next
+		For t = Each NewTask
+			If (t\Status = TASK_STATUS_FAILED And hasFailedTask) Lor (t\Status = TASK_STATUS_END And hasEndTask) Lor (t\Status = TASK_STATUS_NEW And hasNewTask) Then
 				If t\Timer > globalTime Then
 					globalTime = t\Timer
 				EndIf
 			EndIf
 		Next
 		
-		If (Not hasEndTask) Then
-			For t = Each NewTask
-				If t\Status = TASK_STATUS_NEW Then
-					hasNewTask = True
-					If t\Timer > globalTime Then
-						globalTime = t\Timer
-					EndIf
-				EndIf
-			Next
-		EndIf
-		
-		If hasEndTask Lor hasNewTask Lor InvOpen Then
+		If hasEndTask Lor hasFailedTask Lor hasNewTask Lor InvOpen Then
 			If InvOpen Then
 				txt = GetLocalString("Tasks", "inv_task")
+			ElseIf hasFailedTask Then
+				txt = GetLocalString("Tasks", "failed_task")
 			ElseIf hasEndTask Then
 				txt = GetLocalString("Tasks", "end_task")
 			Else
@@ -178,7 +201,7 @@ Function DrawTasks()
 			Else
 				a = Min(globalTime / 2, 255)
 			EndIf
-			Color a, a, a
+			Color a, a * ((Not hasFailedTask) Lor (InvOpen)), a * ((Not hasFailedTask) Lor (InvOpen))
 			Text x, y, Upper(txt), True, False
 			
 			y = y + 40.0
@@ -186,7 +209,7 @@ Function DrawTasks()
 			
 			atLeastOneTask = False
 			For t = Each NewTask
-				If (((hasEndTask And t\Status = TASK_STATUS_END) Lor (Not hasEndTask) And t\Status = TASK_STATUS_NEW) And (Not InvOpen)) Lor (InvOpen And t\Status <> TASK_STATUS_END) Then
+				If (InvOpen And t\Status <> TASK_STATUS_END) Lor ((Not InvOpen) And ((hasEndTask And t\Status = TASK_STATUS_END) Lor (hasFailedTask And t\Status = TASK_STATUS_FAILED) Lor (hasNewTask And t\Status = TASK_STATUS_NEW))) Then
 					If t\Timer > 0.0 Lor InvOpen Then
 						Color 0, 0, 0
 						Text x + 1, y + 1, t\txt, True, False

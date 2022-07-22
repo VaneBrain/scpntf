@@ -128,6 +128,15 @@ Function UpdateEvent_Gate_A_Entrance(e.Events)
 	If e\EventState = 3 And (Not IsStreamPlaying_Strict(IntercomStreamCHN)) Then
 		BeginTask(TASK_CHECKPOINT)
 		e\EventState = 4
+	ElseIf e\EventState = 4 And e\room\dist >= 25.0 Then
+		If SelectedDifficulty\saveType = SAVEONSCREENS Then
+			SetSaveMSG(GetLocalString("Menu","hint_saveonscreens"))
+		ElseIf SelectedDifficulty\saveType = SAVEONQUIT Then
+			SetSaveMSG(GetLocalString("Menu","hint_saveonquit"))
+		Else
+			SetSaveMSG(GetLocalStringR("Menu","hint_saveanywhere",KeyName[KEY_SAVE]))
+		EndIf
+		e\EventState = 5
 	EndIf
 	
 	If e\room\RoomDoors[1]\openstate > 0.01 Then

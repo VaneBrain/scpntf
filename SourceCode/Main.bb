@@ -178,8 +178,8 @@ End Type
 
 InitController()
 
-Const VersionNumber$ = "0.2.5"
-Const CompatibleNumber$ = "0.2.5"
+Const VersionNumber$ = "0.2.8"
+Const CompatibleNumber$ = "0.2.8"
 
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
@@ -1041,8 +1041,8 @@ Function MainLoop()
 			FPSfactor=0.0
 		EndIf
 		
-		If Input_ResetTime>0
-			Input_ResetTime = Max(Input_ResetTime-FPSfactor,0.0)
+		If Input_ResetTime > 0 And FPSfactor > 0.0 Then
+			Input_ResetTime = Max(Input_ResetTime - FPSfactor, 0.0)
 		Else
 			DoubleClick = False
 			If (Not co\Enabled)
@@ -3838,6 +3838,17 @@ Function InitNewGame()
 		EntityType (it\collider, HIT_ITEM)
 		EntityParent(it\collider, 0)
 		ItemAmount = ItemAmount + 1
+		;S-NAV 310 Navigator
+		it = CreateItem("S-NAV 310 Navigator", "nav", 1, 1, 1)
+		it\Picked = True
+		it\Dropped = -1
+		it\itemtemplate\found=True
+		it\state = 100
+		Inventory[4] = it
+		HideEntity(it\collider)
+		EntityType (it\collider, HIT_ITEM)
+		EntityParent(it\collider, 0)
+		ItemAmount = ItemAmount + 1
 		
 		g_I\Weapon_InSlot[GunSlot1] = "p90"
 		g_I\Weapon_InSlot[GunSlot2] = "usp"
@@ -4097,6 +4108,8 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 	Playable = True
 	
 	Contained106 = False
+	Contained173 = False
+	
 	;Probably useless
 	If Curr173 <> Null Then Curr173\Idle = SCP173_ACTIVE
 	
@@ -6538,40 +6551,45 @@ Function GammaUpdate()
 End Function
 
 Function UpdateRichPresence()
-	If MainMenuOpen Then
-		Steam_SetRichPresence("steam_display", "#Status_InMainMenu")
-		BlitzcordSetLargeImage("logo")
-		BlitzcordSetSmallImage("")
-		BlitzcordSetActivityDetails("In Main Menu")
-		BlitzcordSetActivityState("")
-	ElseIf gopt\GameMode = GAMEMODE_MULTIPLAYER Then
-		Select mp_I\Gamemode\ID
-			Case Gamemode_Waves
-				Steam_SetRichPresence("map", mp_I\MapInList\Name)
-				Steam_SetRichPresence("difficulty", mp_I\Gamemode\Difficulty)
-				Steam_SetRichPresence("currWave", mp_I\Gamemode\Phase/2)
-				Steam_SetRichPresence("maxWaves", mp_I\Gamemode\MaxPhase)
-				Steam_SetRichPresence("steam_display", "#Status_Waves")
-				BlitzcordSetLargeImage("waves")
-			Case Gamemode_Deathmatch
-				Steam_SetRichPresence("map", mp_I\MapInList\Name)
-				Steam_SetRichPresence("steam_display", "#Status_TeamDeathmatch")
-				BlitzcordSetLargeImage("tdm")
-		End Select
-		BlitzcordSetSmallImage("logo")
-		BlitzcordSetActivityDetails(mp_I\Gamemode\name+" ("+mp_I\PlayerCount+" of "+mp_I\MaxPlayers+" players)")
-		BlitzcordSetActivityState(mp_I\MapInList\Name)
+	If gv\RichPresenceTimer <= 0.0 Then
+		If MainMenuOpen Then
+			Steam_SetRichPresence("steam_display", "#Status_InMainMenu")
+			BlitzcordSetLargeImage("logo")
+			BlitzcordSetSmallImage("")
+			BlitzcordSetActivityDetails("In Main Menu")
+			BlitzcordSetActivityState("")
+		ElseIf gopt\GameMode = GAMEMODE_MULTIPLAYER Then
+			Select mp_I\Gamemode\ID
+				Case Gamemode_Waves
+					Steam_SetRichPresence("map", mp_I\MapInList\Name)
+					Steam_SetRichPresence("difficulty", mp_I\Gamemode\Difficulty)
+					Steam_SetRichPresence("currWave", mp_I\Gamemode\Phase/2)
+					Steam_SetRichPresence("maxWaves", mp_I\Gamemode\MaxPhase)
+					Steam_SetRichPresence("steam_display", "#Status_Waves")
+					BlitzcordSetLargeImage("waves")
+				Case Gamemode_Deathmatch
+					Steam_SetRichPresence("map", mp_I\MapInList\Name)
+					Steam_SetRichPresence("steam_display", "#Status_TeamDeathmatch")
+					BlitzcordSetLargeImage("tdm")
+			End Select
+			BlitzcordSetSmallImage("logo")
+			BlitzcordSetActivityDetails(mp_I\Gamemode\name+" ("+mp_I\PlayerCount+" of "+mp_I\MaxPlayers+" players)")
+			BlitzcordSetActivityState(mp_I\MapInList\Name)
+		Else
+			Steam_SetRichPresence("difficulty", SelectedDifficulty\name)
+			Steam_SetRichPresence("seed", RandomSeed)
+			Steam_SetRichPresence("steam_display", "#Status_Singleplayer")
+			BlitzcordSetLargeImage("singleplayer")
+			BlitzcordSetSmallImage("logo")
+			BlitzcordSetActivityDetails("Singleplayer")
+			BlitzcordSetActivityState("Difficulty: "+SelectedDifficulty\name+" | Seed: "+RandomSeed)
+		EndIf
+		BlitzcordUpdateActivity()
+		BlitzcordRunCallbacks()
+		gv\RichPresenceTimer = 5*70
 	Else
-		Steam_SetRichPresence("difficulty", SelectedDifficulty\name)
-		Steam_SetRichPresence("seed", RandomSeed)
-		Steam_SetRichPresence("steam_display", "#Status_Singleplayer")
-		BlitzcordSetLargeImage("singleplayer")
-		BlitzcordSetSmallImage("logo")
-		BlitzcordSetActivityDetails("Singleplayer")
-		BlitzcordSetActivityState("Difficulty: "+SelectedDifficulty\name+" | Seed: "+RandomSeed)
+		gv\RichPresenceTimer = gv\RichPresenceTimer - FPSfactor
 	EndIf
-	BlitzcordUpdateActivity()
-	BlitzcordRunCallbacks()
 End Function	
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

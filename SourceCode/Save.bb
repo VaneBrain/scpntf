@@ -157,6 +157,7 @@ Function SaveGame(file$, newzone%=-1)
 	WriteByte f, RemoteDoorOn
 	WriteByte f, SoundTransmission
 	WriteByte f, Contained106
+	WriteByte f, Contained173
 	
 ;	For i = 0 To MAXACHIEVEMENTS-1
 ;		WriteByte f, Achievements[i]\Unlocked
@@ -649,24 +650,7 @@ Function SaveZoneData(file$)
 	WriteByte f, 0
 	
 	For it = Each Items
-		temp = 0
-		For i = 0 To MaxItemAmount-1
-			If Inventory[i] <> Null Then
-				If it = Inventory[i] Then
-					temp = 1
-					Exit
-				ElseIf Inventory[i]\invSlots > 0 Then
-					For j = 0 To Inventory[i]\invSlots-1
-						If it = Inventory[i]\SecondInv[j] Then
-							temp = 1
-							Exit
-						EndIf
-					Next
-				EndIf
-			EndIf
-		Next
-		If temp = 0 And it\invSlots > 0 Then
-			WriteByte f, 1
+		If (Not IsItemInInventory(it)) And it\invSlots > 0 Then
 			For i = 0 To it\invSlots-1
 				If it\SecondInv[i] <> Null Then
 					WriteInt f, it\SecondInv[i]\ID
@@ -676,7 +660,6 @@ Function SaveZoneData(file$)
 			Next
 		EndIf
 	Next
-	WriteByte f, 0
 	
 	For fb = Each FuseBox
 		WriteByte f, fb\fuses
@@ -814,7 +797,8 @@ Function LoadPlayerData(file$, f%)
 	PrevSecondaryLightOn = ReadFloat(f)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)	
-	Contained106 = ReadByte(f)	
+	Contained106 = ReadByte(f)
+	Contained173 = ReadByte(f)
 	
 ;	For i = 0 To MAXACHIEVEMENTS-1
 ;		Achievements[i]\Unlocked=ReadByte(f)
@@ -822,10 +806,6 @@ Function LoadPlayerData(file$, f%)
 	RefinedItems = ReadInt(f)
 	
 	MTFtimer = ReadFloat(f)
-	
-	For it = Each Items
-		RemoveItem(it)
-	Next
 	
 	temp = ReadByte(f)
 	While temp
@@ -1662,26 +1642,21 @@ Function LoadGame(file$, zoneToLoad%=-1)
 		temp = ReadByte(f)
 	Wend
 	
-	temp = ReadByte(f)
-	While temp
-		For it = Each Items
-			If (Not IsItemInInventory(it)) And it\invSlots > 0 Then
-				For i = 0 To it\invSlots-1
-					temp2 = ReadInt(f)
-					If temp2 > -1 Then
-						For it2 = Each Items
-							If it2\ID = temp2 Then
-								it\SecondInv[j] = it2
-								Exit
-							EndIf
-						Next
-					EndIf
-				Next
-			EndIf
-		Next
-		
-		temp = ReadByte(f)
-	Wend
+	For it = Each Items
+		If (Not IsItemInInventory(it)) And it\invSlots > 0 Then
+			For i = 0 To it\invSlots-1
+				temp2 = ReadInt(f)
+				If temp2 > -1 Then
+					For it2 = Each Items
+						If it2\ID = temp2 Then
+							it\SecondInv[i] = it2
+							Exit
+						EndIf
+					Next
+				EndIf
+			Next
+		EndIf
+	Next
 	
 	For fb = Each FuseBox
 		fb\fuses = ReadByte(f)
@@ -1916,8 +1891,11 @@ Function LoadGameQuick(file$)
 	y = ReadFloat(f)
 	RotateEntity(Collider, x, y, 0, 0)
 	
-	For n.NPCs = Each NPCs
+	For n = Each NPCs
 		RemoveNPC(n)
+	Next
+	For it = Each Items
+		RemoveItem(it)
 	Next
 	
 	LoadPlayerData(file, f)
@@ -2382,26 +2360,21 @@ Function LoadGameQuick(file$)
 		temp = ReadByte(f)
 	Wend
 	
-	temp = ReadByte(f)
-	While temp
-		For it = Each Items
-			If (Not IsItemInInventory(it)) And it\invSlots > 0 Then
-				For i = 0 To it\invSlots-1
-					temp2 = ReadInt(f)
-					If temp2 > -1 Then
-						For it2 = Each Items
-							If it2\ID = temp2 Then
-								it\SecondInv[j] = it2
-								Exit
-							EndIf
-						Next
-					EndIf
-				Next
-			EndIf
-		Next
-		
-		temp = ReadByte(f)
-	Wend
+	For it = Each Items
+		If (Not IsItemInInventory(it)) And it\invSlots > 0 Then
+			For i = 0 To it\invSlots-1
+				temp2 = ReadInt(f)
+				If temp2 > -1 Then
+					For it2 = Each Items
+						If it2\ID = temp2 Then
+							it\SecondInv[i] = it2
+							Exit
+						EndIf
+					Next
+				EndIf
+			Next
+		EndIf
+	Next
 	
 	For fb = Each FuseBox
 		fb\fuses = ReadByte(f)

@@ -833,7 +833,7 @@ Function PickItem(item.Items)
 		Select item\itemtemplate\tempname
 			Case "vest"
 				If psp\Kevlar < 100
-					Msg = "You replaced your kevlar"
+					Msg = "You replaced your kevlar."
 					MsgTimer = 70 * 5
 					PlaySound_Strict LoadTempSound("SFX\Interact\PickUpKevlar.ogg")
 					psp\Kevlar = 100
@@ -844,7 +844,7 @@ Function PickItem(item.Items)
 				EndIf
 			Case "finevest"
 				If psp\Kevlar < 150
-					Msg = "You replaced your kevlar"
+					Msg = "You replaced your kevlar."
 					MsgTimer = 70 * 5
 					PlaySound_Strict LoadTempSound("SFX\Interact\PickUpKevlar.ogg")
 					psp\Kevlar = 150
@@ -974,9 +974,7 @@ Function Update294()
 			;PrevBloodloss = Bloodloss
 			;Injuries = 1.5
 			;Bloodloss = 70
-			If (Not GodMode) Then
-				DamageSPPlayer(15, True)
-			EndIf
+			DamageSPPlayer(15, True)
 			EyeIrritation = 9 * 70
 			
 			pvt = CreatePivot()

@@ -21,6 +21,7 @@ Include "SourceCode/SteamConstants.bb"
 Type GlobalVariables
 	Field OptionFile$
 	Field OSBit%
+	Field RichPresenceTimer#
 End Type
 
 Type Options
@@ -41,7 +42,6 @@ Type Options
 	Field EnableSFXRelease%
 	Field EnableSFXRelease_Prev%
 	Field ConsoleEnabled%
-	Field IntroSkipEnabled%
 	Field RenderCubeMapMode%
 	Field MouseSmooth#
 	Field HoldToAim%
@@ -117,7 +117,6 @@ Function InitOptions()
 	opt\EnableSFXRelease% = GetINIInt(gv\OptionFile, "audio", "sfx release", 1)
 	opt\EnableSFXRelease_Prev% = opt\EnableSFXRelease%
 	opt\ConsoleEnabled% = GetINIInt(gv\OptionFile, "console", "enabled", 0)
-	opt\IntroSkipEnabled% = GetINIInt(gv\OptionFile, "options", "skip intro", 0)
 	opt\ConsoleOpening% = GetINIInt(gv\OptionFile, "console", "auto opening", 0)
 	opt\GraphicWidth% = GetINIInt(gv\OptionFile, "options", "width", DesktopWidth())
 	opt\GraphicHeight% = GetINIInt(gv\OptionFile, "options", "height", DesktopHeight())

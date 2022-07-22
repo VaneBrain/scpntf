@@ -230,9 +230,7 @@ Function UpdateEvent_Cont_914(e.Events)
 					Select setting
 						Case COARSE
 							;Injuries = 4.0
-							If (Not GodMode) Then
-								DamageSPPlayer(90, True)
-							EndIf
+							DamageSPPlayer(90, True)
 							Msg = GetLocalString("Singleplayer", "cont_914_1")
 							MsgTimer = 70*8
 						Case ONETOONE

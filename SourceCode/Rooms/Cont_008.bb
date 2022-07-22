@@ -89,7 +89,7 @@ Function UpdateEvent_Cont_008(e.Events)
 		GiveAchievement(Achv008)=True
 		;container open
 		If e\EventState = 0 Then
-			If Curr173\Idle = SCP173_ACTIVE And EntityDistanceSquared(Curr173\Collider,Collider) > PowTwo(HideDistance) ;Just making sure that 173 is far away enough to spawn him to this room
+			If Curr173 <> Null And Curr173\Idle = SCP173_ACTIVE And EntityDistanceSquared(Curr173\Collider,Collider) > PowTwo(HideDistance) ;Just making sure that 173 is far away enough to spawn him to this room
 				PositionEntity Curr173\Collider, EntityX(e\room\Objects[3],True),0.5,EntityZ(e\room\Objects[3],True),True
 				ResetEntity Curr173\Collider
 			EndIf
@@ -110,7 +110,7 @@ Function UpdateEvent_Cont_008(e.Events)
 				
 				If e\EventState2=0 Then
 					ShowEntity e\room\Objects[2]
-					If BlinkTimer<-10 And Curr173\Idle = SCP173_ACTIVE Then
+					If BlinkTimer<-10 And Curr173 <> Null And Curr173\Idle = SCP173_ACTIVE Then
 						PositionEntity Curr173\Collider, EntityX(e\room\Objects[4],True),0.5,EntityZ(e\room\Objects[4],True),True
 						ResetEntity Curr173\Collider
 						
@@ -118,12 +118,10 @@ Function UpdateEvent_Cont_008(e.Events)
 						
 						If (Not WearingHazmat) Then 
 							;Injuries=Injuries+0.1
-							If (Not GodMode) Then
-								DamageSPPlayer(5)
-								If Infect=0 Then Infect=1
-								Msg = GetLocalString("Singleplayer", "cont_008_1")
-								MsgTimer = 70*8
-							EndIf
+							DamageSPPlayer(5)
+							If Infect=0 Then Infect=1
+							Msg = GetLocalString("Singleplayer", "cont_008_1")
+							MsgTimer = 70*8
 						EndIf
 						
 						PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 

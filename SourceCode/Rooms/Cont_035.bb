@@ -129,13 +129,9 @@ Function UpdateEvent_Cont_035(e.Events)
 							;	Injuries = Injuries + (FPSfactor/10000)
 							;EndIf
 						If (Not WearingHazmat) Then
-							If (Not GodMode) Then
-								DamageSPPlayer(0.05, True)
-							EndIf
+							DamageSPPlayer(0.05, True)
 						Else
-							If (Not GodMode) Then
-								DamageSPPlayer(0.01, True)
-							EndIf
+							DamageSPPlayer(0.01, True)
 						EndIf
 						
 						If KillTimer < 0 And Bloodloss =>100 Then

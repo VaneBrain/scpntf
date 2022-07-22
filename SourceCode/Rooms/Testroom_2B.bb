@@ -38,7 +38,7 @@ Function UpdateEvent_Testroom_2B(e.Events)
 	Local pvt%,distSquared#
 	
 	If PlayerRoom = e\room	
-		If Curr173\Idle = SCP173_ACTIVE Then 
+		If Curr173 <> Null And Curr173\Idle = SCP173_ACTIVE Then 
 			If e\EventState = 0 Then
 				If e\room\RoomDoors[0]\open = True
 					PositionEntity(Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))

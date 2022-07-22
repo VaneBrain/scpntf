@@ -601,7 +601,8 @@ Function UpdateConsole(commandSet%)
 							;[Block]
 							StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 							
-							psp\Health = psp\Health - Float(StrTemp)
+							psp\Health = psp\Health - Min(Float(StrTemp),100.0)
+                            CreateConsoleMsg("Injured the player for " + Int(StrTemp) + " HP")
 							;[End Block]
 						Case "infect"
 							;[Block]

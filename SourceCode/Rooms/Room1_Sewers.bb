@@ -16,7 +16,14 @@ Function FillRoom_Room1_Sewers(r.Rooms)
 	
 	fb = CreateFuseBox("Fusebox.b3d", CreateVector3D(r\x - 408.0 * RoomScale, r\y - 5416.0 * RoomScale, r\z + 32.0 * RoomScale), CreateVector3D(0, 270, 0), CreateVector3D(0.4 * RoomScale, 0.4 * RoomScale, 0.4 * RoomScale))
 	EntityParent fb\obj, r\obj
-	fb\fuses = 2
+	If gopt\GameMode <> GAMEMODE_CLASSIC Then
+		fb\fuses = 2
+		it = CreateItem("Fuse", "fuse", r\x - 776.0 * RoomScale, r\y - 5580.0 * RoomScale, r\z - 3728.0 * RoomScale)
+		EntityParent(it\collider, r\obj)
+	Else
+		fb\fuses = 3
+	EndIf
+	
 	r\Objects[ROOM1_SEWERS_FUSEBOX_ID] = fb\obj
 	
 	r\Objects[ROOM1_SEWERS_ELEVATOR_ID] = LoadRMesh("GFX\map\elevator_cabin_2.rmesh", Null)
@@ -73,9 +80,6 @@ Function FillRoom_Room1_Sewers(r.Rooms)
 	HideEntity(r\Objects[ROOM1_SEWERS_ROOM_ID])
 	
 	it = CreateItem("Crowbar", "crowbar", r\x - 128.0 * RoomScale, r\y - 5580.0 * RoomScale, r\z + 32.0 * RoomScale)
-	EntityParent(it\collider, r\obj)
-	
-	it = CreateItem("Fuse", "fuse", r\x - 776.0 * RoomScale, r\y - 5580.0 * RoomScale, r\z - 3728.0 * RoomScale)
 	EntityParent(it\collider, r\obj)
 	
 	wa.Water = CreateWater("GFX\map\rooms\room1_sewers\room1_sewers_water.b3d", "room1_sewers_water", 0, 0, 0, r\obj, (-6208.0*RoomScale))

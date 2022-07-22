@@ -426,14 +426,14 @@ Function RenderLobby()
 			If cmsg\PlayerID = 0 Then Color 100,100,255
 			If cmsg\IsServerMSG > SERVER_MSG_NO Then Color 255,255,0
 			If cmsg\IsServerMSG = SERVER_MSG_NO Then
-				Text x + 10.0 * MenuScale, (ChatBaseY + (30.0 * MenuScale) * (ChatMSGAmount - 1)) + ChatExtraSpace, Players[cmsg\PlayerID]\Name + ":"
+				Text x + 10.0 * MenuScale, (ChatBaseY + (30.0 * MenuScale) * (ChatMSGAmount - 1)) + ChatExtraSpace, cmsg\PlayerName + ":"
 			Else
 				Text x + 10.0 * MenuScale, (ChatBaseY + (30.0 * MenuScale) * (ChatMSGAmount - 1)) + ChatExtraSpace, GetLocalString("Chat", "server") + ":"
 			EndIf
 			
 			Color 255,255,255
 			If cmsg\IsServerMSG > SERVER_MSG_NO Then Color 255,255,0
-			Text x + 10.0 * MenuScale, (ChatBaseY + (30.0 * MenuScale) * ChatMSGAmount) + ChatExtraSpace, Steam_FilterText(Players[cmsg\PlayerID]\SteamIDUpper, Players[cmsg\PlayerID]\SteamIDLower, AssembleChatMSG(cmsg))
+			Text x + 10.0 * MenuScale, (ChatBaseY + (30.0 * MenuScale) * ChatMSGAmount) + ChatExtraSpace, Steam_FilterText(cmsg\SteamIDUpper, cmsg\SteamIDLower, AssembleChatMSG(cmsg))
 			ChatMSGAmount = ChatMSGAmount + 2
 			ChatExtraSpace = ChatExtraSpace + 10.0 * MenuScale
 		Next

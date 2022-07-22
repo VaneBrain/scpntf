@@ -255,20 +255,20 @@ Function UpdateEvent_Cont_049(e.Events)
 					Next
 					
 					n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[5],True), EntityY(e\room\Objects[5],True)+0.2, EntityZ(e\room\Objects[5],True))
-					n\State = MTF_CONTACT
+					n\State = MTF_TARGET_PLAYER
 					n\Reload = 6*70
 					PointEntity n\Collider,Collider
 					e\room\NPC[1] = n
 					
 					n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[5],True), EntityY(e\room\Objects[5],True)+0.2, EntityZ(e\room\Objects[5],True))
-					n\State = MTF_CONTACT
+					n\State = MTF_TARGET_PLAYER
 					n\Reload = (6*70)+Rnd(15,30)
 					RotateEntity n\Collider,0,EntityYaw(e\room\NPC[1]\Collider),0
 					MoveEntity n\Collider,0.5,0,0
 					PointEntity n\Collider,Collider
 					
 					n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[5],True), EntityY(e\room\Objects[5],True)+0.2, EntityZ(e\room\Objects[5],True))
-					n\State = MTF_CONTACT
+					n\State = MTF_TARGET_PLAYER
 					n\Reload = 6*70+Rnd(15,30)
 					RotateEntity n\Collider,0,EntityYaw(e\room\NPC[1]\Collider),0
 					n\State2 = EntityYaw(n\Collider)

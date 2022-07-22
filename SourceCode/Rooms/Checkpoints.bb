@@ -84,6 +84,9 @@ Function FillRoom_Checkpoints(r.Rooms)
 			PositionEntity(r\RoomDoors[CHECKPOINT_ELEVATOR_DOOR_ID]\buttons[1], r\x, r\y + 0.7, r\z + 1604 * RoomScale, True)
 			CreateNewElevator(r\Objects[CHECKPOINT_ELEVATOR_ID], 2, r\RoomDoors[CHECKPOINT_ELEVATOR_DOOR_ID], 1, r, -4096.0, 0.0, 4096.0)
 			CreateCheckpointFakeDoor(r, CHECKPOINT_ELEVATOR_FAKE_DOOR_ID, 224, 0, 1644, 0)
+			r\Objects[4] = CreatePivot()
+			PositionEntity r\Objects[4], r\x - 352.0 * RoomScale, r\y + 256.0 * RoomScale, r\z + 1700.0 * RoomScale
+			EntityParent r\Objects[4], r\obj
 		Case HCZ
 			CreateCheckpointElevator(r, CHECKPOINT_ELEVATOR_ID, 224, 0, 2312, 0, CHECKPOINT_ELEVATOR_DOOR_ID, 224, 0, 2030, 180)
 			PositionEntity(r\RoomDoors[CHECKPOINT_ELEVATOR_DOOR_ID]\buttons[1], r\x, r\y + 0.7, r\z + 1990 * RoomScale, True)
@@ -100,6 +103,13 @@ Function UpdateEvent_Checkpoints(e.Events)
 	Local playerElev%,prevZone%
 	
 	If PlayerRoom = e\room Then
+		If e\room\RoomTemplate\Name = "checkpoint_lcz" Then
+			If e\Sound = 0 Then
+				e\Sound = LoadTempSound("SFX\Room\Checkpoint\elevator_callingdispatch.ogg")
+			EndIf
+			e\SoundCHN = LoopSound2(e\Sound,e\SoundCHN,Camera,e\room\Objects[4],6.0)
+		EndIf
+		
 		If TaskExists(TASK_CHECKPOINT) Then
 			EndTask(TASK_CHECKPOINT)
 			BeginTask(TASK_GOTOZONE)

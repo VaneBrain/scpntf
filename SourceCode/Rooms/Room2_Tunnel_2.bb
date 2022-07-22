@@ -12,7 +12,7 @@ End Function
 Function UpdateEvent_Room2_Tunnel_2(e.Events)
 	
 	If PlayerRoom = e\room Then
-		If Curr173\Idle <> SCP173_ACTIVE Then
+		If Curr173 = Null Lor (Curr173 <> Null And Curr173\Idle <> SCP173_ACTIVE) Then
 			RemoveEvent(e)
 			Return
 		Else		

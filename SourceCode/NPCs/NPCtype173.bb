@@ -66,7 +66,6 @@ Function UpdateNPCtype173(n.NPCs)
 	Local snd.Sound
 	
 	If Curr173\Idle <> SCP173_DISABLED Then
-		
 		dist# = EntityDistance(n\Collider, Collider)
 		
 		n\State3 = 1
@@ -296,21 +295,31 @@ Function UpdateNPCtype173(n.NPCs)
 			
 			PositionEntity(n\Collider, EntityX(n\Collider), Min(EntityY(n\Collider), 0.35), EntityZ(n\Collider))
 			
+			HideEntity n\obj3
+			
+			If Contained173 Then
+				n\Idle = SCP173_CONTAINED
+				PositionEntity n\Collider, 0, -500, 0
+				ResetEntity n\Collider
+			EndIf
 		ElseIf n\Idle = SCP173_BOXED Lor n\Idle = SCP173_CONTAINED Then
 			If n\Idle = SCP173_BOXED Then
 				PointEntity n\obj, Collider
-				RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 10.0), 0, True								
-				If EntityDistanceSquared(n\Collider, Collider) < 1.0 ;PowTwo(1) = 1 / 1*1 = 1 Then
-					MoveEntity n\Collider, 0, 0, -0.016 * FPSfactor * Max(Min((EntityDistanceSquared(n\Collider, Collider) * PowTwo(2) - 1.0) * 0.5, 1.0), -0.5)
-				Else
-					MoveEntity n\Collider, 0, 0, 0.016 * FPSfactor * Max(Min((EntityDistanceSquared(n\Collider, Collider) * PowTwo(2) - 1.0) * 0.5, 1.0), -0.5)
-				EndIf
+				RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 10.0), 0, True
+				MoveEntity n\Collider, 0, 0, 0.016 * FPSfactor * Max(Min((EntityDistanceSquared(n\Collider, Collider) * PowTwo(2) - 1.0), 1.0), -1.0)
+				
 				n\GravityMult = 1.0
 				
 				If EntityDistanceSquared(n\Collider, Collider) > PowTwo(HideDistance) Then
 					TeleportEntity(n\Collider, EntityX(Collider), EntityY(Collider) + 0.1, EntityZ(Collider), n\CollRadius)
 					RotateEntity n\Collider, 0, EntityYaw(Collider), 0
 					MoveEntity n\Collider, 0, 0, -0.5
+				EndIf
+				
+				If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
+					n\Idle = SCP173_ACTIVE
+					FailTask(TASK_173TOCHAMBER)
+					BeginTask(TASK_CONTAIN173)
 				EndIf
 			EndIf
 			

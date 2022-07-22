@@ -209,12 +209,13 @@ Function UpdateEvent_Cont_106(e.Events)
 					d\Size = 0.05 : d\SizeChange = 0.002
 				ElseIf e\EventState3 > 3200 Then
 					
-					If e\EventState2 = True Then ;magnets off -> 106 caught
+					If e\EventState2 = True Then ;magnets on -> 106 caught
 						Contained106 = True
 						If TaskExists(TASK_106RECALL) Then
 							PlayAnnouncement("SFX\Character\MTF\Announc106Contain.ogg")
 							EndTask(TASK_106RECALL)
-						EndIf	
+						EndIf
+						Steam_Achieve(ACHV_106_CONTAINED)
 					Else ;magnets off -> 106 comes out and attacks
 						PositionEntity(Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 						
