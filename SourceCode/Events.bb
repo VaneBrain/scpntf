@@ -112,7 +112,10 @@ Function InitEvents()
 	
 	CreateEvent("room2_trick", "room2_1", 0, 0.15)	
 	
-	CreateEvent("1048_a", "room2_1", 0, 1.0)	
+	CreateEvent("1048_a", "room2_1", 0, 0.3 + (0.3*SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("1048_a", "room4_1", 0, 0.3 + (0.3*SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("1048_a", "room2_tunnel_1", 0, 0.3 + (0.3*SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("1048_a", "room4_tunnel", 0, 0.3 + (0.3*SelectedDifficulty\aggressiveNPCs))
 	
 	CreateEvent("room2_storage", "room2_storage", 0)
 	
@@ -190,21 +193,13 @@ Function InitEvents()
 	CreateEvent("106_sinkhole", "room4_1", Rand(1,2))
 	
 	CreateEvent("cont_079", "cont_079", 0)	
-	
 	CreateEvent("cont_049", "cont_049", 0)
-	
 	CreateEvent("cont_012", "cont_012", 0)
-	
 	CreateEvent("cont_035", "cont_035", 0)
-	
 	CreateEvent("cont_008", "cont_008", 0)
-	
 	CreateEvent("cont_106", "cont_106", 0)	
-	
 	CreateEvent("cont_372", "cont_372", 0)
-	
 	CreateEvent("cont_914", "cont_914", 0)
-	
 	CreateEvent("cont_970", "cont_970", 0)
 	
 	CreateEvent("toilet_guard", "room2_toilets", 1)

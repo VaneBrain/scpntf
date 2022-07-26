@@ -483,6 +483,7 @@ Function LoadModStuff()
 	ApplyHitBoxes(NPCtypeKGuard,"Guard")
 	ApplyHitBoxes(NPCtype939,"939")
 	ApplyHitBoxes(NPCtypeTentacle,"Tentacle")
+	ApplyHitBoxes(NPCtype1048a,"1048A")
 	
 	PreloadAllNPCAnimations()
 	

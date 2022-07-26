@@ -105,7 +105,7 @@ Function UpdateNPCtypeMTF(n.NPCs)
 			For n2 = Each NPCs
 				If n2\NPCtype <> n\NPCtype And n2\HP > 0 And IsTarget(n, n2) Then
 					SeeNPC = OtherNPCSeesMeNPC(n2, n)
-					If SeeNPC And EntityVisible(n\Collider, n2\Collider) Then
+					If SeeNPC And EntityVisible(n2\Collider, n\Collider) Then
 						CurrentNPCDist = EntityDistanceSquared(n\Collider, n2\Collider)
 						If SmallestNPCDist = 0.0 Lor SmallestNPCDist > CurrentNPCDist Then
 							temp = True

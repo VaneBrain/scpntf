@@ -7,9 +7,41 @@ Const MP1048a_STATE_DETECTED = 1
 Const MP1048a_STATE_ATTACK = 2
 ;[End Block]
 
+Function CreateNPCtype1048a(n.NPCs)
+	Local n2.NPCs
+	
+	n\CollRadius = 0.1
+	n\Collider = CreatePivot()
+	EntityRadius n\Collider, n\CollRadius, 0.15
+	EntityType n\Collider, HIT_PLAYER
+	
+	For n2.NPCs = Each NPCs
+		If (n\NPCtype = n2\NPCtype) And (n<>n2) Then
+			n\obj = CopyEntity(n2\obj)
+			Exit
+		EndIf
+	Next
+	
+	If n\obj = 0 Then 
+		n\obj = LoadAnimMesh_Strict("GFX\npcs\scp-1048a.b3d")
+	EndIf
+	
+	Local temp# = 0.05
+	ScaleEntity n\obj, temp, temp, temp	
+	
+	n\HP = 60
+	n\State3 = n\HP
+	n\NVName = "Unidentified"
+	n\GravityMult = 0.5
+	n\Speed = 0.025
+	
+	CopyHitBoxes(n)
+	
+End Function
+
 Function CreateNPCtype1048aMP(n.NPCs)
 	
-	n\CollRadius = 0.15
+	n\CollRadius = 0.1
 	n\Collider = CreatePivot()
 	EntityRadius n\Collider, n\CollRadius, 0.15
 	EntityType n\Collider, HIT_NPC_MP
@@ -31,6 +63,132 @@ Function CreateNPCtype1048aMP(n.NPCs)
 		n\Sound = LoadSound_Strict("SFX\SCP\1048A\Squishing.ogg")
 	EndIf
 	
+End Function
+
+Function UpdateNPCtype1048a(n.NPCs)
+	Local p.Particles
+	Local i%
+	If n\HP > 0 Then
+		Local dist# = EntityDistanceSquared(Collider, n\obj)
+		Select n\State
+			Case 0
+				AnimateNPC(n, 2.0, 395.0, 1.0)
+				If n\HP < n\State3 Then
+					n\State = 1
+				EndIf
+				If dist < 6.0 Then 
+					n\State = 2
+				EndIf
+			Case 1
+				AnimateNPC(n, 648.0, 677.0, 0.75)
+				MoveEntity n\Collider, 0, 0, n\Speed*FPSfactor
+				If dist < 4.0 Then
+					SetNPCFrame(n, 400.0)
+					n\State = 2
+				ElseIf dist >= 64.0 Then
+					n\HP = 0
+				EndIf
+			Case 2
+				Local prevFrame# = AnimTime(n\obj)
+				AnimateNPC(n, 2.0, 647.0, 1.0, False)
+				
+				If n\HP < n\State3 And prevFrame < 400 Then
+					SetNPCFrame(n, 400.0)
+				EndIf
+				If (prevFrame <= 400.0 And AnimTime(n\obj)>400.0) Then
+					n\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
+					n\SoundChn = PlaySound_Strict(n\Sound)
+				EndIf
+				
+				Local volume# = Max(1.0 - Abs(prevFrame - 600.0)/100.0, 0.0)
+				BlurTimer = volume*1000.0/Max(dist/8.0,1.0)
+				CameraShake = volume*10.0/Max(dist/4.0,1.0)
+				
+				If (prevFrame>646.0) Then
+					If dist < 16.0 And (Not GodMode) Then
+						n\State = 3
+						n\State2 = 0.1
+					Else
+						n\HP = 0
+					EndIf
+				EndIf
+		End Select
+		If NoTarget Then
+			n\State = 0
+		Else
+			PointEntity2(n\Collider, Collider, 0.0, False)
+		EndIf
+		UpdateSoundOrigin(n\SoundChn,Camera,n\Collider,16)
+	EndIf
+	
+	If n\State2 > 0.0 And n\State2 <= 70*14 Then
+		n\State2 = n\State2 + FPSfactor
+		
+		BlurTimer = n\State2*2.0
+		If (n\State2>1.0 And n\State2-FPSfactor <= 1.0) Then
+			PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"))
+			
+			Msg = "Something is growing all around your body."
+			MsgTimer = 70.0 * 3.0
+		ElseIf (n\State2>350.0 And n\State2-FPSfactor <= 350.0) Then
+			Select Rand(3)
+				Case 1
+					Msg = "Ears are growing all over your body."
+				Case 2
+					Msg = "Ear-like organs are growing all over your body."
+				Case 3
+					Msg = "Ears are growing all over your body. They are crawling on your skin."
+			End Select
+			
+			MsgTimer = 70.0 * 3.0
+		ElseIf (n\State2>700.0 And n\State2-FPSfactor <= 700.0)
+			Select Rand(4)
+				Case 1
+					Msg = "It is becoming difficult to breathe."
+				Case 2
+					Msg = "You have excellent hearing now. Also, you are dying."
+				Case 3
+					Msg = "The ears are growing inside your body."
+				Case 4
+					Msg = Chr(34)+"Can't... Breathe..."+Chr(34)
+			End Select
+			
+			MsgTimer = 70.0 * 5.0
+		EndIf
+		
+		If (n\State2>70*14) Then
+			If (Not GodMode) Then
+				Kill()
+			Else
+				n\HP = 0
+			EndIf
+		EndIf
+	EndIf
+	
+	PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider)-0.15, EntityZ(n\Collider))
+	RotateEntity n\obj, EntityPitch(n\Collider)-90, EntityYaw(n\Collider), EntityRoll(n\Collider), True
+	
+	If n\HP <= 0 And n\IsDead = False Then
+		If n\SoundChn <> 0 Then
+			StopChannel n\SoundChn
+			n\SoundChn = 0
+			FreeSound_Strict n\Sound
+			n\Sound = 0
+		EndIf
+		PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"),Camera,n\Collider)
+		p.Particles = CreateParticle(EntityX(n\Collider),EntityY(n\Collider)+0.2,EntityZ(n\Collider),5,0.25,0.0)
+		EntityColor p\obj,100,100,100
+		RotateEntity p\pvt,0,0,Rnd(360)
+		p\Achange = -Rnd(0.02,0.03)
+		For i = 0 To 1
+			p.Particles = CreateParticle(EntityX(n\Collider)+Rnd(-0.2,0.2),EntityY(n\Collider)+0.25,EntityZ(n\Collider)+Rnd(-0.2,0.2),5,0.15,0.0)
+			EntityColor p\obj,100,100,100
+			RotateEntity p\pvt,0,0,Rnd(360)
+			p\Achange = -Rnd(0.02,0.03)
+		Next
+		HideEntity(n\obj)
+		n\IsDead = True
+	EndIf
 End Function
 
 Function UpdateNPCtype1048aMP(n.NPCs)
@@ -231,7 +389,7 @@ Function UpdateNPCtype1048aMP(n.NPCs)
 		Return
 	EndIf
 	
-	PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider)-n\CollRadius, EntityZ(n\Collider))
+	PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider)-0.15, EntityZ(n\Collider))
 	RotateEntity n\obj, EntityPitch(n\Collider)-90, EntityYaw(n\Collider), EntityRoll(n\Collider), True
 	
 	EntityAutoFade(n\obj,GetCameraFogRangeFar(Camera)-0.5,GetCameraFogRangeFar(Camera)+0.5)
@@ -240,10 +398,6 @@ End Function
 
 
 
-
-
-
-
 ;~IDEal Editor Parameters:
-;~F#2#9#22#A7
+;~F#2#9#29#43#C1#CC#D0#11E#13A
 ;~C#Blitz3D

@@ -174,7 +174,7 @@ End Type
 
 InitController()
 
-Const VersionNumber$ = "0.2.8"
+Const VersionNumber$ = "0.2.9"
 Const CompatibleNumber$ = "0.2.8"
 
 Global MenuWhite%, MenuBlack%
@@ -3784,74 +3784,6 @@ Function InitNewGame()
 				EndIf
 		End Select
 	Next
-	
-	If NTF_CurrZone <> 2 Then
-		;P90
-		it = CreateItem("FN P90", "p90", 1, 1, 1)
-		it\Picked = True
-		it\Dropped = -1
-		it\itemtemplate\found=True
-		Inventory[0] = it
-		HideEntity(it\collider)
-		EntityType (it\collider, HIT_ITEM)
-		EntityParent(it\collider, 0)
-		ItemAmount = ItemAmount + 1
-		;USP
-		it = CreateItem("USP Tactical", "usp", 1, 1, 1)
-		it\Picked = True
-		it\Dropped = -1
-		it\itemtemplate\found=True
-		Inventory[1] = it
-		HideEntity(it\collider)
-		EntityType (it\collider, HIT_ITEM)
-		EntityParent(it\collider, 0)
-		ItemAmount = ItemAmount + 1
-		;Knife
-		it = CreateItem("Combat Knife", "knife", 1, 1, 1)
-		it\Picked = True
-		it\Dropped = -1
-		it\itemtemplate\found=True
-		Inventory[2] = it
-		HideEntity(it\collider)
-		EntityType (it\collider, HIT_ITEM)
-		EntityParent(it\collider, 0)
-		ItemAmount = ItemAmount + 1
-		;Level 5 Key Card
-		it = CreateItem("Level 5 Key Card", "key5", 1, 1, 1)
-		it\Picked = True
-		it\Dropped = -1
-		it\itemtemplate\found=True
-		Inventory[3] = it
-		HideEntity(it\collider)
-		EntityType (it\collider, HIT_ITEM)
-		EntityParent(it\collider, 0)
-		ItemAmount = ItemAmount + 1
-		;S-NAV 310 Navigator
-		it = CreateItem("S-NAV 310 Navigator", "nav", 1, 1, 1)
-		it\Picked = True
-		it\Dropped = -1
-		it\itemtemplate\found=True
-		it\state = 100
-		Inventory[4] = it
-		HideEntity(it\collider)
-		EntityType (it\collider, HIT_ITEM)
-		EntityParent(it\collider, 0)
-		ItemAmount = ItemAmount + 1
-		
-		g_I\Weapon_InSlot[GunSlot1] = "p90"
-		g_I\Weapon_InSlot[GunSlot2] = "usp"
-		g_I\Weapon_InSlot[GunSlot3] = "knife"
-		g_I\Weapon_CurrSlot% = GunSlot1+1
-		g_I\HoldingGun = GUN_P90
-		For g = Each Guns
-			Select g\ID
-				Case GUN_P90
-					g\CurrReloadAmmo = 3
-				Case GUN_USP
-					g\CurrReloadAmmo = 3
-			End Select
-		Next
-	EndIf
 	
 	DrawLoading(90)
 	

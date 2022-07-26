@@ -1158,9 +1158,8 @@ Function CreateLeverGen.LeverGen(model$, model_handle$, Position.Vector3D, Rotat
 	ScaleEntity lg\obj,Scale\x,Scale\y,Scale\z
 	ScaleEntity lg\obj_handle,Scale\x,Scale\y,Scale\z
 	EntityPickMode lg\obj,2
+	EntityPickMode lg\obj_handle,2
 	EntityType lg\obj,HIT_MAP
-	EntityPickMode lg\obj_handle, 1, False
-	EntityRadius lg\obj_handle, 0.1
 	lg\angle = angle
 	lg\id = id
 	

@@ -165,7 +165,6 @@ Function UpdateMPItems()
 				If i\disttimer < MilliSecs() Then
 					i\dist = EntityDistance(Players[mp_I\PlayerID]\Collider, i\collider)
 					i\disttimer = MilliSecs() + 700
-					If i\dist < HideDist Then ShowEntity i\model
 				EndIf
 				
 				If i\dist < HideDist Then
