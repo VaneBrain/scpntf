@@ -35,32 +35,33 @@ Function UpdateEvent_Room2_Medibay(e.Events)
 		HideEntity e\room\Objects[0]
 	Else
 		ShowEntity e\room\Objects[0]
+	EndIf
 		;Setup
-		If e\EventState = 0
-			e\room\NPC[0] = CreateNPC(NPCtype008,EntityX(e\room\Objects[3],True),0.5,EntityZ(e\room\Objects[3],True))
-			RotateEntity e\room\NPC[0]\Collider,0,e\room\angle-90,0
-			e\EventState = 1
-		EndIf
-		
-		If EntityDistanceSquared(e\room\NPC[0]\Collider,Collider)<PowTwo(1.2)
-			If e\EventState2 = 0
-				LightBlink = 12.0
-				PlaySound_Strict LightSFX
-				e\EventState2 = FPSfactor
-			EndIf
-		EndIf
-	EndIf
-	
-	If e\EventState2 > 0 And e\EventState2 < 70*4
-		e\EventState2 = e\EventState2 + FPSfactor
-	ElseIf e\EventState2 >= 70*4
-		If e\room\NPC[0]\State = 0
-			e\room\NPC[0]\State = 2
-		EndIf
-	EndIf
+;		If e\EventState = 0
+;			e\room\NPC[0] = CreateNPC(NPCtype008,EntityX(e\room\Objects[3],True),0.5,EntityZ(e\room\Objects[3],True))
+;			RotateEntity e\room\NPC[0]\Collider,0,e\room\angle-90,0
+;			e\EventState = 1
+;		EndIf
+;		
+;		If EntityDistanceSquared(e\room\NPC[0]\Collider,Collider)<PowTwo(1.2)
+;			If e\EventState2 = 0
+;				LightBlink = 12.0
+;				PlaySound_Strict LightSFX
+;				e\EventState2 = FPSfactor
+;			EndIf
+;		EndIf
+;	EndIf
+;	
+;	If e\EventState2 > 0 And e\EventState2 < 70*4
+;		e\EventState2 = e\EventState2 + FPSfactor
+;	ElseIf e\EventState2 >= 70*4
+;		If e\room\NPC[0]\State = 0
+;			e\room\NPC[0]\State = 2
+;		EndIf
+;	EndIf
 	
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1#19
+;~F#1
 ;~C#Blitz3D

@@ -598,8 +598,8 @@ Function UpdateGUI()
 		
 		If (closedInv) And (Not InvOpen) Then
 			ResumeSounds()
+			ResetInput()
 			OtherOpen=Null
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
 		EndIf
 		;[End Block]
 	ElseIf InvOpen Then
@@ -644,9 +644,8 @@ Function UpdateGUI()
 		ItemAmount = 0
 		For  n% = 0 To MaxItemAmount - 1
 			isMouseOn% = False
-			If MouseOn(x, y, width, height) Then isMouseOn = True
-			
-			If isMouseOn Then
+			If MouseOn(x, y, width, height) Then 
+				isMouseOn = True
 				MouseSlot = n
 			EndIf
 			
@@ -2690,7 +2689,6 @@ Function DrawGUI()
 		;ItemAmount = 0
 		For  n% = 0 To MaxItemAmount - 1
 			isMouseOn% = False
-			If MouseOn(x, y, width, height) Then isMouseOn = True
 			
 			If Inventory[n] <> Null Then
 				Color 200, 200, 200
@@ -2728,7 +2726,8 @@ Function DrawGUI()
 				End Select
 			EndIf
 			
-			If isMouseOn Then
+			If MouseOn(x, y, width, height) Then 
+				isMouseOn = True
 				MouseSlot = n
 				Color 255, 0, 0
 				Rect(x - 1, y - 1, width + 2, height + 2)

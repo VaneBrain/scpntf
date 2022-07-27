@@ -65,7 +65,6 @@ Function CreateCheckpointFakeDoor(r.Rooms, FakeDoorID%, FakeDoorX#, FakeDoorY#, 
 End Function
 
 Function FillRoom_Checkpoints(r.Rooms)
-	Local d.Doors
 	Local i%
 	
 	;Airlock doors

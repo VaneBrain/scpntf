@@ -56,7 +56,7 @@ Function UpdateEvent_Cont_1162(e.Events)
 		
 		If EntityDistanceSquared(e\room\Objects[0],Collider)<PowTwo(0.75) And Pick1162%
 			DrawHandIcon = True
-			If MouseHit1 Then GrabbedEntity = e\room\Objects[0]
+			If keyhituse Then GrabbedEntity = e\room\Objects[0]
 		EndIf
 		
 		If GrabbedEntity <> 0
@@ -172,7 +172,7 @@ Function UpdateEvent_Cont_1162(e.Events)
 						
 						
 						GiveAchievement(Achv1162)
-						MouseHit1 = False
+						keyhituse = False
 						Exit
 					EndIf
 				Next
@@ -192,7 +192,7 @@ Function UpdateEvent_Cont_1162(e.Events)
 						it = CreateItem(itt\name, itt\tempname, EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
 						EntityType(it\collider, HIT_ITEM)
 						GiveAchievement(Achv1162)
-						MouseHit1 = False
+						keyhituse = False
 						e\EventState3 = 0.0
 						If (Not IsSPPlayerAlive()) Then
 							DeathMSG = GetLocalStringR("Singleplayer", "cont_1162_death", Designation)
@@ -237,20 +237,20 @@ Function UpdateEvent_Cont_1162(e.Events)
 					e\EventState2 = 0.0
 				EndIf
 				Select e\EventState
-					Case 1
-						it = CreateItem("Lost Key","key",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
-					Case 2
-						it = CreateItem("Disciplinary Hearing DH-S-4137-17092","oldpaper",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
-					Case 3
+				;	Case 1
+				;		it = CreateItem("Lost Key","key",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+				;	Case 2
+				;		it = CreateItem("Disciplinary Hearing DH-S-4137-17092","oldpaper",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+					Case 1,2,3
 						it = CreateItem("Coin","coin",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
-					Case 4
+					Case 4,5
 						it = CreateItem("Movie Ticket","ticket",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
-					Case 5
-						it = CreateItem("Old Badge","badge",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+				;	Case 5
+				;		it = CreateItem("Old Badge","badge",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
 				End Select
 				EntityType(it\collider, HIT_ITEM)
 				GiveAchievement(Achv1162)
-				MouseHit1 = False
+				keyhituse = False
 				e\EventState3 = 0.0
 			EndIf
 			pp = FreeEntity_Strict(pp)

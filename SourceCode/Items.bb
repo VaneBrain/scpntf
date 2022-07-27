@@ -446,12 +446,8 @@ Function CreateItem.Items(name$, tempname$, x#, y#, z#, r%=0,g%=0,b%=0,a#=1.0,in
 		
 		If a < 0 Then 
 			EntityFX liquid, 1
-			EntityAlpha liquid, Abs(a)
-		Else
-			EntityAlpha liquid, Abs(a)
 		EndIf
-		
-		
+		EntityAlpha liquid, Abs(a)
 		EntityShininess liquid, 1.0
 	EndIf
 	
@@ -670,14 +666,14 @@ Function PickItem(item.Items)
 							DeathMSG = Designation+" found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
 							DeathMSG = DeathMSG + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
 							Kill()
-						Case "scp148"
-							GiveAchievement(Achv148)	
-						Case "scp513"
-							GiveAchievement(Achv513)
-						Case "scp860"
-							GiveAchievement(Achv860)
-						Case "key6"
-							GiveAchievement(AchvOmni)
+;						Case "scp148"
+;							GiveAchievement(Achv148)	
+;						Case "scp513"
+;							GiveAchievement(Achv513)
+;						Case "scp860"
+;							GiveAchievement(Achv860)
+;						Case "key6"
+;							GiveAchievement(AchvOmni)
 						Case "veryfinevest"
 							Msg = "The vest is too heavy to pick up."
 							MsgTimer = 70*6

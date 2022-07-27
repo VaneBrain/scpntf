@@ -352,19 +352,13 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 		Case NPCtype966
 			CreateNPCtype966(n)
 		Case NPCtype1048a
+			;[Block]
 			If mp_I\PlayState = 0 Then
-				;[Block]
-				n\NVName = "SCP-1048-A"
-				n\obj =	LoadAnimMesh_Strict("GFX\npcs\scp-1048a.b3d")
-				ScaleEntity n\obj, 0.05,0.05,0.05
-				SetAnimTime(n\obj, 2)
-				
-				n\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
-				n\Sound2 = LoadSound_Strict("SFX\SCP\1048A\Growth.ogg")
-				;[End Block]
+				CreateNPCtype1048a(n)
 			Else
 				CreateNPCtype1048aMP(n)
 			EndIf
+			;[End Block]
 		Case NPCtype1499
 			;[Block]
 			n\NVName = "Unidentified"
@@ -601,7 +595,7 @@ Function RemoveNPC(n.NPCs)
 End Function
 
 Function UpdateNPCs()
-	CatchErrors("Uncaught (UpdateNPCs)")
+	CatchErrors("UpdateNPCs")
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, eo.ElevatorObj, eo2.ElevatorObj, w.WayPoints
 	Local i%, dist#, dist2#, angle#, x#, y#, z#, prevFrame#, PlayerSeeAble%, RN$, temp%, pvt%, TempSound2%
 	
@@ -612,6 +606,7 @@ Function UpdateNPCs()
 	Local sfxstep%
 	
 	For n.NPCs = Each NPCs
+		CatchErrors("UpdateNPCs: "+n\NVName+", "+n\NPCtype+" ("+n\State+", "+n\State2+", "+n\State3+")")
 		;A variable to determine if the NPC is in the facility or not
 		n\InFacility = CheckForNPCInFacility(n)
 		
@@ -1711,14 +1706,7 @@ Function UpdateNPCs()
 			Case NPCtype966
 				UpdateNPCtype966(n)
 			Case NPCtype1048a
-				;[Block]
-				Select n\State	
-						
-					Case 1
-						n\PathStatus = FindPath(n, n\EnemyX,n\EnemyY+0.1,n\EnemyZ)
-						;649, 677
-				End Select
-				;[End block]
+				UpdateNPCtype1048a(n)
 			Case NPCtype1499
 				;[Block]
 				;n\State: Current State of the NPC
@@ -2459,7 +2447,7 @@ Function UpdateNPCs()
 		
 		ShowNPCHitBoxes(n)
 		
-		CatchErrors(Chr(34)+n\NVName+Chr(34)+" NPC")
+		CatchErrors("Uncaught (UpdateNPCs)")
 		
 	Next
 	
@@ -3717,12 +3705,12 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 				consoleMSG = "SCP-966 instance spawned."
 			EndIf	
 			
-		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a"
-			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Waves Then
+		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "1048a"
+			If mp_I\Gamemode <> Null And mp_I\Gamemode\ID = Gamemode_Deathmatch Then
+				CreateConsoleMsg("SCP-1048-A cannot be spawned in Deathmatch. Sorry!", 255, 0, 0)
+			Else
 				n.NPCs = CreateNPC(NPCtype1048a, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 				consoleMSG = "SCP-1048-a instance spawned."
-			Else
-				CreateConsoleMsg("SCP-1048-A cannot be spawned with the console. Sorry!", 255, 0, 0)
 			EndIf
 			
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1"
@@ -4462,6 +4450,8 @@ Function IsTarget(n.NPCs, target.NPCs)
 						Return True
 					Case NPCtype096
 						Return True
+					Case NPCtype1048a
+						Return True
 				End Select
 		End Select
 	EndIf
@@ -4538,6 +4528,5 @@ Function FindNPCAnimation.Vector3D(NPCtype%, AnimName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#2#29#B0#C2#CB#DF#10A#125#14A#164#171#189#1A2#1B5#1BC#1D1#1E6#1FB#27C#2B7
-;~F#433#5F8#6A9#6B2#793#85C#860#8C4#8C9
+;~F#29#276#2B1#360#39C#42D#4A4#5FB#6AE#78F#858#85C#8C0
 ;~C#Blitz3D

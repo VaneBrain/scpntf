@@ -106,7 +106,7 @@ Function UpdateEnemySpawners()
 						TeleportEntity(n\Collider,EntityX(ens\obj),EntityY(ens\obj)+0.5,EntityZ(ens\obj))
 					Default
 						n = CreateNPC(NPCtoSpawnType,EntityX(ens\obj),EntityY(ens\obj)+0.5,EntityZ(ens\obj))
-						TeleportEntity(n\Collider,EntityX(ens\obj),EntityY(ens\obj)+0.5,EntityZ(ens\obj),n\CollRadius)
+						TeleportEntity(n\Collider,EntityX(ens\obj),EntityY(ens\obj)+0.5,EntityZ(ens\obj))
 				End Select
 				ens\time = 70*5 ;70*15
 			EndIf

@@ -809,7 +809,7 @@ Function NullMPGame(nomenuload%=False,playbuttonsfx%=True)
 	ConsoleInput = ""
 	ConsoleOpen = False
 	
-	ShouldPlay = 0
+	ShouldPlay = 66
 	
 	Stamina = 100
 	BlurTimer = 0
