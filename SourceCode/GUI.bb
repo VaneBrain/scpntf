@@ -142,9 +142,33 @@ Function UpdateGUI()
 	
 	Local shouldDrawHUD%=True
 	If d_I\SelectedDoor <> Null Then
-		SelectedItem = Null
+		Local usedScp005% = False
 		
-		If shouldDrawHUD Then
+		If SelectedItem <> Null And SelectedItem\itemtemplate\tempname = "scp005" Then
+			If (Not d_I\SelectedDoor\locked) Then
+				usedScp005 = True
+				PlaySound_Strict ScannerSFX1
+			
+				If d_I\SelectedDoor\Code = Str(AccessCode) Then
+					GiveAchievement(AchvMaynard)
+				ElseIf d_I\SelectedDoor\Code = "7816"
+					GiveAchievement(AchvHarp)
+				EndIf									
+			
+				d_I\SelectedDoor\locked = 0
+				UseDoor(d_I\SelectedDoor,True)
+				d_I\SelectedDoor = Null
+				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1#=0.0 : mouse_y_speed_1#=0.0
+				Msg = GetLocalString("Doors", "scp005_keypad_granted")
+			Else
+				PlaySound_Strict ScannerSFX2
+				Msg = GetLocalString("Doors", "scp005_keypad_nothing")
+			EndIf
+			MsgTimer = 70 * 5
+		EndIf
+		
+		If shouldDrawHUD And (Not usedScp005) And (Not d_I\SelectedDoor\locked) Then
+			SelectedItem = Null
 			HideEntity g_I\GunPivot
 			If d_I\SelectedDoor\dir<>5 Then
 				pvt = CreatePivot()
@@ -400,6 +424,7 @@ Function UpdateGUI()
 			EndIf
 		Else
 			d_I\SelectedDoor = Null
+			SelectedItem = Null
 		EndIf
 	Else
 		KeypadInput = ""
@@ -2850,7 +2875,7 @@ Function DrawGUI()
 		;WIP
 		If SelectedItem <> Null Then
 			Select SelectedItem\itemtemplate\tempname
-				Case "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "coin", "fuse"
+				Case "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "coin", "fuse", "scp005"
 					;[Block]
 					DrawImage(SelectedItem\itemtemplate\invimg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
 					;[End Block]

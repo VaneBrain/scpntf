@@ -345,6 +345,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("SCP-198","scp198","GFX\items\scp198.b3d","GFX\items\INVscp198.jpg","",0.04)
 	CreateItemTemplate("SCP-109","scp109","GFX\items\scp109.b3d","GFX\items\INVscp109.jpg","",0.0009)
 	it = CreateItemTemplate("Document SCP-109", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc109.jpg", 0.003) : it\sound = 0
+	CreateItemTemplate("SCP-005", "scp005", "GFX\items\scp005.b3d", "GFX\items\INV005.png", "", 0.0004)
 ;	CreateItemTemplate("Silencer", "silencer", "GFX\weapons\Silencer.b3d","GFX\weapons\INVsilencer.jpg","",0.02)
 	
 	CreateItemTemplate("Fuse", "fuse", "GFX\items\fuse.b3d", "GFX\items\INVfuse.jpg", "", 0.025)

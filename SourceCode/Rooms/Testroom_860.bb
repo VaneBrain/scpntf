@@ -169,6 +169,29 @@ Function UpdateEvent_Testroom_860(e.Events)
 							Msg = GetLocalString("Singleplayer", "testroom_860_1")
 							MsgTimer = 5*70
 						EndIf
+					ElseIf SelectedItem\itemtemplate\tempname="scp005"
+						If keyhituse Then
+							PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
+							SelectedItem = Null
+							
+							pvt = CreatePivot()
+							PositionEntity pvt, EntityX(Camera),EntityY(Camera),EntityZ(Camera)
+							PointEntity pvt, e\room\obj
+							
+							ang# = WrapAngle(EntityYaw(pvt)-EntityYaw(e\room\obj,True))
+							PositionEntity Collider, EntityX(e\room\Objects[2],True),0.5,EntityZ(e\room\Objects[2],True)
+							
+							If ang > 90 And ang < 270 Then
+								RotateEntity Collider, 0, EntityYaw(e\room\obj,True)+180, 0
+							Else
+								RotateEntity Collider, 0, EntityYaw(e\room\obj,True)+0, 0
+							EndIf
+							
+							MoveEntity Collider, 0,0,1.5
+							ResetEntity Collider
+							Msg = GetLocalString("Singleplayer", "scp005_testroom_860_1")
+							MsgTimer = 70 * 5
+						EndIf
 					ElseIf SelectedItem\itemtemplate\tempname="scp860" 
 						If keyhituse Then
 							PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
