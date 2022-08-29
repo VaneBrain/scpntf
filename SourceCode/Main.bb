@@ -1317,6 +1317,9 @@ Function MainLoop()
 			UpdateItems()
 			UpdateParticles()
 			UpdateDamageOverlay()
+			If I_427\Using Then
+				Use427()
+			EndIf
 		Else
 			keyhituse = False
 			keydownuse = False
