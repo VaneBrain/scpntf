@@ -1317,6 +1317,28 @@ Function MainLoop()
 			UpdateItems()
 			UpdateParticles()
 			UpdateDamageOverlay()
+			If I_427\Using Then
+				Use427()
+			Else
+				If I_427\Timer >= 70*360 Then
+					If Rnd(200)<2.0 Then
+						pvt = CreatePivot()
+						PositionEntity pvt, EntityX(Collider)+Rnd(-0.05,0.05),EntityY(Collider)-0.05,EntityZ(Collider)+Rnd(-0.05,0.05)
+						TurnEntity pvt, 90, 0, 0
+						EntityPick(pvt,0.3)
+						de.Decals = CreateDecal(DECAL_FOAM, PickedX(), PickedY()+0.005, PickedZ(), 90, Rand(360), 0)
+						de\Size = Rnd(0.03,0.08)*2.0 : EntityAlpha(de\obj, 1.0) : ScaleSprite de\obj, de\Size, de\Size
+						tempchn% = PlaySound_Strict (DripSFX[Rand(0,3)])
+						ChannelVolume tempchn, Rnd(0.0,0.8)*(opt\SFXVolume*opt\MasterVol)
+						ChannelPitch tempchn, Rand(20000,30000)
+						pvt = FreeEntity_Strict(pvt)
+						BlurTimer = 800
+					EndIf
+				EndIf
+				If I_427\Timer >= 70*390 Then
+					Crouch = True
+				EndIf
+			EndIf
 		Else
 			keyhituse = False
 			keydownuse = False
