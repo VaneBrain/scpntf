@@ -83,14 +83,15 @@ Include "SourceCode\Main.bb"
 Function CheckForDlls()
 	Local InitErrorStr$ = ""
 	
-	If FileSize("Blitzcord.dll")=0 Then InitErrorStr=InitErrorStr+ "Blitzcord.dll"+Chr(13)+Chr(10)
-	If FileSize("BlitzHash.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzHash.dll"+Chr(13)+Chr(10)
-	If FileSize("BlitzMovie.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzMovie.dll"+Chr(13)+Chr(10)
-	If FileSize("BlitzSteamworks.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzSteamworks.dll"+Chr(13)+Chr(10)
-	If FileSize("d3dim700.dll")=0 Then InitErrorStr=InitErrorStr+ "d3dim700.dll"+Chr(13)+Chr(10)
-	If FileSize("discord_game_sdk.dll")=0 Then InitErrorStr=InitErrorStr+ "discord_game_sdk.dll"+Chr(13)+Chr(10)
-	If FileSize("fmod.dll")=0 Then InitErrorStr=InitErrorStr+ "fmod.dll"+Chr(13)+Chr(10)
-	If FileSize("steam_api.dll")=0 Then InitErrorStr=InitErrorStr+ "steam_api.dll"+Chr(13)+Chr(10)
+	If FileType("Blitzcord.dll")<>1 Then InitErrorStr=InitErrorStr+ "Blitzcord.dll"+Chr(13)+Chr(10)
+	If FileType("BlitzHash.dll")<>1 Then InitErrorStr=InitErrorStr+ "BlitzHash.dll"+Chr(13)+Chr(10)
+	If FileType("BlitzMovie.dll")<>1 Then InitErrorStr=InitErrorStr+ "BlitzMovie.dll"+Chr(13)+Chr(10)
+	If FileType("BlitzSteamworks.dll")<>1 Then InitErrorStr=InitErrorStr+ "BlitzSteamworks.dll"+Chr(13)+Chr(10)
+	If FileType("d3dim700.dll")<>1 Then InitErrorStr=InitErrorStr+ "d3dim700.dll"+Chr(13)+Chr(10)
+	If FileType("discord_game_sdk.dll")<>1 Then InitErrorStr=InitErrorStr+ "discord_game_sdk.dll"+Chr(13)+Chr(10)
+	If FileType("fmod.dll")<>1 Then InitErrorStr=InitErrorStr+ "fmod.dll"+Chr(13)+Chr(10)
+	If FileType("steam_api.dll")<>1 Then InitErrorStr=InitErrorStr+ "steam_api.dll"+Chr(13)+Chr(10)
+	If FileType("IniControler.dll")<>1 Then InitErrorStr=InitErrorStr+ "IniControler.dll"+Chr(13)+Chr(10)
 	
 	If Len(InitErrorStr)>0 Then
 		RuntimeError "The following DLLs were not found in the game directory:"+Chr(13)+Chr(10)+Chr(13)+Chr(10)+InitErrorStr
