@@ -314,7 +314,7 @@ Function UpdateNPCtype457MP(n.NPCs)
 				;[Block]
 				AnimateNPC(n, 57, 218, 0.4, False)
 				If n\State3 = 0 Then
-					n\State3 = Rand(1,9)
+					n\State3 = Rand(1,3)
 				EndIf
 				If prevFrame < 64.0 And n\Frame >= 64.0 Then
 					If ChannelPlaying(n\SoundChn2) Then
@@ -324,7 +324,7 @@ Function UpdateNPCtype457MP(n.NPCs)
 						FreeSound_Strict n\Sound2
 						n\Sound2 = 0
 					EndIf
-					n\Sound2 = LoadSound_Strict("SFX\SCP\457\Scream"+(Int(Ceil(Int(n\State3+2)/3)))+".ogg")
+					n\Sound2 = LoadSound_Strict("SFX\SCP\457\Scream"+(Int(n\State3))+".ogg")
 					n\SoundChn2 = PlaySound2(n\Sound2, Camera, n\Collider, 40, 4.0)
 				EndIf
 				p.Particles = CreateParticle(EntityX(n\Collider), EntityY(n\Collider) - 0.25, EntityZ(n\Collider), 6, 0.5, -0.75, 30)
