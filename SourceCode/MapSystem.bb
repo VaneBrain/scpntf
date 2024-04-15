@@ -3388,7 +3388,7 @@ Function UpdateButton%(obj)
 	Local dist# = EntityDistanceSquared(Collider, obj)
 	If dist < PowTwo(0.8) Then
 		Local temp% = CreatePivot()
-		PositionEntity temp, EntityX(mpl\CameraPivot), EntityY(mpl\CameraPivot), EntityZ(mpl\CameraPivot)
+		PositionEntity temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera)
 		PointEntity temp,obj
 		
 		If EntityPick(temp, 0.65) = obj Then

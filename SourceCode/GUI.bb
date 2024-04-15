@@ -3140,7 +3140,7 @@ Function DrawGUI()
 							If navType = 999 And (MilliSecs() Mod 600) < 400 Then
 								For np.NPCs = Each NPCs
 									If np\NPCtype = NPCtype049 Lor np\NPCtype = NPCtype096 Lor np\NPCtype = NPCtypeOldMan Lor np\NPCtype = NPCtype173 Then
-										Local dist# = EntityDistanceSquared(mpl\CameraPivot, np\obj)
+										Local dist# = EntityDistanceSquared(Camera, np\obj)
 										If dist < PowTwo(8.0 * 4) Then
 											dist = Sqr(dist)
 											If (Not np\HideFromNVG) Then
