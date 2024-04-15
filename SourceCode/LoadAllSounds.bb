@@ -56,8 +56,6 @@ Function LoadAllSounds()
 	LeverSFX% = LoadSound_Strict("SFX\Interact\LeverFlip.ogg") 
 	LightSFX% = LoadSound_Strict("SFX\General\LightSwitch.ogg")
 	
-	ButtGhostSFX% = LoadSound_Strict("SFX\SCP\Joke\789J.ogg")
-	
 	RadioSFX[0 * 10] = LoadSound_Strict("SFX\Radio\RadioAlarm.ogg")
 	RadioSFX[0 * 10 + 1] = LoadSound_Strict("SFX\Radio\RadioAlarm2.ogg")
 	For i = 0 To 8
