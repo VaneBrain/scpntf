@@ -2273,7 +2273,7 @@ Function SyncServer()
 					Steam_PushFloat(EntityZ(it\collider))
 					Steam_PushFloat(EntityYaw(it\collider))
 				Next
-				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendUnreliableNoDelay)
+				Steam_SendPacketToUser(Players[i]\SteamIDUpper, Players[i]\SteamIDLower, k_EP2PSendReliable)
 				;[End Block]
 				
 				;NPC syncing (package)
