@@ -35,7 +35,7 @@ Function LoadImage_Strict(file$)
 		
 		Return CopyImage(MenuBlack)
 	EndIf
-	BufferDirty ImageBuffer(tmp)
+	
 	Return tmp
 End Function
 

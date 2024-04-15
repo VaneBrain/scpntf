@@ -44,7 +44,7 @@ Function LoadTextureCheckingIfInCache(texname$,deletetype%=DeleteMapTextures,tex
 			Exit
 		EndIf
 	Next
-	If tic\tex <> 0 And TextureBuffer(tic\tex) <> 0 Then BufferDirty TextureBuffer(tic\tex)
+	
 	Return tic\tex
 	
 End Function
