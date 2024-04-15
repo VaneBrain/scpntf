@@ -2613,6 +2613,8 @@ Function DrawGUI()
 	
 	Local closedInv%
 	
+	Local InvImgSize% = (64 * MenuScale) / 2
+	
 	If OtherOpen<>Null Then
 		;[Block]
 		PrevOtherOpen = OtherOpen
@@ -2672,9 +2674,9 @@ Function DrawGUI()
 		If SelectedItem <> Null Then
 			If MouseDown1 Then
 				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+					DrawImage(SelectedItem\invimg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
-					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+					DrawImage(SelectedItem\invimg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				EndIf
 			EndIf
 		EndIf
@@ -2833,16 +2835,8 @@ Function DrawGUI()
 		
 		If SelectedItem <> Null Then
 			If MouseDown1 Then
-				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
-				ElseIf SelectedItem <> Inventory[MouseSlot]
-					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
-				EndIf
-			Else
-				If MouseSlot = 66 Then
-					
-				Else
-					
+				If MouseSlot = 66 Lor SelectedItem <> Inventory[MouseSlot] Then
+					DrawImage(SelectedItem\invimg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				EndIf
 			EndIf
 		EndIf
@@ -2854,13 +2848,13 @@ Function DrawGUI()
 			Select SelectedItem\itemtemplate\tempname
 				Case "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "coin", "fuse"
 					;[Block]
-					DrawImage(SelectedItem\itemtemplate\invimg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+					DrawImage(SelectedItem\itemtemplate\invimg, opt\GraphicWidth / 2 - InvImgSize, opt\GraphicHeight / 2 - InvImgSize)
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If psp\Health < 100 Then
 						If CanUseItem(False, True, True)
-							DrawImage(SelectedItem\itemtemplate\invimg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+							DrawImage(SelectedItem\itemtemplate\invimg, opt\GraphicWidth / 2 - InvImgSize, opt\GraphicHeight / 2 - InvImgSize)
 							
 							width% = 300
 							height% = 20
@@ -3587,8 +3581,8 @@ Function DrawMenu()
 			;[Block]
 			width = ImageWidth(PauseMenuIMG)
 			height = ImageHeight(PauseMenuIMG)
-			x = opt\GraphicWidth / 2 - width / 2
-			y = opt\GraphicHeight / 2 - height / 2
+			x = viewport_center_x - width / 2
+			y = viewport_center_y - height / 2
 			
 			DrawImage PauseMenuIMG, x, y
 			
@@ -3604,7 +3598,7 @@ Function DrawMenu()
 			DrawAllMenuButtons()
 			
 			y = y+104*MenuScale
-			If (Not GameSaved) Or SelectedDifficulty\permaDeath Then
+			If (Not GameSaved) Lor SelectedDifficulty\permaDeath Then
 				Color 50,50,50
 				Text(x + 185*MenuScale, y + 30*MenuScale, GetLocalString("Menu", "loadgame"), True, True)
 			EndIf
@@ -4014,8 +4008,8 @@ Function UpdateMenu()
 			;[Block]
 			width = ImageWidth(PauseMenuIMG)
 			height = ImageHeight(PauseMenuIMG)
-			x = opt\GraphicWidth / 2 - width / 2
-			y = opt\GraphicHeight / 2 - height / 2
+			x = viewport_center_x - width / 2
+			y = viewport_center_y - height / 2
 			
 			x = x+132*MenuScale
 			y = y+122*MenuScale	

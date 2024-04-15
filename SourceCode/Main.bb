@@ -5768,10 +5768,10 @@ Function RenderWorld2(tween#)
 	
 	Local hasBattery% = 2
 	Local power% = 0
-	If (WearingNightVision=1) Or (WearingNightVision=2)
+	If (WearingNightVision=1) Lor (WearingNightVision=2)
 		For i% = 0 To MaxItemAmount - 1
 			If (Inventory[i]<>Null) Then
-				If (WearingNightVision = 1 And Inventory[i]\itemtemplate\tempname = "nvgoggles") Or (WearingNightVision = 2 And Inventory[i]\itemtemplate\tempname = "supernv") Then
+				If (WearingNightVision = 1 And Inventory[i]\itemtemplate\tempname = "nvgoggles") Lor (WearingNightVision = 2 And Inventory[i]\itemtemplate\tempname = "supernv") Then
 					Inventory[i]\state = Inventory[i]\state - (FPSfactor * (0.02 * WearingNightVision))
 					power%=Int(Inventory[i]\state)
 					If Inventory[i]\state<=0.0 Then ;this nvg can't be used
