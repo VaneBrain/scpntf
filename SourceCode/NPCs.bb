@@ -3829,7 +3829,6 @@ Function Console_SpawnNPC(c_input$, c_state$ = "")
 	If mp_I\PlayState>0 Then
 		Collider = 0
 		If n <> Null Then
-			PositionEntity n\Collider,0,3,0
 			ResetEntity n\Collider
 		EndIf
 	EndIf
