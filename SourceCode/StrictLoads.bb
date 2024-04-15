@@ -556,6 +556,15 @@ Function FreeEntity_Strict%(entity%)
 	Return 0
 End Function
 
+Function FreeImage_Strict%(image%)
+	
+	If image <> 0 Then
+		FreeImage image
+	EndIf
+	
+	Return 0
+End Function
+
 ;don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$,flags=1,texdeletetype%=0)
 	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
