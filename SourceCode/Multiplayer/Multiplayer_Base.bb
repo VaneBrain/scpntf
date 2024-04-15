@@ -772,6 +772,9 @@ Function MPMainLoop()
 		
 		RecvDataServer()
 		
+		MousePosX = MouseX()
+		MousePosY = MouseY()
+		
 		If Input_ResetTime>0
 			Input_ResetTime = Max(Input_ResetTime-FPSfactor,0.0)
 		Else
@@ -1029,6 +1032,9 @@ Function MPMainLoopClient()
 		
 		RecvDataClient()
 		If MainMenuOpen Then Return
+		
+		MousePosX = MouseX()
+		MousePosY = MouseY()
 		
 		If Input_ResetTime>0
 			Input_ResetTime = Max(Input_ResetTime-FPSfactor,0.0)

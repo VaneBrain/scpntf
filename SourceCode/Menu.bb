@@ -3377,6 +3377,8 @@ Function UpdateLauncher()
 		
 		MouseHit1 = MouseHit(1)
 		MouseDown1 = MouseDown(1)
+		MousePosX = MouseX()
+		MousePosY = MouseY()
 		
 		Color 255, 255, 255
 		DrawImage(LauncherIMG, 0, 0)

@@ -49,6 +49,9 @@ Function MainLoopMenu()
 		ft\accumulator = ft\accumulator-GetTickDuration()
 		If (ft\accumulator<=0.0) Then CaptureWorld()
 		
+		MousePosX = MouseX()
+		MousePosY = MouseY()
+		
 		If Input_ResetTime>0
 			Input_ResetTime = Max(Input_ResetTime-FPSfactor,0.0)
 		Else

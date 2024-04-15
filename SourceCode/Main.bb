@@ -906,6 +906,7 @@ LoopDelay = MilliSecs()
 Global CurrTrisAmount%
 
 Global Input_ResetTime# = 0.0
+Global MousePosX#, MousePosY#
 
 Type SCP427
 	Field Using%
@@ -1032,6 +1033,9 @@ Function MainLoop()
 		If ConsoleOpen Lor InvOpen
 			FPSfactor=0.0
 		EndIf
+		
+		MousePosX = MouseX()
+		MousePosY = MouseY()
 		
 		If Input_ResetTime > 0 And FPSfactor > 0.0 Then
 			Input_ResetTime = Max(Input_ResetTime - FPSfactor, 0.0)
@@ -6126,11 +6130,11 @@ Function UpdateDeafPlayer()
 End Function
 
 Function ScaledMouseX%()
-	Return Float(MouseX()-(RealGraphicWidth*0.5*(1.0-AspectRatioRatio)))*Float(opt\GraphicWidth)/Float(RealGraphicWidth*AspectRatioRatio)
+	Return Float(MousePosX-(RealGraphicWidth*0.5*(1.0-AspectRatioRatio)))*Float(opt\GraphicWidth)/Float(RealGraphicWidth*AspectRatioRatio)
 End Function
 
 Function ScaledMouseY%()
-	Return Float(MouseY())*Float(opt\GraphicHeight)/Float(RealGraphicHeight)
+	Return MousePosY*Float(opt\GraphicHeight)/Float(RealGraphicHeight)
 End Function
 
 Function CatchErrors(location$)
