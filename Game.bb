@@ -22,6 +22,8 @@ Type GlobalVariables
 	Field OptionFile$
 	Field OSBit%
 	Field RichPresenceTimer#
+	Field SteamIDUpper%
+	Field SteamIDLower%
 End Type
 
 Type Options
@@ -100,6 +102,9 @@ Function CheckForDlls()
 	
 	Local SteamResultCode% = Steam_Init()
 	If SteamResultCode <> 0 Then RuntimeError("Steam API failed to initialize! Error Code: " + SteamResultCode)
+	
+	gv\SteamIDUpper = Steam_GetPlayerIDUpper()
+	gv\SteamIDLower = Steam_GetPlayerIDLower()
 	
 End Function
 
