@@ -73,8 +73,10 @@ Function DrawLoading(percent%, shortloading=False, customloadingscreen$="")
 						If ls\ID = temp Then
 							If (Not ls\noAuto) Then
 								For i = 0 To (ls\imgamount-1)
-									If ls\img[i] = 0 Then ls\img[i] = LoadImage_Strict("Loadingscreens\"+ls\imgpath[i])
-									ls\img[i] = ResizeImage2(ls\img[i], ImageWidth(ls\img[i]) * MenuScale, ImageHeight(ls\img[i]) * MenuScale)
+									If ls\img[i] = 0 Then 
+										ls\img[i] = LoadImage_Strict("Loadingscreens\"+ls\imgpath[i])
+										ls\img[i] = ResizeImage2(ls\img[i], ImageWidth(ls\img[i]) * MenuScale, ImageHeight(ls\img[i]) * MenuScale)
+									EndIf
 								Next
 								SelectedLoadingScreen = ls
 								isSelected = True
@@ -87,8 +89,10 @@ Function DrawLoading(percent%, shortloading=False, customloadingscreen$="")
 				For ls = Each LoadingScreens
 					If ls\title = customloadingscreen Then
 						For i = 0 To (ls\imgamount-1)
-							If ls\img[i] = 0 Then ls\img[i] = LoadImage_Strict("Loadingscreens\"+ls\imgpath[i])
-							ls\img[i] = ResizeImage2(ls\img[i], ImageWidth(ls\img[i]) * MenuScale, ImageHeight(ls\img[i]) * MenuScale)
+							If ls\img[i] = 0 Then 
+								ls\img[i] = LoadImage_Strict("Loadingscreens\"+ls\imgpath[i])
+								ls\img[i] = ResizeImage2(ls\img[i], ImageWidth(ls\img[i]) * MenuScale, ImageHeight(ls\img[i]) * MenuScale)
+							EndIf
 						Next
 						SelectedLoadingScreen = ls
 						Exit
