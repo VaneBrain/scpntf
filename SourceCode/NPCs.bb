@@ -4350,10 +4350,10 @@ Function PlayNPCSound(n.NPCs, sound$, loop%=False, range#=10, volume#=1.0)
 		ChannelVolume(n\SoundChn, volume# * (1 - dist#)*opt\VoiceVol#*opt\MasterVol)
     EndIf
 	
-    If (Not ChannelPlaying(n\SoundChn)) Then
-        FreeSound_Strict(sound)
-        n\SoundChn = 0
-    EndIf
+;    If (Not ChannelPlaying(n\SoundChn)) Then
+;        FreeSound_Strict(sound)
+;        n\SoundChn = 0
+;    EndIf
 End Function
 
 Function SwitchNPCGun%(n.NPCs, WeaponID%)
