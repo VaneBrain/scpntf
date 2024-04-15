@@ -1007,11 +1007,13 @@ Function UpdateGuns()
 								pAmmo = pAmmo - 1
 								pShootState = FPSfactor
 								pReloadState = 0.0
+								pPressReload = False
 							EndIf
 						EndIf
 						If pShootState > 0.0 And pShootState < g\Rate_Of_Fire Then
 							pShootState = pShootState + FPSfactor
 							pReloadState = 0.0
+							pPressReload = False
 						Else
 							pShootState = 0.0
 						EndIf
