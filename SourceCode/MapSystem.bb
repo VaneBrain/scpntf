@@ -4499,7 +4499,7 @@ Function UpdateCheckpointMonitors(numb%)
 					EndIf
 					PaintSurface sf,b
 				EndIf
-				If name<>"" Then DeleteSingleTextureEntryFromCache t1
+				If name<>"" Then FreeTexture t1
 			EndIf
 			FreeBrush b
 		EndIf
@@ -4532,7 +4532,7 @@ Function TurnCheckpointMonitorsOff(numb%)
 					BrushTexture b, MonitorTextureOff, 0, 0
 					PaintSurface sf,b
 				EndIf
-				If name<>"" Then DeleteSingleTextureEntryFromCache t1
+				If name<>"" Then FreeTexture t1
 			EndIf
 			FreeBrush b
 		EndIf

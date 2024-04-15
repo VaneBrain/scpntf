@@ -4658,7 +4658,7 @@ Function GetStepSound(entity%,collradius#=0.3)
 				If texture <> 0 Then
 					name = StripPath(TextureName(texture))
 					If (name <> "") Then
-						DeleteSingleTextureEntryFromCache(texture)
+						FreeTexture(texture)
 						For mat.Materials = Each Materials
 							If mat\name = name Then
 								If mat\StepSound > 0 Then

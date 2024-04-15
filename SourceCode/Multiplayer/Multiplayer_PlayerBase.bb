@@ -1390,10 +1390,10 @@ Function SetupTeam(playerid%)
 							If Left(Lower(name),5) = "hands" Then
 								BrushTexture b, tex, 0, j
 								PaintSurface sf,b
-								DeleteSingleTextureEntryFromCache t1
+								FreeTexture t1
 								Exit
 							EndIf
-							If name<>"" Then DeleteSingleTextureEntryFromCache t1
+							If name<>"" Then FreeTexture t1
 						EndIf
 					Next
 					FreeBrush b
