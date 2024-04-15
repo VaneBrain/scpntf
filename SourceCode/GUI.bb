@@ -2136,9 +2136,9 @@ Function DrawGUI()
 				Color 255, 255, 255
 			EndIf
 		EndIf
-		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		
-		DrawImage BlinkIcon, x - 50, y
+		Rect(x - 50 - 1, y, 30 + 2, 30 + 2, False)
+		DrawImage BlinkIcon, x - 50, y + 1
 		
 		SetFont fo\Font%[Font_Digital_Medium]
 		y = opt\GraphicHeight - 55
@@ -2154,8 +2154,9 @@ Function DrawGUI()
 		Else
 			Color 255, 0, 0
 		EndIf
-		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
-		DrawImage mpl\HealthIcon, x - 50, y
+		
+		Rect(x - 50 - 1, y, 30 + 2, 30 + 2, False)
+		DrawImage mpl\HealthIcon, x - 50, y + 1
 		
 		If psp\Health > 20
 			Color 0, 255, 0
@@ -2176,8 +2177,8 @@ Function DrawGUI()
 			Color 255, 0, 0
 		EndIf
 		
-		Rect(x + 100 - 1, y - 1, 30 + 2, 30 + 2, False)
-		DrawImage mpl\KevlarIcon, x + 100, y
+		Rect(x + 100 - 1, y, 30 + 2, 30 + 2, False)
+		DrawImage mpl\KevlarIcon, x + 100, y + 1
 		
 		If psp\Kevlar > 20
 			Color 0, 255, 0
@@ -2216,11 +2217,11 @@ Function DrawGUI()
 					Color 255, 255, 255
 				EndIf
 			EndIf
-			Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
+			Rect(x - 50 - 1, y, 30 + 2, 30 + 2, False)
 			If Crouch Then
-				DrawImage CrouchIcon, x - 50, y
+				DrawImage CrouchIcon, x - 50, y + 1
 			Else
-				DrawImage SprintIcon, x - 50, y
+				DrawImage SprintIcon, x - 50, y + 1
 			EndIf
 		EndIf
 		
