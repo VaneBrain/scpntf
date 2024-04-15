@@ -59,7 +59,7 @@ Function UpdateEvent_Room2_Tunnel_2_Smoke(e.Events)
 		If e\room\dist < 3.5 Then
 			PlaySound_Strict(BurstSFX) 
 			For i = -1 To 1 Step 2
-				em.Emitters = CreateEmitter(EntityX(e\room\obj,True), 544.0 * RoomScale, EntityZ(e\room\obj,True) + (512.0 * RoomScale) * i, 0)
+				em.Emitters = CreateEmitter(EntityX(e\room\obj,True) + ((512.0 * RoomScale) * i) * (e\room\angle Mod 180 = 90), 544.0 * RoomScale, EntityZ(e\room\obj,True) + ((512.0 * RoomScale) * i) * (e\room\angle Mod 180 = 0), 0)
 				TurnEntity(em\Obj, 90, 0, 0, True)
 				EntityParent(em\Obj, e\room\obj)
 				em\Size = 0.05
