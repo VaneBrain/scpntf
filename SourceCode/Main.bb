@@ -183,6 +183,7 @@ InitController()
 
 Const VersionNumber$ = "0.2.9"
 Const CompatibleNumber$ = "0.2.8"
+Const BuildMessage$ = ""
 
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
@@ -1002,6 +1003,9 @@ Function GlobalGameLoop()
 		;Text 700, 110, "Phys. Memory: "+((TotalPhys()/1024)-(AvailPhys()/1024))+" MB/"+(TotalPhys()/1024)+" MB ("+(TotalPhys()-AvailPhys())+" KB/"+TotalPhys()+" KB). CPU Usage: "+MemoryLoad()+"%"
 		;Text 700, 130, "Virtual Memory: "+((TotalVirtual()/1024)-(AvailVirtual()/1024))+" MB/"+(TotalVirtual()/1024)+" MB ("+(TotalVirtual()-AvailVirtual())+" KB/"+TotalVirtual()+" KB)"
 		;Text 700, 150, "Video Memory: "+((TotalVidMem()/1024)-(AvailVidMem()/1024))+" MB/"+(TotalVidMem()/1024)+" MB ("+(TotalVidMem()-AvailVidMem())+" KB/"+TotalVidMem()+" KB)"
+		If HUDenabled And BuildMessage <> "" Then 
+			Text(GraphicsWidth()-StringWidth(BuildMessage)-4, GraphicsHeight()-StringHeight(BuildMessage)-4, BuildMessage)
+		EndIf
 		
 		Steam_Update()
 		UpdateRichPresence()
