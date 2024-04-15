@@ -1,4 +1,4 @@
-
+﻿
 *SCP: Nine-Tailed Fox
 
 
@@ -92,6 +92,8 @@
 		Zadrakos
 		
 		...and many more!
+
+		Special thanks to Dege for dgVoodoo2!
 	
 	
 *Russian localization by Trill Team.
