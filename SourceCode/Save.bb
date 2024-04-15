@@ -1675,7 +1675,7 @@ Function LoadGame(file$, zoneToLoad%=-1)
 	PlayerNewElevator = ReadByte(f)
 	
 	For do.Doors = Each Doors
-		If do\room <> Null Then
+		If do\room = Null Then
 			dist# = 20.0
 			Local closestroom.Rooms
 			For r.Rooms = Each Rooms
@@ -2393,7 +2393,7 @@ Function LoadGameQuick(file$)
 	PlayerNewElevator = ReadByte(f)
 	
 	For do.Doors = Each Doors
-		If do\room <> Null Then
+		If do\room = Null Then
 			dist# = 20.0
 			Local closestroom.Rooms
 			For r.Rooms = Each Rooms
