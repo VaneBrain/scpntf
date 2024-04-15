@@ -270,6 +270,11 @@ Function DrawLoading(percent%, shortloading=False, customloadingscreen$="")
 	If close Then
 		SelectedLoadingScreen\rotImg = FreeEntity_Strict(SelectedLoadingScreen\rotImg)
 		SelectedLoadingScreen\cam = FreeEntity_Strict(SelectedLoadingScreen\cam)
+		For i = 0 To (SelectedLoadingScreen\imgamount-1)
+			If SelectedLoadingScreen\img[i] <> 0 Then
+				SelectedLoadingScreen\img[i] = FreeImage_Strict(SelectedLoadingScreen\img[i])
+			EndIf
+		Next
 		
 		If Camera<>0 Then
 			ShowEntity Camera
