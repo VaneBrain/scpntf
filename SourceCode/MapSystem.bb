@@ -3707,7 +3707,7 @@ Function CreateMap()
 	Local loopamount%,dimensions%,hallwaychance%
 	
 	;Set the SeedRnd according to the RandomSeed
-	SeedRnd GenerateSeedNumber(RandomSeed)
+	SeedRnd GenerateSeedNumber(RandomSeed)+NTF_CurrZone
 	
 	;Initialize the new Grid (deleting the old one if existing and creating a new one)
 	If CurrGrid <> Null Then
