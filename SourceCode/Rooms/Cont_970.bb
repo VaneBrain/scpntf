@@ -32,7 +32,7 @@ Function FillRoom_Cont_970(r.Rooms)
 End Function
 
 Function UpdateEvent_Cont_970(e.Events)
-	Local n.NPCs,it.Items,de.Decals,itt.ItemTemplates,it2.Items
+	Local n.NPCs,it.Items,de.Decals,itt.ItemTemplates,it2.Items,src.Doors,dest.Doors
 	Local temp%,x#,y#,z#,tex%
 	Local i
 	
@@ -41,81 +41,82 @@ Function UpdateEvent_Cont_970(e.Events)
 			e\room\RoomDoors[1]\locked = False
 			e\room\RoomDoors[4]\locked = False
 			
-			If EntityDistanceSquared(Collider, Curr173\obj)<PowTwo(8.0) Lor EntityDistanceSquared(Collider, Curr106\obj)<PowTwo(8.0) Then
-				e\room\RoomDoors[1]\locked = True
-				e\room\RoomDoors[4]\locked = True
-			Else
-				For n.NPCs = Each NPCs
-					If n\NPCtype = NPCtypeMTF Then 
-						If EntityDistanceSquared(Collider, Curr173\obj)<PowTwo(8.0) Then 
-							e\room\RoomDoors[1]\locked = True
-							e\room\RoomDoors[4]\locked = True
-							Exit
-						EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCtype = NPCtypeMTF Lor n\NPCtype = NPCtype173 Lor n\NPCtype = NPCtypeOldMan Then 
+					If EntityDistanceSquared(Collider, n\obj)<PowTwo(8.0) Then 
+						e\room\RoomDoors[1]\locked = True
+						e\room\RoomDoors[4]\locked = True
 					EndIf
-				Next
-			EndIf
+				EndIf
+			Next
+			
 			e\EventState2 = 70*5
 		Else
 			e\EventState2 = e\EventState2 - FPSfactor
 		EndIf
 		
-		LightVolume = TempLightVolume*0.5
-		
 		TFormPoint EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,e\room\obj
+		LightVolume = TempLightVolume*Max(Abs(TFormedZ())/1024.0,0.4)
 		
 		temp = 0
 		If TFormedX()>730 Then
-			GiveAchievement(Achv970)
-			
 			UpdateWorld()
 			TFormPoint EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,e\room\obj
 			
 			For i = 1 To 2
-				e\room\RoomDoors[i]\open = e\room\RoomDoors[i+2]\open
-				e\room\RoomDoors[i]\openstate = e\room\RoomDoors[i+2]\openstate
-				PositionEntity e\room\RoomDoors[i]\obj, EntityX(e\room\RoomDoors[i+2]\obj),EntityY(e\room\RoomDoors[i+2]\obj),EntityZ(e\room\RoomDoors[i+2]\obj)
-				PositionEntity e\room\RoomDoors[i]\obj2, EntityX(e\room\RoomDoors[i+2]\obj2),EntityY(e\room\RoomDoors[i+2]\obj2),EntityZ(e\room\RoomDoors[i+2]\obj2)							
+				src.Doors = e\room\RoomDoors[i + 2]
+				dest.Doors = e\room\RoomDoors[i]
 				
-				e\room\RoomDoors[i+2]\open = False
-				e\room\RoomDoors[i+2]\openstate = 0
-				PositionEntity e\room\RoomDoors[i+2]\obj, EntityX(e\room\RoomDoors[0]\obj),EntityY(e\room\RoomDoors[0]\obj),EntityZ(e\room\RoomDoors[0]\obj)
-				PositionEntity e\room\RoomDoors[i+2]\obj2, EntityX(e\room\RoomDoors[0]\obj2),EntityY(e\room\RoomDoors[0]\obj2),EntityZ(e\room\RoomDoors[0]\obj2)							
+				dest\open = src\open
+				dest\openstate = src\openstate
+				EntityParent(dest\obj, dest\frameobj) : EntityParent(src\obj, src\frameobj)
+				EntityParent(dest\obj2, dest\frameobj) : EntityParent(src\obj2, src\frameobj)
+				
+				PositionEntity(dest\obj, EntityX(src\obj), EntityY(src\obj), EntityZ(src\obj))
+				PositionEntity(dest\obj2, EntityX(src\obj2), EntityY(src\obj2), EntityZ(src\obj2))
+				
+				EntityParent(dest\obj, 0) : EntityParent(src\obj, 0)
+				EntityParent(dest\obj2, 0) : EntityParent(src\obj2, 0)
+				
+				src\open = False
+				src\openstate = 0.0
 			Next	
 			
 			TFormPoint TFormedX()-1024, TFormedY(), TFormedZ(),e\room\obj,0
-			HideEntity Collider
-			PositionEntity Collider, TFormedX(), EntityY(Collider), TFormedZ(), True
-			ShowEntity Collider
-			DebugLog "tformedx()>720"
+			PositionEntity(Collider, TFormedX(), EntityY(Collider), TFormedZ(), True)
+			ResetEntity(Collider)
+			
 			temp = True
 			
 		ElseIf TFormedX()<-730
-			GiveAchievement(Achv970)
-			
 			UpdateWorld()
 			TFormPoint EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,e\room\obj
 			
 			For i = 1 To 2
-				e\room\RoomDoors[i+2]\open = e\room\RoomDoors[i]\open
-				e\room\RoomDoors[i+2]\openstate = e\room\RoomDoors[i]\openstate
-				PositionEntity e\room\RoomDoors[i+2]\obj, EntityX(e\room\RoomDoors[i]\obj),EntityY(e\room\RoomDoors[i]\obj),EntityZ(e\room\RoomDoors[i]\obj)
-				PositionEntity e\room\RoomDoors[i+2]\obj2, EntityX(e\room\RoomDoors[i]\obj2),EntityY(e\room\RoomDoors[i]\obj2),EntityZ(e\room\RoomDoors[i]\obj2)							
+				src.Doors = e\room\RoomDoors[i]
+				dest.Doors = e\room\RoomDoors[i + 2]
 				
-				e\room\RoomDoors[i]\open = False
-				e\room\RoomDoors[i]\openstate = 0
-				PositionEntity e\room\RoomDoors[i]\obj, EntityX(e\room\RoomDoors[0]\obj),EntityY(e\room\RoomDoors[0]\obj),EntityZ(e\room\RoomDoors[0]\obj)
-				PositionEntity e\room\RoomDoors[i]\obj2, EntityX(e\room\RoomDoors[0]\obj2),EntityY(e\room\RoomDoors[0]\obj2),EntityZ(e\room\RoomDoors[0]\obj2)							
+				dest\open = src\open
+				dest\openstate = src\openstate
+				EntityParent(dest\obj, dest\frameobj) : EntityParent(src\obj, src\frameobj)
+				EntityParent(dest\obj2, dest\frameobj) : EntityParent(src\obj2, src\frameobj)
+				
+				PositionEntity(dest\obj, EntityX(src\obj), EntityY(src\obj), EntityZ(src\obj))
+				PositionEntity(dest\obj2, EntityX(src\obj2), EntityY(src\obj2), EntityZ(src\obj2))
+				
+				EntityParent(dest\obj, 0) : EntityParent(src\obj, 0)
+				EntityParent(dest\obj2, 0) : EntityParent(src\obj2, 0)
+				
+				src\open = False
+				src\openstate = 0.0
 			Next
 			
 			TFormPoint TFormedX()+1024, TFormedY(), TFormedZ(),e\room\obj,0
-			HideEntity Collider
-			PositionEntity Collider, TFormedX(), EntityY(Collider), TFormedZ(), True
-			ShowEntity Collider
-			
-			DebugLog "tformedx()<720"
+			PositionEntity(Collider, TFormedX(), EntityY(Collider), TFormedZ(), True)
+			ResetEntity(Collider)
 			
 			temp = True
+			
 		EndIf
 		
 		If temp = True Then 
@@ -142,7 +143,7 @@ Function UpdateEvent_Cont_970(e.Events)
 			
 			Select e\EventState 
 				Case 2
-					i = Rand(MaxItemAmount)
+					i = Rand(0, MaxItemAmount-1)
 					If Inventory[i]<>Null Then RemoveItem(Inventory[i])								
 				Case 5
 					;Injuries = Injuries + 0.3
@@ -198,7 +199,7 @@ Function UpdateEvent_Cont_970(e.Events)
 						e\room\NPC[1]=Null
 					EndIf
 				Case 60
-					If (Not HalloweenTex) Then
+					If (Not HalloweenTex) And Curr173 <> Null Then
 						HalloweenTex = True
 						Local tex970 = LoadTexture_Strict("GFX\npcs\173\173h.pt", 1)
 						EntityTexture Curr173\obj, tex970
@@ -211,6 +212,9 @@ Function UpdateEvent_Cont_970(e.Events)
 				temp = Rand(0,2)
 				PlaySound_Strict(AmbientSFX[temp * 15 + Rand(0,AmbientSFXAmount[temp]-1)])
 			EndIf
+			
+			PositionEntity(Camera, EntityX(Collider), EntityY(Camera), EntityZ(Collider), True)
+			CaptureWorld()
 		Else
 			If e\room\NPC[0] <> Null Then
 				If EntityDistanceSquared(Collider, e\room\NPC[0]\Collider)<PowTwo(3.0) Then
@@ -235,7 +239,7 @@ Function UpdateEvent_Cont_970(e.Events)
 					x = TFormedX() : y = TFormedY() : z = TFormedZ()
 					
 					If it\Dropped=1 Then
-						For i = - 1 To 1 Step 2
+						For i = -1 To 1 Step 2
 							TFormPoint x+1024*i,y,z,e\room\obj,0
 							it2.Items = CreateItem(it\name, it\itemtemplate\tempname, TFormedX(), EntityY(it\collider), TFormedZ())
 							RotateEntity(it2\collider, EntityPitch(it\collider),EntityYaw(it\collider),0)
@@ -267,7 +271,7 @@ Function UpdateEvent_Cont_970(e.Events)
 				If e\Sound = 0 Then
 					e\Sound = LoadSound_Strict("SFX\SCP\970\Corpse.ogg")
 				EndIf
-				e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\obj);
+				e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\obj)
 				If e\EventState < 30 Then
 					LightVolume = TempLightVolume*0.4
 				ElseIf e\EventState > 60
