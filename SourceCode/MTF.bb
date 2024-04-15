@@ -2535,22 +2535,24 @@ Function TextWithAlign%(x%, y%, txt$, xAlign% = 0, yAlign% = 0)
 	
 End Function
 
-Function MaskTexture(Texture%, Red, Green, Blue)
-	Local x%,y%,Pixel
-    Local MaskColor = (Red Shl 16) Or (Green Shl 8) Or Blue
-    Local MaskSizeX% = TextureWidth(Texture)
-    Local MaskSizeY% = TextureHeight(Texture)
-    Local MaskBuffer = TextureBuffer(Texture)
-    LockBuffer(MaskBuffer)
-    For x = 0 To MaskSizeX
-        For y = 0 To MaskSizeY
-            Pixel = ReadPixel(x, y, MaskBuffer) And $00FFFFFF
-            If (Pixel = MaskColor) Then
-                WritePixel(x, y, Pixel, MaskBuffer)
-            EndIf
-        Next
-    Next
-    UnlockBuffer(MaskBuffer)
+Function MaskTexture(texture%, red%, green%, blue%) 
+	Local x%,y%,pixel%
+	Local maskColor% = (red Shl 16) Or (green Shl 8) Or blue 
+	Local maskSizeX% = TextureWidth(texture) 
+	Local maskSizeY% = TextureHeight(texture) 
+	Local maskBuffer% = TextureBuffer(texture) 
+	LockBuffer(maskBuffer) 
+	For x = 0 To maskSizeX-1 
+		For y = 0 To maskSizeY-1 
+			pixel = ReadPixel(x, y, maskBuffer) And $00FFFFFF 
+			If (pixel = maskColor) Then 
+				WritePixel(x, y, pixel, maskBuffer) 
+			Else 
+				WritePixel(x, y, pixel Or $FF000000, maskBuffer) 
+			EndIf 
+		Next 
+	Next 
+	UnlockBuffer(maskBuffer) 
 End Function
 
 
