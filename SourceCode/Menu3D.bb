@@ -1254,20 +1254,6 @@ Function Update3DMenu()
 				p\Achange = -0.016
 			Next
 			
-			If m3d\State[0]=0 Then
-				If m3d\State[1]<0.5 Then
-					m3d\State[1]=Min(m3d\State[1]+0.0025*FPSfactor,0.5)
-				Else
-					m3d\State[0]=1
-				EndIf
-			Else
-				If m3d\State[1]>0.0 Then
-					m3d\State[1]=Max(m3d\State[1]-0.0025*FPSfactor,0.0)
-				Else
-					m3d\State[0]=0
-				EndIf
-			EndIf
-			
 			PositionEntity m3d\Pivot,-0.0,0.3,-2.5+m3d\State[1]
 			RotateEntity m3d\Pivot,-10,0,0
 			;[End Block]
