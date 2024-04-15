@@ -10,7 +10,7 @@ Function FillRoom_Room2_2(r.Rooms)
 			EndIf
 		EndIf
 	Next
-	If r\Objects[0]=0 Then r\Objects[0] = LoadRMesh("GFX\map\rooms\room2_2\fan_opt.rmesh",Null)
+	If r\Objects[0]=0 Then r\Objects[0] = LoadRMesh("GFX\map\rooms\room2_2\fan_opt.rmesh",Null,False)
 	ScaleEntity r\Objects[0], RoomScale, RoomScale, RoomScale
 	PositionEntity(r\Objects[0], r\x - 248 * RoomScale, 528 * RoomScale, r\z, 0)
 	EntityParent(r\Objects[0], r\obj)
