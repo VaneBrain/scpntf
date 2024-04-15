@@ -4,7 +4,7 @@ Const SCP049_NULL = 0
 Const SCP049_LOOKING = 1
 Const SCP049_ACTIVE = 2
 Const SCP049_KILL = 3
-Const SCP049_CATWALK = 4
+Const SCP049_CATWALK = 4 ;UNUSED
 Const SCP049_ROOM2SL = 5
 Const SCP049_STUNNED = 6
 ;[End Block]
@@ -42,7 +42,7 @@ Function UpdateNPCtype049(n.NPCs)
 	
 	n\BlinkTimer# = 1.0
 	
-	If n\Idle > 0.1
+	If n\Idle > 0.1 And n\State <> SCP049_NULL Then
 		If PlayerRoom\RoomTemplate\Name$ <> "cont_049"
 			n\Idle = Max(n\Idle-(1+SelectedDifficulty\aggressiveNPCs)*FPSfactor,0.1)
 		EndIf
@@ -52,7 +52,7 @@ Function UpdateNPCtype049(n.NPCs)
 		PositionEntity n\Collider,0,-500,0
 		PositionEntity n\obj,0,-500,0
 	Else
-		If n\Idle = 0.1 Then
+		If n\Idle = 0.1 And n\State <> SCP049_NULL Then
 			If PlayerInReachableRoom() Then
 				For i = 0 To 3
 					If PlayerRoom\Adjacent[i]<>Null Then
@@ -387,27 +387,6 @@ Function UpdateNPCtype049(n.NPCs)
 							;Animate2(n\obj, AnimTime(n\obj), 537, 660, 0.7, False)
 				PositionEntity n\Collider, CurveValue(EntityX(Collider),EntityX(n\Collider),20.0),EntityY(n\Collider),CurveValue(EntityZ(Collider),EntityZ(n\Collider),20.0)
 				RotateEntity n\Collider, 0, CurveAngle(EntityYaw(Collider)-180.0,EntityYaw(n\Collider),40), 0
-				;[End Block]
-			Case SCP049_CATWALK ;Standing on catwalk in room4
-				;[Block]
-				If dist < PowTwo(8.0) Then
-					AnimateNPC(n, 18, 19, 0.05)
-					
-								;Animate2(n\obj, AnimTime(n\obj), 18, 19, 0.05)
-					PointEntity n\obj, Collider	
-					RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 45.0), 0
-					
-					n\State3 = 1
-				ElseIf dist > PowTwo(HideDistance*0.8) And n\State3 > 0 Then
-					n\State = 2
-					n\State3 = 0
-					For r.Rooms = Each Rooms
-						If EntityDistanceSquared(r\obj,n\Collider)<PowTwo(4.0) Then
-							TeleportEntity(n\Collider,EntityX(r\obj),0.1,EntityZ(r\obj),n\CollRadius,True)
-							Exit
-						EndIf
-					Next
-				EndIf
 				;[End Block]
 			Case SCP049_ROOM2SL ;used for "room2sl"
 				;[Block]
