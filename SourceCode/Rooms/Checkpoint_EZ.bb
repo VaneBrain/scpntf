@@ -114,7 +114,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 					If e\room\NPC[i] = Null Then
 						For n = Each NPCs
 							If n\NPCtype = NPCtypeMTF And i = (n\PrevState - 1) Then
-								If EntityDistanceSquared(n\Collider, e\room\RoomDoors[CHECKPOINT_AIRLOCK_DOOR2_ID]\frameobj) < PowTwo(0.4) Then
+								If EntityDistanceSquared(n\Collider, e\room\RoomDoors[CHECKPOINT_AIRLOCK_DOOR2_ID]\frameobj) < 1.0 Then
 									e\room\NPC[i] = n
 									e\room\NPC[i]\State = MTF_TOTARGET
 									e\room\NPC[i]\EnemyX = EntityX(e\room\Objects[i + CHECKPOINT_EZ_WAYPOINT1_ID], True)
@@ -144,7 +144,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 				;The door is open, but not all of the 2 MTF units have arrived, teleport them into the gateway
 				If e\room\RoomDoors[CHECKPOINT_EZ_KEYCARD_DOOR_ID]\open Then
 					For n = Each NPCs
-						If n\NPCtype = NPCtypeMTF And n\State <> MTF_TOTARGET And EntityDistanceSquared(n\Collider, e\room\RoomDoors[CHECKPOINT_AIRLOCK_DOOR2_ID]\frameobj) > PowTwo(4.0) Then
+						If n\NPCtype = NPCtypeMTF And n\State <> MTF_TOTARGET And EntityDistanceSquared(n\Collider, e\room\RoomDoors[CHECKPOINT_AIRLOCK_DOOR2_ID]\frameobj) > 16.0 Then
 							PositionEntity n\Collider, e\room\x, e\room\y + 0.5, e\room\z
 							ResetEntity n\Collider
 							n\PathStatus = 0
@@ -190,7 +190,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 						e\EventState2 = 1
 					EndIf	
 				ElseIf e\EventState2 = 1 Then
-					If EntityDistanceSquared(Collider, e\room\RoomDoors[CHECKPOINT_EZ_KEYCARD_DOOR_ID]\frameobj) < PowTwo(0.5) Then
+					If EntityDistanceSquared(Collider, e\room\RoomDoors[CHECKPOINT_EZ_KEYCARD_DOOR_ID]\frameobj) < 0.5 Then
 						;PlayNewDialogue(101,%11)
 						;TODO: Dialogue for forgor to put fuse in LOL
 						e\EventState2 = 2
@@ -211,7 +211,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 				If ChannelPlaying(e\SoundCHN)
 					UpdateSoundOrigin(e\SoundCHN,Camera,e\room\NPC[CHECKPOINT_EZ_NPC2_ID]\obj,10,1.5)
 				EndIf
-				If EntityDistanceSquared(Collider, e\room\RoomDoors[CHECKPOINT_EZ_KEYCARD_DOOR_ID]\frameobj) < PowTwo(0.5) Then
+				If EntityDistanceSquared(Collider, e\room\RoomDoors[CHECKPOINT_EZ_KEYCARD_DOOR_ID]\frameobj) < 0.5 Then
 					e\EventState = 3
 					e\EventState3 = 2
 					;Spawn 106 between both MTF units
@@ -226,7 +226,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 					e\SoundCHN2 = StreamSound_Strict("SFX\Music\SuspenseEnd.ogg", opt\MusicVol, 0)
 					e\SoundCHN2_isStream = True
 					PlayNewDialogue(102,%11)
-				ElseIf EntityDistanceSquared(Collider, e\room\RoomDoors[3]\frameobj) < PowTwo(4.0) Then
+				ElseIf EntityDistanceSquared(Collider, e\room\RoomDoors[3]\frameobj) < 16.0 Then
 					If ChannelPlaying(e\SoundCHN) Then
 						StopChannel(e\SoundCHN)
 						StopStream_Strict(e\SoundCHN2)
