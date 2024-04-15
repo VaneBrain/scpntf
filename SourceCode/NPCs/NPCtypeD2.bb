@@ -85,6 +85,7 @@ Function UpdateNPCtypeD2(n.NPCs)
 								PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\MTF_Spotted"+Rand(1, 5)+".ogg"))
 							EndIf	
 							n\State = D2_ATTACK
+							n\Reload = Rand(40, 80)
 							Exit
 						EndIf
 					EndIf
@@ -100,6 +101,7 @@ Function UpdateNPCtypeD2(n.NPCs)
 							PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\MTF_Spotted"+Rand(1, 5)+".ogg"))
 						EndIf
 						n\State = D2_ATTACK
+						n\Reload = Rand(40, 80)
 					EndIf	
 				EndIf
 			EndIf
@@ -240,6 +242,7 @@ Function UpdateNPCtypeD2(n.NPCs)
 				If n\HP <> n\State3 Lor dist <= 10.0 Then
 					PlayNPCSound(n, LoadTempSound("SFX\Character\D-Class\MTF_Spotted"+Rand(1, 5)+".ogg"))
 					n\State = D2_ATTACK
+					n\Reload = Rand(25, 50)
 					n\State3 = 0
 					ShowEntity(n\Gun\obj)
 				ElseIf dist > 100.0 Then
