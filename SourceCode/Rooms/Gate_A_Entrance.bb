@@ -84,8 +84,6 @@ Function UpdateEvent_Gate_A_Entrance(e.Events)
 			EntityTexture(e\room\NPC[1]\obj, tex)
 			DeleteSingleTextureEntryFromCache tex
 			
-			MTFtimer = 1.0
-			
 			Curr106\Idle = True
 			Curr173\Idle = SCP173_DISABLED
 			
@@ -181,6 +179,7 @@ Function UpdateEvent_Gate_A_Entrance(e.Events)
 			OpenCloseDoor(e\room\RoomDoors[1])
 			e\EventState = 3
 			PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+			MTFtimer = 1.0
 			e\room\NPC[0]\IdleTimer = 70*15
 			e\room\NPC[0]\State = MTF_SEARCH
 			e\room\NPC[1]\IdleTimer = 70*17
