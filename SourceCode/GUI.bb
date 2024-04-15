@@ -1778,192 +1778,10 @@ Function UpdateGUI()
 					;[End Block]
 				Case "navigator", "nav"
 					;[Block]
-					
-					If SelectedItem\itemtemplate\img=0 Then
-						SelectedItem\itemtemplate\img=LoadImage_Strict(SelectedItem\itemtemplate\imgpath)	
-						MaskImage(SelectedItem\itemtemplate\img, 255, 0, 255)
-					EndIf
-					
-					If SelectedItem\state <= 100 Then SelectedItem\state = Max(0, SelectedItem\state - FPSfactor * 0.005)
-					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\itemtemplate\img)*0.5+20
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\itemtemplate\img)*0.4-85
-					width = 287
-					height = 256
-					
-					Local PlayerX,PlayerZ
-					
-					DrawImage(SelectedItem\itemtemplate\img, x - ImageWidth(SelectedItem\itemtemplate\img) / 2, y - ImageHeight(SelectedItem\itemtemplate\img) / 2 + 85)
-					
-					SetFont fo\Font[Font_Digital_Small]
-					
-					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-						If (MilliSecs() Mod 1000) > 300 Then	
-							Text(x, y + height / 2 - 80, "ERROR 06", True)
-							Text(x, y + height / 2 - 60, "LOCATION UNKNOWN", True)						
+					If SelectedItem\itemtemplate\name <> "S-NAV Navigator Ultimate" Then
+						If SelectedItem\state <= 100 Then 
+							SelectedItem\state = Max(0, SelectedItem\state - FPSfactor * 0.005)
 						EndIf
-					Else
-						
-						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" Then
-								SelectedItem\state = 101
-							EndIf
-							
-							PlayerX% = Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5)
-							PlayerZ% = Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5)
-							
-							SetBuffer ImageBuffer(NavBG)
-							Local xx = x-ImageWidth(SelectedItem\itemtemplate\img)/2
-							Local yy = y-ImageHeight(SelectedItem\itemtemplate\img)/2+85
-							DrawImage(SelectedItem\itemtemplate\img, xx, yy)
-							
-							x = x - 12 + ((EntityX(Collider) - 4.0) Mod 8.0)*3
-							y = y + 12 - ((EntityZ(Collider)-4.0) Mod 8.0)*3
-							For x2 = Max(1, PlayerX - 6) To Min(MapWidth - 1, PlayerX + 6)
-								For z2 = Max(1, PlayerZ - 6) To Min(MapHeight - 1, PlayerZ + 6)
-									
-									If CoffinDistance > 16.0 Lor Rnd(16.0)<CoffinDistance Then 
-										If MapTemp[x2 * MapWidth + z2] And (MapFound[x2 * MapWidth + z2] > 0 Lor SelectedItem\itemtemplate\name = "S-NAV 310 Navigator" Lor SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") Then
-											Local drawx% = x + (PlayerX - x2) * 24 , drawy% = y - (PlayerZ - z2) * 24 
-											
-											;Color (30,30,30)
-											;If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then Color(100, 0, 0)
-											;
-											;If MapTemp[(x2 + 1) * MapWidth + z2] = False Then Line(drawx - 12, drawy - 12, drawx - 12, drawy + 12)
-											;If MapTemp[(x2 - 1) * MapWidth + z2] = False Then Line(drawx + 12, drawy - 12, drawx + 12, drawy + 12)
-											;
-											;If MapTemp[x2 * MapWidth + z2 - 1] = False Then Line(drawx - 12, drawy - 12, drawx + 12, drawy - 12)
-											;If MapTemp[x2 * MapWidth + z2 + 1] = False Then Line(drawx - 12, drawy + 12, drawx + 12, drawy + 12)
-											
-											If MapTemp[(x2+1) * MapWidth + z2]=False
-												DrawImage NavImages[3],drawx-12,drawy-12
-											EndIf
-											If MapTemp[(x2-1) * MapWidth + z2]=False
-												DrawImage NavImages[1],drawx-12,drawy-12
-											EndIf
-											If MapTemp[x2 * MapWidth + z2-1]=False
-												DrawImage NavImages[0],drawx-12,drawy-12
-											EndIf
-											If MapTemp[x2 * MapWidth + z2+1]=False
-												DrawImage NavImages[2],drawx-12,drawy-12
-											EndIf
-										EndIf
-									EndIf
-									
-								Next
-							Next
-							
-							SetBuffer BackBuffer()
-							DrawImageRect NavBG,xx+80,yy+70,xx+80,yy+70,270,230
-							Color 30,30,30
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then Color(100, 0, 0)
-							Rect xx+80,yy+70,270,230,False
-							
-							x = opt\GraphicWidth - ImageWidth(SelectedItem\itemtemplate\img)*0.5+20
-							y = opt\GraphicHeight - ImageHeight(SelectedItem\itemtemplate\img)*0.4-85
-							
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then 
-								Color(100, 0, 0)
-							Else
-								Color (30,30,30)
-							EndIf
-							If (MilliSecs() Mod 1000) > 300 Then
-								If SelectedItem\itemtemplate\name <> "S-NAV 310 Navigator" And SelectedItem\itemtemplate\name <> "S-NAV Navigator Ultimate" Then
-									Text(x - width/2 + 10, y - height/2 + 10, "MAP DATABASE OFFLINE")
-								EndIf
-								
-								yawvalue = EntityYaw(Collider)-90
-								x1 = x+Cos(yawvalue)*6 : y1 = y-Sin(yawvalue)*6
-								x2 = x+Cos(yawvalue-140)*5 : y2 = y-Sin(yawvalue-140)*5				
-								x3 = x+Cos(yawvalue+140)*5 : y3 = y-Sin(yawvalue+140)*5
-								
-								Line x1,y1,x2,y2
-								Line x1,y1,x3,y3
-								Line x2,y2,x3,y3
-							EndIf
-							
-							Local SCPs_found% = 0
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600) < 400 Then
-								Local dist# = EntityDistanceSquared(Camera, Curr173\obj)
-								If dist < PowTwo(8.0 * 4) Then
-									dist = Sqr(dist)
-									Color 100, 0, 0
-									Oval(x - dist * 3, y - 7 - dist * 3, dist * 3 * 2, dist * 3 * 2, False)
-									Text(x - width / 2 + 10, y - height / 2 + 30, "SCP-173")
-									SCPs_found% = SCPs_found% + 1
-								EndIf
-								dist# = EntityDistanceSquared(Camera, Curr106\obj)
-								If dist < PowTwo(8.0 * 4) Then
-									dist = Sqr(dist)
-									Color 100, 0, 0
-									Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-									Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-106")
-									SCPs_found% = SCPs_found% + 1
-								EndIf
-								If Curr096<>Null Then 
-									dist# = EntityDistanceSquared(Camera, Curr096\obj)
-									If dist < PowTwo(8.0 * 4) Then
-										dist = Sqr(dist)
-										Color 100, 0, 0
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-										Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-096")
-										SCPs_found% = SCPs_found% + 1
-									EndIf
-								EndIf
-								For np.NPCs = Each NPCs
-									If np\NPCtype = NPCtype049
-										dist# = EntityDistanceSquared(Camera, np\obj)
-										If dist < PowTwo(8.0 * 4) Then
-											dist = Sqr(dist)
-											If (Not np\HideFromNVG)
-												Color 100, 0, 0
-												Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-												Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-049")
-												SCPs_found% = SCPs_found% + 1
-											EndIf
-										EndIf
-									EndIf
-								Next
-								If PlayerRoom\RoomTemplate\Name = "cont_895" Then
-									If CoffinDistance < 8.0 Then
-										dist = Rnd(4.0, 8.0)
-										Color 100, 0, 0
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-										Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-895")
-									EndIf
-								EndIf
-							End If
-							
-							Color (30,30,30)
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then Color(100, 0, 0)
-							If SelectedItem\state <= 100 Then
-								;Text (x - width/2 + 10, y - height/2 + 10, "BATTERY")
-								;xtemp = x - width/2 + 10
-								;ytemp = y - height/2 + 30		
-								;Line xtemp, ytemp, xtemp+20, ytemp
-								;Line xtemp, ytemp+100, xtemp+20, ytemp+100
-								;Line xtemp, ytemp, xtemp, ytemp+100
-								;Line xtemp+20, ytemp, xtemp+20, ytemp+100
-								;
-								;SetFont fo\Font[Font_Digital_Large]
-								;For i = 1 To Ceil(SelectedItem\state / 10.0)
-								;	Text (xtemp+11, ytemp+i*10-26, "-", True)
-								;	;Rect(x - width/2, y+i*15, 40 - i * 6, 5, Ceil(SelectedItem\state / 20.0) > 4 - i)
-								;Next
-								;SetFont fo\Font[Font_Digital_Small]
-								
-								xtemp = x - width/2 + 196
-								ytemp = y - height/2 + 10
-								Rect xtemp,ytemp,80,20,False
-								
-								For i = 1 To Ceil(SelectedItem\state / 10.0)
-									DrawImage NavImages[4],xtemp+i*8-6,ytemp+4
-								Next
-								
-								SetFont fo\Font[Font_Digital_Small]
-							EndIf
-						EndIf
-						
 					EndIf
 					;[End Block]
 				;new Items in SCP:CB 1.3
@@ -3193,22 +3011,33 @@ Function DrawGUI()
 					;[End Block]
 				Case "navigator", "nav"
 					;[Block]
+					Local navType%
+					Select SelectedItem\itemtemplate\name
+						Case "S-NAV 300 Navigator"
+							navType = 300
+						Case "S-NAV 310 Navigator"
+							navType = 310
+						Case "S-NAV Navigator Ultimate"
+							navType = 999
+						Default
+							navType = 300
+					End Select
 					
 					If SelectedItem\itemtemplate\img=0 Then
 						SelectedItem\itemtemplate\img=LoadImage_Strict(SelectedItem\itemtemplate\imgpath)	
+						SelectedItem\itemtemplate\imgwidth = ImageWidth(SelectedItem\itemtemplate\img) / 2
+						SelectedItem\itemtemplate\imgheight = ImageHeight(SelectedItem\itemtemplate\img) / 2
 						MaskImage(SelectedItem\itemtemplate\img, 255, 0, 255)
 					EndIf
 					
-					If SelectedItem\state <= 100 Then SelectedItem\state = Max(0, SelectedItem\state - FPSfactor * 0.005)
-					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\itemtemplate\img)*0.5+20
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\itemtemplate\img)*0.4-85
+					x = opt\GraphicWidth - SelectedItem\itemtemplate\imgwidth+20
+					y = opt\GraphicHeight - SelectedItem\itemtemplate\imgheight-85
 					width = 287
 					height = 256
 					
 					Local PlayerX,PlayerZ
 					
-					DrawImage(SelectedItem\itemtemplate\img, x - ImageWidth(SelectedItem\itemtemplate\img) / 2, y - ImageHeight(SelectedItem\itemtemplate\img) / 2 + 85)
+					DrawImage(SelectedItem\itemtemplate\img, x - SelectedItem\itemtemplate\imgwidth, y - SelectedItem\itemtemplate\imgheight + 85)
 					
 					SetFont fo\Font[Font_Digital_Small]
 					
@@ -3216,87 +3045,81 @@ Function DrawGUI()
 						If (MilliSecs() Mod 1000) > 300 Then
 							Color 30,30,30
 							Text(x, y + height / 2 - 80, "ERROR 06", True)
-							Text(x, y + height / 2 - 60, "LOCATION UNKNOWN", True)						
+							Text(x, y + height / 2 - 60, "LOCATION UNKNOWN", True)
 						EndIf
-					Else
-						
-						If (SelectedItem\state > 0 Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" Then
-								SelectedItem\state = 101
-							EndIf
-
+					Else						
+						If (SelectedItem\state > 0 Lor navType = 999) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont_895") Then
 							PlayerX% = Floor(EntityX(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							PlayerZ% = Floor(EntityZ(Collider) / 8.0 + 0.5) ;PlayerRoom\obj
 							
-							SetBuffer ImageBuffer(NavBG)
-							Local xx = x-ImageWidth(SelectedItem\itemtemplate\img)/2
-							Local yy = y-ImageHeight(SelectedItem\itemtemplate\img)/2+85
-							DrawImage(SelectedItem\itemtemplate\img, xx, yy)
+							Local xx = x-SelectedItem\itemtemplate\imgwidth
+							Local yy = y-SelectedItem\itemtemplate\imgheight+85
 							
-							Local grid_size%
-							If NTF_CurrZone = 3 Then
-								grid_size% = MapGridSizeEZ
-							Else
-								grid_size% = MapGridSize
-							EndIf
-							
-							Local posX# = EntityX(Collider) - 4.0
-							Local posZ# = EntityZ(Collider) - 4.0
-							Local stepsX% = 0
-							Local stepsZ% = 0
-							Local tempPos# = posX
-							While tempPos < 0.0
-								stepsX = stepsX + 1
-								tempPos = tempPos + 8.0
-							Wend
-							tempPos# = posZ
-							While tempPos < 0.0
-								stepsZ = stepsZ + 1
-								tempPos = tempPos + 8.0
-							Wend
-							x = x - 12 + ((posX + (8.0 * stepsX)) Mod 8.0) * 3
-							y = y + 12 - ((posZ + (8.0 * stepsZ)) Mod 8.0) * 3
-							For z2 = Max(0, PlayerZ - 6) To Min(grid_size - 1, PlayerZ + 6)
-								For x2 = Max(0, PlayerX - 6) To Min(grid_size - 1, PlayerX + 6)
-									If SelectedItem\itemtemplate\name = "S-NAV 300 Navigator" And Rand(0,1) Then Exit
-									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then
+							If SelectedItem\state2 = 0.0 Then
+								Local grid_size%
+								If NTF_CurrZone = 3 Then
+									grid_size% = MapGridSizeEZ
+								Else
+									grid_size% = MapGridSize
+								EndIf
+								
+								Local posX# = EntityX(Collider) - 4.0
+								Local posZ# = EntityZ(Collider) - 4.0
+								Local stepsX% = 0
+								Local stepsZ% = 0
+								Local tempPos# = posX
+								While tempPos < 0.0
+									stepsX = stepsX + 1
+									tempPos = tempPos + 8.0
+								Wend
+								tempPos# = posZ
+								While tempPos < 0.0
+									stepsZ = stepsZ + 1
+									tempPos = tempPos + 8.0
+								Wend
+								x = x - 12 + ((posX + (8.0 * stepsX)) Mod 8.0) * 3
+								y = y + 12 - ((posZ + (8.0 * stepsZ)) Mod 8.0) * 3
+								
+								SetBuffer ImageBuffer(NavBG)
+								DrawImage(SelectedItem\itemtemplate\img, xx, yy)
+								Local val% = 6 / (1 + 0.5*(navType = 300))
+								For z2 = Max(0, PlayerZ - val) To Min(grid_size - 1, PlayerZ + val)
+									For x2 = Max(0, PlayerX - val) To Min(grid_size - 1, PlayerX + val)
 										;Make distinguishing between S-NAV 300 Navigator, S-NAV 310 Navigator and S-NAV Ultimate
-										If CurrGrid\Grid[x2 + (z2 * grid_size)] Then
-											Local drawx% = x + (PlayerX - x2) * 24 , drawy% = y - (PlayerZ - z2) * 24
-											
-											If (x2 + 1) > (grid_size - 1) Lor (Not CurrGrid\Grid[(x2 + 1) + (z2 * grid_size)]) Then
-												DrawImage NavImages[3], drawx - 12, drawy - 12
-											EndIf
-											If (x2 - 1) < 0 Lor (Not CurrGrid\Grid[(x2 - 1) + (z2 * grid_size)]) Then
-												DrawImage NavImages[1], drawx - 12, drawy - 12
-											EndIf
-											If (z2 - 1) < 0 Lor (Not CurrGrid\Grid[x2 + ((z2 - 1) * grid_size)]) Then
-												DrawImage NavImages[0], drawx - 12, drawy - 12
-											EndIf
-											If (z2 + 1) > (grid_size - 1) Lor (Not CurrGrid\Grid[x2 + ((z2 + 1) * grid_size)]) Then
-												DrawImage NavImages[2], drawx - 12, drawy - 12
+										If navType = 300 And Rand(0,1) Then Exit
+										If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then
+											If CurrGrid\Grid[x2 + (z2 * grid_size)] Then
+												Local drawx% = x + (PlayerX - x2) * 24 - 12, drawy% = y - (PlayerZ - z2) * 24 - 12
+												
+												If (x2 + 1) > (grid_size - 1) Lor (Not CurrGrid\Grid[(x2 + 1) + (z2 * grid_size)]) Then
+													DrawImage NavImages[3], drawx, drawy
+												EndIf
+												If (x2 - 1) < 0 Lor (Not CurrGrid\Grid[(x2 - 1) + (z2 * grid_size)]) Then
+													DrawImage NavImages[1], drawx, drawy
+												EndIf
+												If (z2 - 1) < 0 Lor (Not CurrGrid\Grid[x2 + ((z2 - 1) * grid_size)]) Then
+													DrawImage NavImages[0], drawx, drawy
+												EndIf
+												If (z2 + 1) > (grid_size - 1) Lor (Not CurrGrid\Grid[x2 + ((z2 + 1) * grid_size)]) Then
+													DrawImage NavImages[2], drawx, drawy
+												EndIf
 											EndIf
 										EndIf
-									EndIf
-								Next
-							Next
-							
-							SetBuffer BackBuffer()
+									Next
+								Next								
+								SetBuffer BackBuffer()
+								SelectedItem\state2 = 2.0
+							Else
+								SelectedItem\state2 = Max(0.0, SelectedItem\state2 - FPSfactor)
+							EndIf
 							DrawImageRect NavBG,xx+80,yy+70,xx+80,yy+70,270,230
 							Color 30,30,30
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then Color(100, 0, 0)
 							Rect xx+80,yy+70,270,230,False
 							
-							x = opt\GraphicWidth - ImageWidth(SelectedItem\itemtemplate\img)*0.5+20
-							y = opt\GraphicHeight - ImageHeight(SelectedItem\itemtemplate\img)*0.4-85
-							
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then 
-								Color(100, 0, 0)
-							Else
-								Color (30,30,30)
-							EndIf
+							x = opt\GraphicWidth - SelectedItem\itemtemplate\imgwidth+20
+							y = opt\GraphicHeight - SelectedItem\itemtemplate\imgheight-85
 							If (MilliSecs() Mod 1000) > 300 Then
-								If SelectedItem\itemtemplate\name <> "S-NAV 310 Navigator" And SelectedItem\itemtemplate\name <> "S-NAV Navigator Ultimate" Then
+								If navType < 310 Then
 									Text(x - width/2 + 10, y - height/2 + 10, "WARNING - LOW SIGNAL")
 								EndIf
 								
@@ -3311,42 +3134,17 @@ Function DrawGUI()
 							EndIf
 							
 							Local SCPs_found% = 0
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600) < 400 Then
-								Local dist# = EntityDistanceSquared(Camera, Curr173\obj)
-								If dist < PowTwo(8.0 * 4) Then
-									dist = Sqr(dist)
-									Color 100, 0, 0
-									Oval(x - dist * 3, y - 7 - dist * 3, dist * 3 * 2, dist * 3 * 2, False)
-									Text(x - width / 2 + 10, y - height / 2 + 30, "SCP-173")
-									SCPs_found% = SCPs_found% + 1
-								EndIf
-								dist# = EntityDistanceSquared(Camera, Curr106\obj)
-								If dist < PowTwo(8.0 * 4) Then
-									dist = Sqr(dist)
-									Color 100, 0, 0
-									Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-									Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-106")
-									SCPs_found% = SCPs_found% + 1
-								EndIf
-								If Curr096<>Null Then 
-									dist# = EntityDistanceSquared(Camera, Curr096\obj)
-									If dist < PowTwo(8.0 * 4) Then
-										dist = Sqr(dist)
-										Color 100, 0, 0
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-										Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-096")
-										SCPs_found% = SCPs_found% + 1
-									EndIf
-								EndIf
+							
+							If navType = 999 And (MilliSecs() Mod 600) < 400 Then
 								For np.NPCs = Each NPCs
-									If np\NPCtype = NPCtype049
-										dist# = EntityDistanceSquared(Camera, np\obj)
+									If np\NPCtype = NPCtype049 Lor np\NPCtype = NPCtype096 Lor np\NPCtype = NPCtypeOldMan Lor np\NPCtype = NPCtype173 Then
+										Local dist# = EntityDistanceSquared(mpl\CameraPivot, np\obj)
 										If dist < PowTwo(8.0 * 4) Then
 											dist = Sqr(dist)
-											If (Not np\HideFromNVG)
+											If (Not np\HideFromNVG) Then
 												Color 100, 0, 0
-												Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-												Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-049")
+												Oval(x - dist * 1.5, y - dist * 1.5, dist * 3, dist * 3, False)
+												Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), np\NVName)
 												SCPs_found% = SCPs_found% + 1
 											EndIf
 										EndIf
@@ -3356,42 +3154,27 @@ Function DrawGUI()
 									If CoffinDistance < 8.0 Then
 										dist = Rnd(4.0, 8.0)
 										Color 100, 0, 0
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
+										Oval(x - dist * 1.5, y - dist * 1.5, dist * 3, dist * 3, False)
 										Text(x - width / 2 + 10, y - height / 2 + 30 + (20*SCPs_found), "SCP-895")
 									EndIf
 								EndIf
-							End If
+							EndIf
 							
 							Color (30,30,30)
-							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then Color(100, 0, 0)
-							If SelectedItem\state <= 100 Then
-								;Text (x - width/2 + 10, y - height/2 + 10, "BATTERY")
-								;xtemp = x - width/2 + 10
-								;ytemp = y - height/2 + 30		
-								;Line xtemp, ytemp, xtemp+20, ytemp
-								;Line xtemp, ytemp+100, xtemp+20, ytemp+100
-								;Line xtemp, ytemp, xtemp, ytemp+100
-								;Line xtemp+20, ytemp, xtemp+20, ytemp+100
-								;
-								;SetFont fo\Font[Font_Digital_Large]
-								;For i = 1 To Ceil(SelectedItem\state / 10.0)
-								;	Text (xtemp+11, ytemp+i*10-26, "-", True)
-								;	;Rect(x - width/2, y+i*15, 40 - i * 6, 5, Ceil(SelectedItem\state / 20.0) > 4 - i)
-								;Next
-								;SetFont fo\Font[Font_Digital_Small]
-								
-								xtemp = x - width/2 + 196
-								ytemp = y - height/2 + 10
-								Rect xtemp,ytemp,80,20,False
-								
-								For i = 1 To Ceil(SelectedItem\state / 10.0)
-									DrawImage NavImages[4],xtemp+i*8-6,ytemp+4
-								Next
-								
-								SetFont fo\Font[Font_Digital_Small]
+							If navType < 999 Then
+								If SelectedItem\state <= 100 Then
+									xtemp = x - width/2 + 196
+									ytemp = y - height/2 + 10
+									Rect xtemp,ytemp,80,20,False
+									
+									For i = 1 To Ceil(SelectedItem\state / 10.0)
+										DrawImage NavImages[4],xtemp+i*8-6,ytemp+4
+									Next
+									
+									SetFont fo\Font[Font_Digital_Small]
+								EndIf
 							EndIf
 						EndIf
-						
 					EndIf
 					;[End Block]
 				;new Items in SCP:CB 1.3

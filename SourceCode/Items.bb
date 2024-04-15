@@ -20,7 +20,7 @@ Type ItemTemplates
 	Field obj%, objpath$, parentobjpath$
 	Field invimg%,invimg2%,invimgpath$
 	Field imgpath$, img%
-	
+	Field imgwidth%, imgheight%
 	Field isAnim%
 	
 	Field scale#
