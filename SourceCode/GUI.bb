@@ -3810,8 +3810,8 @@ Function UpdateMenu()
 					FPSfactor = 0
 					
 					ResetInput()
-					
 					ResumeSounds()
+					DeleteTextureEntriesFromCache(0)
 					Return
 				EndIf
 			Else
