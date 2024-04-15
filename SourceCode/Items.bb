@@ -637,51 +637,37 @@ Function PickItem(item.Items)
 							SetAnimTime item\model,19.0
 						Case "1123"
 							If Not (Wearing714 = 1) Then
-								If PlayerRoom\RoomTemplate\Name <> "room1123" Then
+								If PlayerRoom\RoomTemplate\Name <> "cont_1123" Then
 									LightFlash = 7
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
-									DeathMSG = Designation+" was shot dead after attempting to attack a member of Nine-Tailed Fox. Surveillance tapes show that the subject had been "
-									DeathMSG = DeathMSG + "wandering around the site approximately 9 minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-									DeathMSG = DeathMSG + " in chinese. SCP-1123 was found in [REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
-									DeathMSG = DeathMSG + "exactly SCP-1123 was removed from its containment chamber is still unknown."
+									DeathMSG = GetLocalStringR("Singleplayer", "cont_1123_death", Designation)
 									Kill()
+									Return
 								EndIf
 								For e.Events = Each Events
-									If e\EventName = "room1123" Then 
+									If e\EventName = "cont_1123" Then 
 										If e\EventState = 0 Then
 											LightFlash = 3
 											PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 										EndIf
 										e\EventState = Max(1, e\EventState)
-										
 										Exit
 									EndIf
 								Next
 							EndIf
-							
-							Return
 						Case "killbat"
 							LightFlash = 1.0
 							PlaySound_Strict(IntroSFX[2])
 							DeathMSG = Designation+" found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
 							DeathMSG = DeathMSG + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
 							Kill()
-;						Case "scp148"
-;							GiveAchievement(Achv148)	
-;						Case "scp513"
-;							GiveAchievement(Achv513)
-;						Case "scp860"
-;							GiveAchievement(Achv860)
-;						Case "key6"
-;							GiveAchievement(AchvOmni)
+							Return
 						Case "veryfinevest"
 							Msg = "The vest is too heavy to pick up."
 							MsgTimer = 70*6
 							Exit
 						Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
 							item\state = 0
-						Case "navigator", "nav"
-							If item\itemtemplate\name = "S-NAV Navigator Ultimate" Then GiveAchievement(AchvSNAV)
 						Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 							Msg = "You put on the hazmat suit."
 							TakeOffStuff(1+16)

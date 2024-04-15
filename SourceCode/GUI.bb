@@ -196,13 +196,6 @@ Function UpdateGUI()
 									Case 8 ;enter
 										If KeypadInput = d_I\SelectedDoor\Code Then
 											PlaySound_Strict ScannerSFX1
-											
-											If d_I\SelectedDoor\Code = Str(AccessCode) Then
-												GiveAchievement(AchvMaynard)
-											ElseIf d_I\SelectedDoor\Code = "7816"
-												GiveAchievement(AchvHarp)
-											EndIf									
-											
 											d_I\SelectedDoor\locked = 0
 											UseDoor(d_I\SelectedDoor,True)
 											d_I\SelectedDoor = Null
@@ -980,29 +973,6 @@ Function UpdateGUI()
 					EndIf
 					MsgTimer = 70 * 5
 					SelectedItem = Null	
-					
-					;[End Block]
-				Case "1123"
-					;[Block]
-					If Not (Wearing714 = 1) Then
-						If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-							LightFlash = 7
-							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
-							DeathMSG = GetLocalStringR("Singleplayer", "cont_1123_death", Designation)
-							Kill()
-							Return
-						EndIf
-						For e.Events = Each Events
-							If e\EventName = "room1123" Then 
-								If e\EventState = 0 Then
-									LightFlash = 3
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
-								EndIf
-								e\EventState = Max(1, e\EventState)
-								Exit
-							EndIf
-						Next
-					EndIf
 					
 					;[End Block]
 				Case "scp513"
