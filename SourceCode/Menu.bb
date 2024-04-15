@@ -4056,16 +4056,9 @@ Function GetLineAmount(A$, W, H, Leading#=1)
 End Function
 
 Function LimitText$(txt$,width%)
-	Local TextLength%, UnFitting%, LetterWidth%
 	If txt = "" Lor width = 0 Then Return ""
-	TextLength = StringWidth(txt)
-	UnFitting = TextLength - width*FontWidth()
-	If UnFitting <= 0 Then
-		Return txt
-	Else
-		LetterWidth = TextLength / Len(txt)
-		Return (Left(txt, Max(Len(txt) - UnFitting / (LetterWidth - 4), 1)) + "...")
-	EndIf
+	If Len(txt) <= width Then  Return txt
+	Return (Left(txt, width-Min(Len(txt)-width,3)) + "...")
 End Function
 
 Function DrawTooltip(message$)
