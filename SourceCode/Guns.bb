@@ -2210,23 +2210,25 @@ Function UpdateIronSight()
 		g_I\IronSightAnim = 0
 	EndIf
 	
-	If opt\HoldToAim Then
-		If (Not g_I\IronSightAnim) And hasIronSight Then
-			prevIronSight = g_I\IronSight
-			g_I\IronSight% = MouseDown2
-			If g_I\IronSight <> prevIronSight Then
-				g_I\IronSightAnim = 2
+	If SelectedItem = Null Then
+		If opt\HoldToAim Then
+			If (Not g_I\IronSightAnim) And hasIronSight Then
+				prevIronSight = g_I\IronSight
+				g_I\IronSight% = MouseDown2
+				If g_I\IronSight <> prevIronSight Then
+					g_I\IronSightAnim = 2
+				EndIf
 			EndIf
-		EndIf
-	Else
-		If MouseHit2 Then
-			If SelectedItem = Null Then
+		Else
+			If MouseHit2 Then
 				If (Not g_I\IronSightAnim) And hasIronSight Then
 					g_I\IronSight% = (Not g_I\IronSight%)
 					g_I\IronSightAnim = 2
 				EndIf
 			EndIf
 		EndIf
+	Else
+		DeselectIronSight()
 	EndIf
 	
 End Function
