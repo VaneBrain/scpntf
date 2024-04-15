@@ -186,8 +186,10 @@ Function UpdateNPCtype1048a(n.NPCs)
 			RotateEntity p\pvt,0,0,Rnd(360)
 			p\Achange = -Rnd(0.02,0.03)
 		Next
-		HideEntity(n\obj)
 		n\IsDead = True
+	EndIf
+	If n\IsDead And n\State2 = 0.0 Then
+		HideEntity(n\obj)
 	EndIf
 End Function
 
