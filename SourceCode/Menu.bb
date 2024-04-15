@@ -3586,19 +3586,16 @@ Function IsResolutionHeightValid%(height%)
 End Function
 
 Function DrawTiledImageRect(img%, srcX%, srcY%, srcwidth#, srcheight#, x%, y%, width%, height%)
-	Local srcwidth_orig = srcwidth
-	Local srcheight_orig = srcheight
 	
 	Local x2% = x
 	While x2 < x+width
+		If x2 + srcwidth > x + width Then srcwidth = (x + width) - x2
 		Local y2% = y
 		While y2 < y+height
-			If x2 + srcwidth > x + width Then srcwidth = srcwidth - Max((x2 + srcwidth) - (x + width), 1)
-			If y2 + srcheight > y + height Then srcheight = srcheight - Max((y2 + srcheight) - (y + height), 1)
-			DrawBlockRect(img, x2, y2, srcX, srcY, srcwidth, srcheight)
-			y2 = y2 + srcheight_orig
+			DrawBlockRect(img, x2, y2, srcX, srcY, srcwidth, Min((y + height) - y2, srcheight))
+			y2 = y2 + srcheight
 		Wend
-		x2 = x2 + srcwidth_orig
+		x2 = x2 + srcwidth
 	Wend
 	
 End Function
