@@ -6420,6 +6420,7 @@ Function ResetInput()
 	MouseHit(1)
 	MouseHit(2)
 	MouseDown(1)
+	MouseDown(2)
 	GrabbedEntity = 0
 	Input_ResetTime# = 10.0
 	
@@ -6427,6 +6428,7 @@ Function ResetInput()
 	keyhituse = 0
 	keydownuse = 0
 	MouseHit(3)
+	MouseDown(3)
 	
 End Function
 
