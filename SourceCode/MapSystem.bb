@@ -4059,13 +4059,12 @@ Function CreateMap()
 		
 		;Spawn some rooms that are neccesary for the zone
 		CreateRoom(0, ROOM1, (grid_size+1) * spacing, 0, (grid_size+1) * spacing, "pocketdimension")
-		CreateRoom(0, ROOM1, 0,-1000,100,"testmap")
 	ElseIf NTF_CurrZone = 0 Then
 		CreateRoom(0, ROOM1, 8, 0, 8, "gate_a_intro")
 	ElseIf NTF_CurrZone = 4 Then
 		CreateRoom(0, ROOM1, 8, 0, 8, "gate_a_topside")
 	ElseIf NTF_CurrZone = 5
-		CreateRoom(zone, ROOM1, 0, 0, 0, "area_076")
+		CreateRoom(0, ROOM1, 0, 0, 0, "testmap")
 	EndIf
 	
 	;Preventing room overlaps

@@ -10,12 +10,15 @@ Function FillRoom_Testmap(r.Rooms)
 	Local em.Emitters = CreateEmitter(r\x, r\y+350.0 * RoomScale, r\z-350.0 * RoomScale, 4)
 	TurnEntity(em\Obj, 90, 0, 0, True)
 	EntityParent(em\Obj, r\obj)
+	em\Disable = True
 	em.Emitters = CreateEmitter(r\x+350.0 * RoomScale, r\y+350.0 * RoomScale, r\z-350.0 * RoomScale, 4)
 	TurnEntity(em\Obj, 90, 0, 0, True)
 	EntityParent(em\Obj, r\obj)
+	em\Disable = True
 	em.Emitters = CreateEmitter(r\x, r\y+350.0 * RoomScale, r\z-700.0 * RoomScale, 4)
 	TurnEntity(em\Obj, 90, 0, 0, True)
 	EntityParent(em\Obj, r\obj)
+	em\Disable = True
 ;	CreateCutscene("Testmap_TestCutscene", Start)
 	
 ;	r\Objects[0] = LoadMesh_Strict("GFX\puddle.b3d");LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")

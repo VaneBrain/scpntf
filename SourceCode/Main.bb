@@ -3807,7 +3807,7 @@ Function InitNewGame()
 					PlayerRoom = r
 				EndIf
 			Case 5
-				If r\RoomTemplate\Name = "area_076"
+				If r\RoomTemplate\Name = "testmap"
 					PositionEntity (Collider, EntityX(r\obj), 0.5, EntityZ(r\obj))
 					PlayerRoom = r
 				EndIf
