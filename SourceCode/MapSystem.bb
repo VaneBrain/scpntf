@@ -2269,7 +2269,7 @@ Function UpdateRooms()
 		EndIf
 		If hide Then
 			For i=0 To 3
-				If (IsRoomAdjacent(PlayerRoom\Adjacent[i],r)) Then hide=False : Exit
+				If IsRoomAdjacent(PlayerRoom\Adjacent[i],r) Then hide=False : Exit
 			Next
 		EndIf
 		
@@ -2324,7 +2324,7 @@ Function UpdateRooms()
 End Function
 
 Function IsRoomAdjacent(this.Rooms,that.Rooms)
-	If this=Null Then Return False
+	If this=Null Lor that = Null Then Return False
 	If this=that Then Return True
 	For i=0 To 3
 		If that=this\Adjacent[i] Then Return True
