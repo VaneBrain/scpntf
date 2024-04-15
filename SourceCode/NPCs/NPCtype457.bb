@@ -282,12 +282,7 @@ Function UpdateNPCtype457MP(n.NPCs)
 								If EntityDistanceSquared(Players[i]\Collider,n\Collider) < PowTwo(2.0) Then
 									If Players[i]\CurrHP > 0 Then
 										Players[i]\CurrHP = Max(Players[i]\CurrHP - 2, 0)
-										If Players[i]\CurrHP <= 0 Then
-											cmsg = AddChatMSG("death_killedby", 0, SERVER_MSG_IS, CHATMSG_TYPE_TWOPARAM_TRANSLATE)
-											cmsg\Msg[1] = Players[n\ClosestPlayer]\Name
-											cmsg\Msg[2] = n\NVName
-											Players[i]\Deaths = Players[i]\Deaths + 1
-										EndIf
+										IsPlayerKilledByNPC(n)
 									EndIf
 								EndIf
 							EndIf

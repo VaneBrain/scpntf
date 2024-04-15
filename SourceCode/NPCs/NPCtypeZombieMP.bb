@@ -238,12 +238,7 @@ Function UpdateNPCtypeZombieMP(n.NPCs)
 							EndIf
 							If Players[n\ClosestPlayer]\CurrHP > 0 Then
 								DamagePlayer(n\ClosestPlayer,Rand(6+2*mp_I\Gamemode\Difficulty,10+2*mp_I\Gamemode\Difficulty),Rand(10+4*mp_I\Gamemode\Difficulty,14+4*mp_I\Gamemode\Difficulty),5)
-								If Players[n\ClosestPlayer]\CurrHP <= 0 Then
-									cmsg = AddChatMSG("death_killedby", 0, SERVER_MSG_IS, CHATMSG_TYPE_TWOPARAM_TRANSLATE)
-									cmsg\Msg[1] = Players[n\ClosestPlayer]\Name
-									cmsg\Msg[2] = n\NVName
-									Players[n\ClosestPlayer]\Deaths = Players[n\ClosestPlayer]\Deaths + 1
-								EndIf
+								IsPlayerKilledByNPC(n)
 							EndIf	
 						EndIf
 					EndIf

@@ -279,6 +279,16 @@ Function TeleportCloserMP(n.NPCs)
 	
 End Function
 
+Function IsPlayerKilledByNPC(n.NPCs)
+	Local cmsg.ChatMSG
+	If Players[n\ClosestPlayer]\CurrHP <= 0 Then
+		cmsg = AddChatMSG("death_killedby", 0, SERVER_MSG_IS, CHATMSG_TYPE_TWOPARAM_TRANSLATE)
+		cmsg\Msg[1] = Players[n\ClosestPlayer]\Name
+		cmsg\Msg[2] = n\NVName
+		Players[n\ClosestPlayer]\Deaths = Players[n\ClosestPlayer]\Deaths + 1
+	EndIf
+End Function
+
 ;~IDEal Editor Parameters:
 ;~F#6#10#16#20#FD
 ;~C#Blitz3D
