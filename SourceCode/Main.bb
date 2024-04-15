@@ -5122,16 +5122,16 @@ Function UpdateInfect()
 	
 	Local teleportForInfect% = True
 	
-	If PlayerRoom\RoomTemplate\Name = "room860"
+	If PlayerRoom\RoomTemplate\Name = "testroom_860"
 		For e.Events = Each Events
-			If e\EventName = "room860"
+			If e\EventName = "testroom_860"
 				If e\EventState = 1.0
 					teleportForInfect = False
 				EndIf
 				Exit
 			EndIf
 		Next
-	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension"
+	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor NTF_CurrZone <> HCZ Then
 		teleportForInfect = False
 	EndIf
 	
@@ -5174,7 +5174,7 @@ Function UpdateInfect()
 				If Infect >= 92.7 And temp < 92.7 Then
 					If teleportForInfect
 						For r.Rooms = Each Rooms
-							If r\RoomTemplate\Name="008" Then
+							If r\RoomTemplate\Name="cont_008" Then
 								PositionEntity Collider, EntityX(r\Objects[7],True),EntityY(r\Objects[7],True),EntityZ(r\Objects[7],True),True
 								ResetEntity Collider
 								r\NPC[0] = CreateNPC(NPCtypeD, EntityX(r\Objects[6],True),EntityY(r\Objects[6],True)+0.2,EntityZ(r\Objects[6],True))
@@ -5184,6 +5184,7 @@ Function UpdateInfect()
 								r\NPC[0]\State=6
 								PlayerRoom = r
 								UnableToMove = False
+								IsZombie = True
 								Exit
 							EndIf
 						Next
@@ -5204,7 +5205,7 @@ Function UpdateInfect()
 					PointEntity Collider, PlayerRoom\NPC[0]\Collider
 					PointEntity PlayerRoom\NPC[0]\Collider, Collider
 					PointEntity Camera, PlayerRoom\NPC[0]\Collider,EntityRoll(Camera)
-					ForceMove = 0.75
+					ForceMove = 0.3
 					;Injuries = 2.5
 					;Bloodloss = 0
 					UnableToMove = False
