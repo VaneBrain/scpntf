@@ -146,7 +146,7 @@ Function CreatePlayerTag(playerID%)
 	ScaleSprite Players[playerID]\NameTag,0.0006*(StringWidth(Players[playerID]\Name)),0.025
 	EntityFX Players[playerID]\NameTag,1+8
 	EntityOrder Players[playerID]\NameTag,-1
-	Local tex% = CreateTexture(1024,64,256+4)
+	Local tex% = CreateTextureUsingCacheSystem(1024,64,4)
 	SetBuffer TextureBuffer(tex)
 	ClsColor 0,0,0
 	Cls

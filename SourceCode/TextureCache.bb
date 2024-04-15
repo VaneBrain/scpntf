@@ -90,7 +90,7 @@ Function CreateTextureUsingCacheSystem(width%,height%,texflags%=1,frames%=1,dele
 	tic = New TextureInCache
 	tic\texname = "CreateTexture"
 	tic\texdeletetype = deletetype
-	tic\tex = CreateTexture(width%,height%,texflags%+256);(256*(SaveTexturesInVRam<>0)),frames%)
+	tic\tex = CreateTexture(width%,height%,texflags%+256,frames%)
 	DebugLog "CreateTexture using Cache system (handle): "+tic\tex
 	Return tic\tex
 	
