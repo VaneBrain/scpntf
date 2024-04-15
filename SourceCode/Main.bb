@@ -1357,24 +1357,26 @@ Function MainLoop()
 			ElseIf PlayerRoom\RoomTemplate\Name = "gate_a_topside" Lor PlayerRoom\RoomTemplate\Name = "gate_a_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b_topside" Then
 				CurrFogColor = FogColor_Outside
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-				CurrFogColor = FogColor_PD
+				;PD sets the fog customly in the UpdateEvent code
+				CurrFogColor = ""
+			Else
+				Select NTF_CurrZone
+					Case LCZ
+						CurrFogColor = FogColor_LCZ
+					Case HCZ
+						CurrFogColor = FogColor_HCZ
+					Case EZ
+						CurrFogColor = FogColor_EZ
+				End Select
 			EndIf
 		EndIf
-		If CurrFogColor = "" Then
-			Select NTF_CurrZone
-				Case LCZ
-					CurrFogColor = FogColor_LCZ
-				Case HCZ
-					CurrFogColor = FogColor_HCZ
-				Case EZ
-					CurrFogColor = FogColor_EZ
-			End Select
+		If CurrFogColor <> "" Then
+			Local FogColorR% = Left(CurrFogColor,3)
+			Local FogColorG% = Mid(CurrFogColor,4,3)
+			Local FogColorB% = Right(CurrFogColor,3)
+			CameraFogColor Camera,FogColorR,FogColorG,FogColorB
+			CameraClsColor Camera,FogColorR,FogColorG,FogColorB
 		EndIf
-		Local FogColorR% = Left(CurrFogColor,3)
-		Local FogColorG% = Mid(CurrFogColor,4,3)
-		Local FogColorB% = Right(CurrFogColor,3)
-		CameraFogColor Camera,FogColorR,FogColorG,FogColorB
-		CameraClsColor Camera,FogColorR,FogColorG,FogColorB
 		
 		If InfiniteStamina% Then Stamina = Min(100, Stamina + (100.0-Stamina)*0.01*FPSfactor)
 		

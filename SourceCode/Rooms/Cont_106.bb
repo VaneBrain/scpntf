@@ -58,7 +58,7 @@ Function FillRoom_Cont_106(r.Rooms)
 	PositionEntity (r\Objects[9], r\x - 272 * RoomScale, r\y - 672.0 * RoomScale, r\z + 2736.0 * RoomScale, True)
 	
 	r\Objects[10] = CreatePivot(r\obj)
-	PositionEntity (r\Objects[10], r\x, r\y, r\z - 720.0 * RoomScale, True)
+	PositionEntity (r\Objects[10], r\x - 300.0 * RoomScale, r\y, r\z - 720.0 * RoomScale, True)
 	
 	w.WayPoints = CreateWaypoint(r\x + 480.0*RoomScale, r\y + 50*RoomScale, r\z + 2240.0*RoomScale,Null,r)
 	w.WayPoints = CreateWaypoint(r\x, r\y + 50*RoomScale, r\z + 1600.0*RoomScale,Null,r)

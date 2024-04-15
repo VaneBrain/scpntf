@@ -12,40 +12,22 @@ Function FillRoom_Pocketdimension(r.Rooms)
 	r\Objects[11]=LoadRMesh("GFX\map\rooms\pocketdimension\pocketdimension5_opt.rmesh",Null,False) ;the pillar room
 	
 	terrain = LoadMesh_Strict("GFX\map\rooms\pocketdimension\pocketdimensionterrain.b3d")
-	ScaleEntity terrain,RoomScale,RoomScale,RoomScale,True
-	PositionEntity terrain, 0, 2944, 0, True
+	Local tex = LoadTexture_Strict("GFX\map\textures\rockmoss.jpg")
+	EntityTexture terrain, tex, 0, 1
 	
 	CreateItem("Burnt Note", "paper", EntityX(r\obj),0.5,EntityZ(r\obj)+3.5)
-	
-;	For n = 0 To -1
-;		
-;		Select n
-;			Case 0
-;				entity = hallway 					
-;			Case 1
-;				entity = r\Objects[8]						
-;			Case 2
-;				entity = r\Objects[9]						
-;			Case 3
-;				entity = r\Objects[10]							
-;			Case 4
-;				entity = r\Objects[11]							
-;		End Select
-;		
-;	Next
 	
 	For i = 8 To 11
 		ScaleEntity (r\Objects[i],RoomScale,RoomScale,RoomScale)
 		EntityType GetChild(r\Objects[i],2), HIT_MAP
 		EntityPickMode GetChild(r\Objects[i],2), 2
 		PositionEntity(r\Objects[i],r\x,r\y,r\z+32.0,True)
-		EntityParent(r\Objects[i], r\obj)
 	Next
 	
 	ScaleEntity (terrain,RoomScale,RoomScale,RoomScale)
 	EntityType terrain, HIT_MAP
 	EntityPickMode terrain, 3
-	PositionEntity(terrain,r\x,r\y+2944.0*RoomScale,r\z+32.0,True)			
+	PositionEntity(terrain,r\x,r\y+2944.0*RoomScale,r\z+32.0,True)
 	
 	r\RoomDoors[0] = CreateDoor(0, r\x,2048*RoomScale,r\z+32.0-1024*RoomScale,0,r,False)
 	r\RoomDoors[1] = CreateDoor(0, r\x,2048*RoomScale,r\z+32.0+1024*RoomScale,180,r,False)
@@ -126,7 +108,7 @@ Function FillRoom_Pocketdimension(r.Rooms)
 End Function
 
 Function UpdateEvent_Pocketdimension(e.Events)
-	Local r.Rooms,de.Decals,e2.Events,p.Particles
+	Local p.Particles
 	Local angle#,x#,y#,z#,dist#,pvt%,temp#
 	Local i
 	
@@ -150,17 +132,6 @@ Function UpdateEvent_Pocketdimension(e.Events)
 		PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = True
 		
 		If (EntityY(Collider)<2000*RoomScale Lor EntityY(Collider)>2608*RoomScale) Then CurrStepSFX = 1
-		
-		If e\Sound = 0 Then LoadEventSound(e,"SFX\Room\PocketDimension\Rumble.ogg")
-		If e\Sound2 = 0 Then e\Sound2 = LoadEventSound(e,"SFX\Room\PocketDimension\PrisonVoices.ogg",1)
-		
-		If e\EventState = 0 Then
-			CameraFogColor Camera, 0,0,0
-			CameraClsColor Camera, 0,0,0
-			PlaySound_Strict(Use914SFX)
-			PlaySound_Strict(OldManSFX[5])
-			e\EventState = 0.1
-		EndIf
 		
 		If EntityY(Collider)<2000*RoomScale Lor e\EventState3=0 Lor EntityY(Collider)>2608*RoomScale Then 
 			ShouldPlay = 3
@@ -207,7 +178,9 @@ Function UpdateEvent_Pocketdimension(e.Events)
 			Curr106\State = -11
 		EndIf
 		
-		If e\EventState2 = 1 Then ;in the second room
+		If Int(e\EventState2) = 1 Then ;in the second room
+			CameraFogColor Camera, 0,0,0
+			CameraClsColor Camera, 0,0,0
 			
 			ShowEntity(e\room\Objects[9])
 			PositionEntity(e\room\Objects[9], EntityX(e\room\Objects[8],True)+3384*RoomScale, 0.0, EntityZ(e\room\Objects[8],True),True)
@@ -234,6 +207,13 @@ Function UpdateEvent_Pocketdimension(e.Events)
 					
 					CameraFogColor Camera, 38, 55, 47
 					CameraClsColor Camera, 38, 55, 47
+					
+					If e\Sound = 0 Then
+						LoadEventSound(e,"SFX\Room\PocketDimension\Explosion.ogg")
+					EndIf
+					If e\Sound2 = 0 Then 
+						LoadEventSound(e,"SFX\Room\PocketDimension\TrenchPlane.ogg",1)
+					EndIf
 					
 					If EntityX(e\room\Objects[20],True)<EntityX(e\room\Objects[8],True)-4000*RoomScale Then
 						e\SoundCHN2 = PlaySound_Strict(e\Sound2)
@@ -282,7 +262,6 @@ Function UpdateEvent_Pocketdimension(e.Events)
 					ElseIf dist < 8.0
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[20], 8.0)
 						EntityTexture e\room\Objects[20], e\room\Objects[19]
-						;Injuries=Injuries+(8.0-dist)*FPSfactor*0.0005
 						
 						If dist<7.0 Then 
 							pvt% = CreatePivot()
@@ -293,6 +272,8 @@ Function UpdateEvent_Pocketdimension(e.Events)
 							user_camera_pitch=user_camera_pitch-90
 							RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(pvt), EntityYaw(Collider), 10), 0)
 							pvt = FreeEntity_Strict(pvt)
+							
+							DamageSPPlayer(0.025, True)
 						EndIf
 					EndIf
 					
@@ -300,8 +281,8 @@ Function UpdateEvent_Pocketdimension(e.Events)
 					
 					;check if player is at the sinkhole (the exit from the trench room)
 					If EntityY(Collider)<8.5 Then
-						LoadEventSound(e,"SFX\Room\PocketDimension\Rumble.ogg")
-						LoadEventSound(e,"SFX\Room\PocketDimension\PrisonVoices.ogg",1)
+						e\Sound = FreeSound_Strict(e\Sound)
+						e\Sound2 = FreeSound_Strict(e\Sound2)
 						
 						;move to the "exit room"
 						BlurTimer = 1500
@@ -310,13 +291,17 @@ Function UpdateEvent_Pocketdimension(e.Events)
 						
 						PositionEntity(Collider, EntityX(e\room\Objects[8],True)-400*RoomScale, -304*RoomScale, EntityZ(e\room\Objects[8],True))
 						ResetEntity Collider
-						
-						CameraFogColor Camera, 0,0,0
-						CameraClsColor Camera, 0,0,0
 					EndIf
 					
 				Else
 					e\EventState3 = 0
+					
+					If e\Sound = 0 Then 
+						LoadEventSound(e,"SFX\Room\PocketDimension\Rumble.ogg")
+					EndIf
+					If e\Sound2 = 0 Then 
+						LoadEventSound(e,"SFX\Room\PocketDimension\PrisonVoices.ogg",1)
+					EndIf
 					
 					For i = 9 To 10
 						dist = DistanceSquared(EntityX(Collider),EntityX(e\room\Objects[i],True),EntityZ(Collider),EntityZ(e\room\Objects[i],True))
@@ -358,13 +343,11 @@ Function UpdateEvent_Pocketdimension(e.Events)
 					
 					temp = EntityDistance(Collider, e\room\Objects[17])
 					If temp < 2000*RoomScale Then
-						;Injuries = Injuries + (FPSfactor/4000)
 						
-;						If Injuries > 1.0 Then
-;							If Injuries - (FPSfactor/4000)=< 1.0 Then
-;								PlaySound_Strict LoadTempSound("SFX\Room\PocketDimension\Kneel.ogg")
-;							EndIf
-;						EndIf
+						If e\EventState2 = 1 Then
+							PlaySound_Strict LoadTempSound("SFX\Room\PocketDimension\Kneel.ogg")
+							e\EventState2 = 1.1
+						EndIf
 						
 						Sanity = Max(Sanity - FPSfactor / temp / 8,-1000)
 						
@@ -383,16 +366,14 @@ Function UpdateEvent_Pocketdimension(e.Events)
 						
 						;teleport the player to the trenches
 						If Crouch Then
-							;TODO fix trenches!
-;							BlinkTimer = -10
-;							PositionEntity Collider, EntityX(e\room\Objects[8],True)-1344*RoomScale,2944*RoomScale,EntityZ(e\room\Objects[8],True)-1184*RoomScale
-;							ResetEntity Collider
+							BlinkTimer = -10
+							TeleportEntity(Collider, EntityX(e\room\Objects[8],True)-1344*RoomScale,2944*RoomScale,EntityZ(e\room\Objects[8],True)-1184*RoomScale)
+							RotateEntity(Collider, EntityPitch(Collider), 0, EntityRoll(Collider))
 							Crouch = False
-;							
-;							LoadEventSound(e,"SFX\Room\PocketDimension\Explosion.ogg")
-;							LoadEventSound(e,"SFX\Room\PocketDimension\TrenchPlane.ogg",1)
-;							PositionEntity e\room\Objects[20], EntityX(e\room\Objects[8],True)-1000,0,0,True
-							TeleportPlayerFromPD(e)
+							
+							e\Sound = FreeSound_Strict(e\Sound)
+							e\Sound2 = FreeSound_Strict(e\Sound2)
+							PositionEntity e\room\Objects[20], EntityX(e\room\Objects[8],True)-1000,0,0,True
 						EndIf
 					ElseIf EntityY(Collider)<-180*RoomScale ;the "exit room"
 						temp = Distance(EntityX(Collider),EntityX(e\room\Objects[8],True)+1024*RoomScale,EntityZ(Collider),EntityZ(e\room\Objects[8],True))
@@ -412,13 +393,6 @@ Function UpdateEvent_Pocketdimension(e.Events)
 			
 			If EntityY(Collider) < -1600*RoomScale Then
 				If EntityDistanceSquared(Collider, e\room\Objects[8]) > PowTwo(4750*RoomScale) Then
-					CameraFogColor Camera, 0,0,0
-					CameraClsColor Camera, 0,0,0
-					
-					DropSpeed = 0
-					BlurTimer = 500
-					BlurTimer = 1500
-					PositionEntity(Collider, EntityX(e\room\obj,True), 0.4, EntityX(e\room\obj,True))
 					TeleportPlayerFromPD(e)
 				Else ;the player is not at the exit, must've fallen down
 					
@@ -432,6 +406,9 @@ Function UpdateEvent_Pocketdimension(e.Events)
 				EndIf
 			EndIf
 		ElseIf e\EventState2 = 0
+			CameraFogColor Camera, 0,0,0
+			CameraClsColor Camera, 0,0,0
+			
 			HideEntity(e\room\Objects[9])
 			HideEntity(e\room\Objects[10])
 			dist# = EntityDistance(Collider, e\room\obj)	
@@ -475,7 +452,7 @@ Function UpdateEvent_Pocketdimension(e.Events)
 						ResetEntity Collider
 					Case 16,17,18,19
 						TeleportPlayerFromPD(e)
-					Case 20,21,22 ;the tower room
+					Case 20,21,22 ;pillar room
 						BlinkTimer = -10
 						PositionEntity(Collider, EntityX(e\room\Objects[12],True), 0.6, EntityZ(e\room\Objects[12],True))
 						ResetEntity Collider
@@ -538,18 +515,7 @@ Function UpdateEvent_Pocketdimension(e.Events)
 			If EntityY(Collider) < -1600*RoomScale Then
 				;player is at the exit
 				If DistanceSquared(EntityX(e\room\Objects[16],True),EntityX(Collider),EntityZ(e\room\Objects[16],True),EntityZ(Collider))<PowTwo(144*RoomScale) Then
-					
-					CameraFogColor Camera, 0,0,0
-					CameraClsColor Camera, 0,0,0
-					
-					DropSpeed = 0
-					BlurTimer = 500
-					PositionEntity(Collider, EntityX(e\room\obj), 0.5, EntityZ(e\room\obj))
-					ResetEntity Collider
-					e\EventState2 = 0
-					d_I\UpdateDoorsTimer = 0
-					UpdateDoors()
-					UpdateRooms()
+					TeleportPlayerFromPD(e)
 				Else ;somewhere else -> must've fallen down
 					If KillTimer => 0 Then 
 						PlaySound_Strict HorrorSFX[8]
@@ -575,7 +541,7 @@ End Function
 
 Function TeleportPlayerFromPD(e.Events)
 	Local r.Rooms, de.Decals, e2.Events
-	Local random%, temp%
+	Local random%, temp%, spawnDecal% = True
 	
 	If KillTimer < 0 Then Return
 	
@@ -586,50 +552,50 @@ Function TeleportPlayerFromPD(e.Events)
 		EndIf
 	Next
 	
-	random = Rand(1,9)
-	For r.Rooms = Each Rooms
-		If NTF_CurrZone = HCZ Then
-			If r\RoomTemplate\Name = "room1_sewers" And temp Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			ElseIf r\RoomTemplate\Name = "room2_tunnel_1" And random <= 3 And (Not temp) Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				;de.Decals = CreateDecal(DECAL_DECAY, EntityX(r\obj,True),EntityY(r\obj,True),EntityZ(r\obj,True), 270, Rand(360), 0)
-				;TeleportEntity(de\obj,EntityX(r\obj,True),EntityY(r\obj,True)+1.0,EntityZ(r\obj,True),0.3,True,4,1)
-				Exit
-			ElseIf r\RoomTemplate\Name = "cont_106" And (random > 3 And random <= 6) And (Not temp) Then
-				TeleportEntity(Collider,EntityX(r\Objects[10],True),0.4,EntityZ(r\Objects[10],True),0.3,True)
-				Exit
-			ElseIf r\RoomTemplate\Name = "room2_elevator_2" And random > 6 And (Not temp) Then	
-				TeleportEntity(Collider,EntityX(r\Objects[0],True),0.4,EntityZ(r\Objects[0],True),0.3,True)
-				;de.Decals = CreateDecal(DECAL_DECAY, EntityX(r\Objects[0],True),EntityY(r\Objects[0],True),EntityZ(r\Objects[0],True), 270, Rand(360), 0)
-				;TeleportEntity(de\obj,EntityX(r\Objects[0],True),EntityY(r\Objects[0],True)+1.0,EntityZ(r\Objects[0],True),0.3,True,4,1)
-				Exit
-			EndIf
-		ElseIf NTF_CurrZone = LCZ Then
-			If r\RoomTemplate\Name = "room2_3" And random <= 3 Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			ElseIf r\RoomTemplate\Name = "endroom_1" And (random > 3 And random <= 6) Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			ElseIf r\RoomTemplate\Name = "room2c_1" And random > 6 Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			EndIf
-		ElseIf NTF_CurrZone = EZ Then
-			If r\RoomTemplate\Name = "room4_ez" And random <= 3 Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			ElseIf r\RoomTemplate\Name = "endroom_1" And (random > 3 And random <= 6) Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			ElseIf r\RoomTemplate\Name = "room2c_ez" And random > 6 Then
-				TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
-				Exit
-			EndIf
-		EndIf	
-	Next
+	Repeat
+		random = Rand(1,9)
+		For r.Rooms = Each Rooms
+			If NTF_CurrZone = HCZ Then
+				If r\RoomTemplate\Name = "room1_sewers" And temp Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					spawnDecal = False
+					Exit
+				ElseIf r\RoomTemplate\Name = "room2_tunnel_1" And random <= 3 And (Not temp) Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				ElseIf r\RoomTemplate\Name = "cont_106" And (random > 3 And random <= 6) And (Not temp) Then
+					TeleportEntity(Collider,EntityX(r\Objects[10],True),0.4,EntityZ(r\Objects[10],True),0.3,True)
+					Exit
+				ElseIf r\RoomTemplate\Name = "room2_elevator_2" And random > 6 And (Not temp) Then	
+					TeleportEntity(Collider,EntityX(r\Objects[0],True),0.4,EntityZ(r\Objects[0],True),0.3,True)
+					Exit
+				EndIf
+			ElseIf NTF_CurrZone = LCZ Then
+				If r\RoomTemplate\Name = "room2_3" And random <= 3 Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				ElseIf r\RoomTemplate\Name = "endroom_1" And (random > 3 And random <= 6) Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				ElseIf r\RoomTemplate\Name = "room2c_1" And random > 6 Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				EndIf
+			ElseIf NTF_CurrZone = EZ Then
+				If r\RoomTemplate\Name = "room4_ez" And random <= 3 Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				ElseIf r\RoomTemplate\Name = "endroom_1" And (random > 3 And random <= 6) Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				ElseIf r\RoomTemplate\Name = "room2c_ez" And random > 6 Then
+					TeleportEntity(Collider,EntityX(r\obj,True),0.4,EntityZ(r\obj,True),0.3,True)
+					Exit
+				EndIf
+			EndIf	
+		Next
+	Until r <> Null
+	
 	e\EventState = 0
 	e\EventState2 = 0
 	d_I\UpdateDoorsTimer = 0
@@ -649,6 +615,19 @@ Function TeleportPlayerFromPD(e.Events)
 	UpdateDoors()
 	Curr106\State = 10000
 	Curr106\Idle = False
-End Function	
+	
+	If spawnDecal Then
+		Local pvt% = CreatePivot(Collider)
+		PositionEntity(pvt, EntityX(Collider), EntityY(Collider), EntityZ(Collider), True)
+		RotateEntity pvt, -90, 0, 0
+		EntityPick(pvt, 10000.0)
+		If PickedEntity() <> 0 Then
+			de.Decals = CreateDecal(DECAL_DECAY, PickedX(), PickedY()-0.0025, PickedZ(), 270, Rand(360), 0)
+			AlignToVector de\obj, -PickedNX(), -PickedNY(), -PickedNZ(), 3
+		EndIf
+		pvt = FreeEntity_Strict(pvt)
+	EndIf
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
