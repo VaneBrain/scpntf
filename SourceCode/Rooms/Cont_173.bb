@@ -95,23 +95,25 @@ End Function
 
 Function UpdateEvent_Cont_173(e.Events)
 	
-	Select e\EventState
-		Case 0
-			If Curr173\Idle = SCP173_BOXED And EntityDistanceSquared(Curr173\Collider, e\room\Objects[CONT_173_CHAMBERPIVOT]) < PowTwo(1.5) Then
-				PlayPlayerSPVoiceLine("scp173contained" + Rand(1, 2))
-				Curr173\Idle = SCP173_CONTAINED
-				Contained173 = True
-				e\EventState = 1
-			EndIf
-		Case 1
-			If EntityDistanceSquared(Collider, e\room\Objects[CONT_173_CHAMBERPIVOT]) > PowTwo(8.0) Then
-				UseDoor(e\room\RoomDoors[CONT_173_DOOR_CHAMBER], False)
-				PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
-				EndTask(TASK_173TOCHAMBER)
-				Steam_Achieve(ACHV_173_CONTAINED)
-				e\EventState = 2
-			EndIf
-	End Select
+	If PlayerRoom = e\room Then
+		Select e\EventState
+			Case 0
+				If Curr173\Idle = SCP173_BOXED And EntityDistanceSquared(Curr173\Collider, e\room\Objects[CONT_173_CHAMBERPIVOT]) < 2.5 Then
+					PlayPlayerSPVoiceLine("scp173contained" + Rand(1, 2))
+					Curr173\Idle = SCP173_CONTAINED
+					Contained173 = True
+					e\EventState = 1
+				EndIf
+			Case 1
+				If EntityDistanceSquared(Collider, e\room\Objects[CONT_173_CHAMBERPIVOT]) >= 64.0 Then
+					OpenCloseDoor(e\room\RoomDoors[CONT_173_DOOR_CHAMBER])
+					PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
+					EndTask(TASK_173TOCHAMBER)
+					Steam_Achieve(ACHV_173_CONTAINED)
+					e\EventState = 2
+				EndIf
+		End Select
+	EndIf
 	
 End Function
 
