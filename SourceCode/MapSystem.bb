@@ -150,13 +150,8 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 	
 	Local hasNoColl% = False
 	
-	For i=0 To 3 ;reattempt up to 3 times
-		If f=0 Then
-			f=ReadFile(file)
-		Else
-			Exit
-		EndIf
-	Next
+	f=ReadFile(file)
+	
 	If f=0 Then RuntimeError "Error reading file "+Chr(34)+file+Chr(34)
 	Local isRMesh$ = ReadString(f)
 	If Instr(isRMesh,"RoomMesh") = 0 Then
