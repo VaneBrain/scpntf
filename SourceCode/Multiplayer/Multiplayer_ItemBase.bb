@@ -157,7 +157,7 @@ Function UpdateMPItems()
 					HideEntity i\OverHereSprite
 				Else
 					ShowEntity i\OverHereSprite
-					PositionEntity i\OverHereSprite, EntityX(i\collider), EntityY(i\collider), EntityZ(i\collider)
+					PositionEntity i\OverHereSprite, EntityX(i\collider), EntityY(i\collider)+0.25, EntityZ(i\collider)
 				EndIf
 			EndIf
 			
