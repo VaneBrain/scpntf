@@ -128,7 +128,7 @@ Function UpdateEvent_Checkpoint_EZ_106(e.Events)
 				Next
 				
 				If e\room\NPC[CHECKPOINT_EZ_NPC1_ID] <> Null And e\room\NPC[CHECKPOINT_EZ_NPC2_ID] <> Null Then
-					;TODO: Play audio of MTF units going to the elevator doors
+					MTFtimer = 30000
 					PlayNewDialogue(100,%011101)
 					mtfd\Enabled = False
 					n.NPCs = CreateNPC(NPCtypeD,EntityX(e\room\Objects[CHECKPOINT_EZ_BODY_POS_ID],True),EntityY(e\room\Objects[CHECKPOINT_EZ_BODY_POS_ID],True),EntityZ(e\room\Objects[CHECKPOINT_EZ_BODY_POS_ID],True))
