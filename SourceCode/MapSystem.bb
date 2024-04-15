@@ -3388,24 +3388,24 @@ Function UpdateLever(obj, locked=False, axis%=LEVER_AXIS_PITCH, lever_min%=-80, 
 	
 End Function
 
-Function UpdateButton(obj)
+Function UpdateButton%(obj)
+	Local result% = False
 	Local dist# = EntityDistanceSquared(Collider, obj)
 	If dist < PowTwo(0.8) Then
 		Local temp% = CreatePivot()
-		PositionEntity temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera)
+		PositionEntity temp, EntityX(mpl\CameraPivot), EntityY(mpl\CameraPivot), EntityZ(mpl\CameraPivot)
 		PointEntity temp,obj
 		
 		If EntityPick(temp, 0.65) = obj Then
-			If d_I\ClosestButton = 0 Then 
+			If d_I\ClosestButton = 0 Lor dist < EntityDistanceSquared(Collider, d_I\ClosestButton) Then
 				d_I\ClosestButton = obj
-			Else
-				If dist < EntityDistanceSquared(Collider, d_I\ClosestButton) Then d_I\ClosestButton = obj
-			EndIf							
+				result = True
+			EndIf
 		EndIf
 		
 		temp = FreeEntity_Strict(temp)
 	EndIf			
-	
+	Return result
 End Function
 
 Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.Events, ignorerotation% = True)

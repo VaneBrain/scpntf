@@ -325,23 +325,9 @@ Function UpdateDoors()
 					If d\buttons[i] <> 0 Then
 						If Abs(EntityX(Collider)-EntityX(d\buttons[i],True)) < 1.0 Then 
 							If Abs(EntityZ(Collider)-EntityZ(d\buttons[i],True)) < 1.0 Then 
-								Local dist# = DistanceSquared(EntityX(Collider, True), EntityX(d\buttons[i], True), EntityZ(Collider, True), EntityZ(d\buttons[i], True))
-								If dist < PowTwo(0.7) Then
-									Local temp% = CreatePivot()
-									PositionEntity temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera)
-									PointEntity temp,d\buttons[i]
-									
-									If EntityPick(temp, 0.6) = d\buttons[i] Then
-										If d_I\ClosestButton = 0 Then
-											d_I\ClosestButton = d\buttons[i]
-											d_I\ClosestDoor = d
-										Else
-											If dist < EntityDistanceSquared(Collider, d_I\ClosestButton) Then d_I\ClosestButton = d\buttons[i] : d_I\ClosestDoor = d
-										EndIf							
-									EndIf
-									
-									temp = FreeEntity_Strict(temp)
-								EndIf							
+								If UpdateButton(d\buttons[i]) Then
+									d_I\ClosestDoor = d
+								EndIf
 							EndIf
 						EndIf
 						
