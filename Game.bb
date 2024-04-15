@@ -46,6 +46,7 @@ Type Options
 	Field MouseSmooth#
 	Field HoldToAim%
 	Field HoldToCrouch%
+	Field GraphicDriver%
 End Type
 
 Const GAMEMODE_UNKNOWN% = -1
@@ -123,6 +124,7 @@ Function InitOptions()
 	opt\GraphicHeight% = GetINIInt(gv\OptionFile, "options", "height", DesktopHeight())
 	opt\ShowFPS = GetINIInt(gv\OptionFile, "options", "show FPS", 0)
 	opt\DisplayMode% = GetINIInt(gv\OptionFile, "options", "display mode", 1)
+	opt\GraphicDriver% = GetINIInt(gv\OptionFile, "options", "graphic driver", 0)
 	opt\RenderCubeMapMode% = GetINIInt(gv\OptionFile, "options", "cubemaps", 2)
 	opt\EnableRoomLights% = GetINIInt(gv\OptionFile, "options", "room lights enabled", 1)
 	opt\TextureDetails% = GetINIInt(gv\OptionFile, "options", "texture details", 2)

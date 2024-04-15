@@ -5716,8 +5716,8 @@ End Function
 
 Function Graphics3DExt%(width%,height%,depth%=32,mode%=2)
 	
+	SetGfxDriver(opt\GraphicDriver+1)
 	Graphics3D width,height,depth,mode
-	SetGfxDriver(CountGfxDrivers())
 	TextureFilter "", 8192 ;This turns on Anisotropic filtering for textures. Use TextureAnisotropic to change anisotropic level.
 	InitFastResize()
 	

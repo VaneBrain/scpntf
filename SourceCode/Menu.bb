@@ -3369,6 +3369,7 @@ Function UpdateLauncher()
 	Local UpdaterIMG% = CreateImage(400,445)
 	
 	AppTitle "SCP: Nine-Tailed Fox Launcher"
+	CountGfxDrivers()
 	
 	Repeat
 		Local y = 0
@@ -3386,7 +3387,7 @@ Function UpdateLauncher()
 		If DrawButton(640 - 32, 0, 32, 32, "X", False, False, False) Then
 			PutINIValue(gv\OptionFile, "options", "width", currentWidth)
 			PutINIValue(gv\OptionFile, "options", "height", currentHeight)
-			PutINIValue(gv\OptionFile, "options", "display mode", opt\DisplayMode)
+			PutINIValue(gv\OptionFile, "options", "graphic driver", opt\GraphicDriver)
 			Steam_Shutdown()
 			End
 		EndIf
@@ -3429,27 +3430,27 @@ Function UpdateLauncher()
 		EndIf
 		
 		Color 255,255,255
-		Text(20, 130, GetLocalString("Launcher", "resolution") + ":")
+		Text(80, 130, GetLocalString("Launcher", "resolution") + ":", True)
 		DrawFrame(5, 150, 120, 30, 0, 0, 1024, 1024, FRAME_THICK, 512)
 		Text(65, 165, currentWidth + "x" + currentHeight, True, True)
 		Local frameheight = 0
 		y = 0
+		
+		Local txt$
 		Select SelectedInputBox
 			Case 0 ;Every tab hidden
 				If DrawButton(120, 150, 30, 30, "▼", False, False, False) Then
 					SelectedInputBox = 1
 				EndIf
 				
-				Text(15, 200, GetLocalString("Launcher", "mode") + ":")
+				Text(80, 200, GetLocalString("Launcher", "driver") + ":", True)
 				DrawFrame(5, 220, 120, 30, 0, 0, 1024, 1024, FRAME_THICK, 512)
-				Local txt$
-				Select opt\DisplayMode
-					Case 0
-						txt = GetLocalString("Launcher", "windowed")
-					Case 1
-						txt = GetLocalString("Launcher", "fullscreen")
-				End Select
-				Text(65, 235, txt, True, True)
+				If opt\GraphicDriver = 0 Then
+					txt = GetLocalString("Launcher", "primary_driver")
+				Else
+					txt = GfxDriverName(opt\GraphicDriver+1)
+				EndIf
+				Text(20, 235, LimitText(txt,10),False,True)
 				If DrawButton(120, 220, 30, 30, "▼", False, False, False) Then
 					SelectedInputBox = -1
 				EndIf
@@ -3458,20 +3459,28 @@ Function UpdateLauncher()
 					SelectedInputBox = 1
 				EndIf
 				
-				DrawFrame(5, 237, 145, 70, 0, 0, 1024, 1024, FRAME_THICK, 512)
-				For i = 0 To 1
-					Select i
-						Case 0
-							Text(5+(145/2),267+(20*i),GetLocalString("Launcher", "windowed"),True,True)
-						Case 1
-							Text(5+(145/2),267+(20*i),GetLocalString("Launcher", "fullscreen"),True,True)
-					End Select
-					If MouseOn(20,257+(20*i),113,20) Then
+				Local txt2$
+				For i = 0 To CountGfxDrivers()-1
+					If i = 0 Then
+						txt2 = GetLocalString("Launcher", "primary_driver")
+					ElseIf StringWidth(txt2) < StringWidth(GfxDriverName(i+1))
+						txt2 = GfxDriverName(i+1)
+					EndIf
+				Next
+				DrawFrame(5, 247, StringWidth(txt2)+30, 20*(i+1), 0, 0, 1024, 1024, FRAME_THICK, 512)
+				For i = 0 To CountGfxDrivers()-1
+					If i = 0 Then
+						txt2 = GetLocalString("Launcher", "primary_driver")
+					Else
+						txt2 = GfxDriverName(i+1)
+					EndIf
+					Text(20,267+(20*i),txt2,False,True)
+					If MouseOn(15,257+(20*i),StringWidth(txt2)+10,20) Then
 						Color 100,100,100
-						Rect(20,257+(20*i),113,20,False)
+						Rect(15,257+(20*i),StringWidth(txt2)+10,20,False)
 						Color 255,255,255
 						If MouseHit1 Then
-							opt\DisplayMode = i
+							opt\GraphicDriver = i
 							SelectedInputBox = 0
 							PlaySound_Strict ButtonSFX
 							Exit
@@ -3479,16 +3488,14 @@ Function UpdateLauncher()
 					EndIf
 				Next
 				
-				Text(15, 200, GetLocalString("Launcher", "mode")+":")
+				Text(80, 200, GetLocalString("Launcher", "driver")+":", True)
 				DrawFrame(5, 220, 120, 30, 0, 0, 1024, 1024, FRAME_THICK, 512)
-				txt$ = ""
-				Select opt\DisplayMode
-					Case 0
-						txt = GetLocalString("Launcher", "windowed")
-					Case 1
-						txt = GetLocalString("Launcher", "fullscreen")
-				End Select
-				Text(65, 235, txt,True,True)
+				If opt\GraphicDriver = 0 Then
+					txt = GetLocalString("Launcher", "primary_driver")
+				Else
+					txt = GfxDriverName(opt\GraphicDriver+1)
+				EndIf
+				Text(20, 235, LimitText(txt,10),False,True)
 				
 				If DrawButton(120, 220, 30, 30, "▲", False, False, False) Then
 					SelectedInputBox = 0
@@ -3548,6 +3555,11 @@ Function UpdateLauncher()
 			opt\GraphicHeight = currentHeight
 			RealGraphicWidth = opt\GraphicWidth
 			RealGraphicHeight = opt\GraphicHeight
+			If opt\GraphicWidth = DesktopWidth() And opt\GraphicHeight = DesktopHeight() Then
+				opt\DisplayMode = 1
+			Else
+				opt\DisplayMode = 0
+			EndIf
 			Exit
 		EndIf
 		Flip
@@ -3555,7 +3567,7 @@ Function UpdateLauncher()
 	
 	PutINIValue(gv\OptionFile, "options", "width", opt\GraphicWidth)
 	PutINIValue(gv\OptionFile, "options", "height", opt\GraphicHeight)
-	PutINIValue(gv\OptionFile, "options", "display mode", opt\DisplayMode)
+	PutINIValue(gv\OptionFile, "options", "graphic driver", opt\GraphicDriver)
 	
 	DeleteMenuImages()
 	
@@ -3567,6 +3579,9 @@ Function UpdateLauncher()
 	ScrollBarY2 = 0
 	ScrollMenuHeight = 0
 	ScrollMenuHeight2 = 0
+	
+	EndGraphics()
+	Delay 10
 	
 End Function
 
