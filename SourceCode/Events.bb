@@ -65,7 +65,7 @@ Function CreateEvent.Events(eventname$, roomname$, id%, prob# = 0.0)
 					If e2\room = r Then temp = True : Exit
 				Next
 				
-				If Rnd(0.0, 1.0) < prob And temp = False Then
+				If Rnd(0.0, 1.0) <= prob And temp = False Then
 					e.Events = New Events
 					e\EventName = eventname
 					e\room = r
