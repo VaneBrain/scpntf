@@ -76,6 +76,7 @@ Function UpdateEvent_Gate_A_Entrance(e.Events)
 				n\EnemyZ = EntityZ(n\Collider)
 				PointEntity(n\Collider,e\room\RoomDoors[1]\frameobj)
 				SetNPCFrame(n,Rand(962, 1259))
+				n\NPCRoom = e\room
 			Next
 			
 			e\room\NPC[1]\texture = "GFX\npcs\MTF_newdiffuse_medic.jpg"
