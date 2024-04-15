@@ -293,16 +293,9 @@ Function UpdateNPCtype096(n.NPCs)
 		Case SCP096_WALKING
 			;[Block]
 			If dist < PowTwo(16.0) Then 
-				
-				If dist < PowTwo(4.0) Then
-					GiveAchievement(Achv096)
-				EndIf
-				
-				If n\SoundChn = 0
+				If n\SoundChn = 0 Then
 					n\SoundChn = StreamSound_Strict("SFX\Music\096.ogg",0)
 					n\SoundChn_IsStream = True
-				Else
-					UpdateStreamSoundOrigin(n\SoundChn,Camera,n\Collider,14.0,opt\VoiceVol*opt\MasterVol)
 				EndIf
 				
 				If n\Frame>=422
@@ -383,6 +376,8 @@ Function UpdateNPCtype096(n.NPCs)
 					EndIf
 				EndIf
 			EndIf
+			
+			UpdateStreamSoundOrigin(n\SoundChn,Camera,n\Collider,14.0,opt\VoiceVol*opt\MasterVol)
 			;[End Block]
 	End Select
 	
