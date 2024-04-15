@@ -262,6 +262,14 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 	
 	d\MTFClose = True
 	
+	HideEntity d\obj
+	If d\obj2 <> 0 Then
+		HideEntity d\obj2
+	EndIf
+	HideEntity d\frameobj
+	HideEntity d\buttons[0]
+	HideEntity d\buttons[1]
+	
 	Return d
 	
 End Function
