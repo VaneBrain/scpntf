@@ -2868,7 +2868,9 @@ Function MovePlayer()
 		
 		Local CollidedFloor% = False
 		For i = 1 To CountCollisions(Collider)
-			If CollisionY(Collider, i) < EntityY(Collider) - 0.25 Then CollidedFloor = True
+			If CollisionY(Collider, i) < EntityY(Collider) - 0.25 Then 
+				CollidedFloor = True
+			EndIf
 		Next
 		
 		If CollidedFloor = True Then
@@ -2886,21 +2888,12 @@ Function MovePlayer()
 			EndIf
 			DropSpeed# = 0
 		Else
-			;DropSpeed# = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
-			If PlayerFallingPickDistance#<>0.0
-				Local pick = LinePick(EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,-PlayerFallingPickDistance,0)
-				If pick
-					DropSpeed# = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
-				Else
-					DropSpeed# = 0
-				EndIf
-			Else
-				DropSpeed# = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
-			EndIf
+			DropSpeed# = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
 		EndIf
-		PlayerFallingPickDistance# = 10.0
 		
-		If (Not UnableToMove%) And ShouldEntitiesFall Then TranslateEntity Collider, 0, DropSpeed * FPSfactor, 0
+		If (Not UnableToMove%) And ShouldEntitiesFall Then 
+			TranslateEntity Collider, 0, DropSpeed * FPSfactor, 0
+		EndIf
 	EndIf
 	
 	ForceMove = False

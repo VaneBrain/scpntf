@@ -1810,17 +1810,6 @@ Function LoadGame(file$, zoneToLoad%=-1)
 		Next
 	EndIf
 	
-	If Collider <> 0 Then
-		If PlayerRoom<>Null Then
-			ShowEntity PlayerRoom\obj
-		EndIf
-		ShowEntity Collider
-		TeleportEntity(Collider,EntityX(Collider),EntityY(Collider)+0.5,EntityZ(Collider),0.3,True)
-		If PlayerRoom<>Null Then
-			HideEntity PlayerRoom\obj
-		EndIf
-	EndIf
-	
 	UpdateDoorsTimer = 0
 	
 	CatchErrors("Uncaught (LoadGame(" + file + "))")
@@ -1842,9 +1831,6 @@ Function LoadGameQuick(file$)
 	Msg = ""
 	SelectedEnding = ""
 	
-	PositionEntity Collider,0,1000.0,0,True
-	ResetEntity Collider
-	
 	Local x#, y#, z#, i%, j%, temp%, temp2%, strtemp$, id%, tex%, dist#, dist2#
 	Local player_x#,player_y#,player_z#, r.Rooms, n.NPCs, do.Doors, g.Guns, itt.ItemTemplates, it2.Items, n2.NPCs, it.Items, em.Emitters, fb.FuseBox, ne.NewElevator
 	Local f% = ReadFile(file + "main.ntf")
@@ -1853,7 +1839,7 @@ Function LoadGameQuick(file$)
 	strtemp = ReadString(f)
 	strtemp = ReadString(f)
 	
-	DropSpeed = -0.1
+	DropSpeed = 0.0
 	HeadDropSpeed = 0.0
 	Shake = 0
 	CurrSpeed = 0
@@ -1874,9 +1860,7 @@ Function LoadGameQuick(file$)
 	
 	PlayTime = ReadInt(f)
 	
-	;HideEntity Head
 	HideEntity Collider
-	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
@@ -2427,17 +2411,6 @@ Function LoadGameQuick(file$)
 	;EndIf
 	
 	CloseFile f
-	
-	If Collider <> 0 Then
-		If PlayerRoom<>Null Then
-			ShowEntity PlayerRoom\obj
-		EndIf
-		ShowEntity Collider
-		TeleportEntity(Collider,EntityX(Collider),EntityY(Collider)+0.5,EntityZ(Collider),0.3,True)
-		If PlayerRoom<>Null Then
-			HideEntity PlayerRoom\obj
-		EndIf
-	EndIf
 	
 	UpdateDoorsTimer = 0
 	
