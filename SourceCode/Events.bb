@@ -159,7 +159,9 @@ Function InitEvents()
 	CreateEvent("room3_tunnel","room3_tunnel", 0, 0.2)
 	CreateEvent("cont_513","cont_513", 0)
 	
-	CreateEvent("room4_1","room4_1", 0)
+	If gopt\GameMode = GAMEMODE_DEFAULT Then
+		CreateEvent("room4_1","room4_1", 0)
+	EndIf
 	
 	If Rand(5)<5 Then
 		Select Rand(3)
