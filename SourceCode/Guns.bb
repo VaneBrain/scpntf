@@ -576,7 +576,7 @@ Function UpdateGuns()
 			prevFrame# = AnimTime(g\obj)
 			
 			If g\ID = pHoldingGun Then
-				shootCondition = ((Not MenuOpen) And (Not ConsoleOpen) And ((Not isMultiplayer) Lor ((Not InLobby()) And (Not mp_I\ChatOpen) And (Not mp_I\Gamemode\DisableMovement) And (Not IsInVote()))) And (Not IsPlayerListOpen()) And (Not IsModerationOpen()))
+				shootCondition = (SelectedItem = Null) And ((Not MenuOpen) And (Not ConsoleOpen) And ((Not isMultiplayer) Lor ((Not InLobby()) And (Not mp_I\ChatOpen) And (Not mp_I\Gamemode\DisableMovement) And (Not IsInVote()))) And (Not IsPlayerListOpen()) And (Not IsModerationOpen()))
 				Select g\GunType
 					Case GUNTYPE_AUTO
 						;[Block]
