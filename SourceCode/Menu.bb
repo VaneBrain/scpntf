@@ -2330,31 +2330,32 @@ Function RenderMainMenu()
 						;[End Block]
 				ElseIf MainMenuTab = MenuTab_Options_ControlsBinding Then
 					;[Block]
-					Text(x + 20 * MenuScale, y - 10 * MenuScale, "Control configuration:")
+					x = x + 20 * MenuScale
+					Text(x, y - 10 * MenuScale, "Control configuration:")
 					y = y + 10 * MenuScale
 					
-					Text(x + 20 * MenuScale, y + 15 * MenuScale, GetLocalString("Options","cont_forward"))
-					Text(x + 20 * MenuScale, y + 35 * MenuScale, GetLocalString("Options","cont_back"))
-					Text(x + 20 * MenuScale, y + 55 * MenuScale, GetLocalString("Options","cont_left"))
-					Text(x + 20 * MenuScale, y + 75 * MenuScale, GetLocalString("Options","cont_right"))
-					Text(x + 20 * MenuScale, y + 95 * MenuScale, GetLocalString("Options","cont_crouch"))
-					Text(x + 20 * MenuScale, y + 115 * MenuScale, GetLocalString("Options","cont_sprint"))
+					Text(x, y + 15 * MenuScale, GetLocalString("Options","cont_forward"))
+					Text(x, y + 35 * MenuScale, GetLocalString("Options","cont_back"))
+					Text(x, y + 55 * MenuScale, GetLocalString("Options","cont_left"))
+					Text(x, y + 75 * MenuScale, GetLocalString("Options","cont_right"))
+					Text(x, y + 95 * MenuScale, GetLocalString("Options","cont_crouch"))
+					Text(x, y + 115 * MenuScale, GetLocalString("Options","cont_sprint"))
 					
-					Text(x + 20 * MenuScale, y + 155 * MenuScale, GetLocalString("Options","cont_holster"))
-					Text(x + 20 * MenuScale, y + 175 * MenuScale, GetLocalString("Options","cont_reload"))
+					Text(x, y + 155 * MenuScale, GetLocalString("Options","cont_holster"))
+					Text(x, y + 175 * MenuScale, GetLocalString("Options","cont_reload"))
 					
-					Text(x + 20 * MenuScale, y + 215 * MenuScale, GetLocalString("Options","cont_blink"))
-					Text(x + 20 * MenuScale, y + 235 * MenuScale, GetLocalString("Options","cont_inventory"))
-					Text(x + 20 * MenuScale, y + 255 * MenuScale, GetLocalString("Options","cont_interact"))
+					Text(x, y + 215 * MenuScale, GetLocalString("Options","cont_blink"))
+					Text(x, y + 235 * MenuScale, GetLocalString("Options","cont_inventory"))
+					Text(x, y + 255 * MenuScale, GetLocalString("Options","cont_interact"))
 					
-					Text(x + 20 * MenuScale, y + 295 * MenuScale, GetLocalString("Options","cont_chat"))
-					Text(x + 20 * MenuScale, y + 315 * MenuScale, GetLocalString("Options","cont_commandwheel"))
-					Text(x + 20 * MenuScale, y + 335 * MenuScale, GetLocalString("Options","cont_socialwheel"))
+					Text(x, y + 295 * MenuScale, GetLocalString("Options","cont_chat"))
+					Text(x, y + 315 * MenuScale, GetLocalString("Options","cont_commandwheel"))
+					Text(x, y + 335 * MenuScale, GetLocalString("Options","cont_socialwheel"))
 					
-					Text(x + 20 * MenuScale, y + 375 * MenuScale, GetLocalString("Options","cont_console"))
-					Text(x + 20 * MenuScale, y + 395 * MenuScale, GetLocalString("Options","cont_save"))
+					Text(x, y + 375 * MenuScale, GetLocalString("Options","cont_console"))
+					Text(x, y + 395 * MenuScale, GetLocalString("Options","cont_save"))
 					
-					If MouseOn(x+20*MenuScale,y,width-40*MenuScale,420*MenuScale)
+					If MouseOn(x,y,width-40*MenuScale,420*MenuScale)
 						DrawOptionsTooltip("controls")
 					EndIf
 					;[End Block]
