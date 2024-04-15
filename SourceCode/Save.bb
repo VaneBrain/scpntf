@@ -52,6 +52,8 @@ Function SaveGame(file$, newzone%=-1)
 	WriteInt f, BlurTimer
 	WriteFloat f, HealTimer
 	
+	WriteByte f, gopt\GameMode + 1
+	
 	For g = Each Guns
 		WriteInt f, g\CurrAmmo
 		WriteInt f, g\CurrReloadAmmo
@@ -695,6 +697,8 @@ Function LoadPlayerData(file$, f%)
 	DeathTimer = ReadInt(f)	
 	BlurTimer = ReadInt(f)	
 	HealTimer = ReadFloat(f)
+	
+	gopt\GameMode = ReadByte(f) - 1
 	
 	For g = Each Guns
 		g\CurrAmmo = ReadInt(f)
