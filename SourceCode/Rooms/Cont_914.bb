@@ -5,8 +5,11 @@ Function FillRoom_Cont_914(r.Rooms)
 	
 	r\RoomDoors[2] = CreateDoor(r\zone,r\x,0,r\z-368.0*RoomScale,0,r,False,True,2)
 	r\RoomDoors[2]\dir=1 : r\RoomDoors[2]\AutoClose=False : r\RoomDoors[2]\open=False
-	PositionEntity (r\RoomDoors[2]\buttons[0], r\x - 496.0 * RoomScale, 0.7, r\z - 272.0 * RoomScale, True)
-	TurnEntity(r\RoomDoors[2]\buttons[0], 0, 90, 0)
+	
+	r\RoomDoors[2]\buttons[0] = FreeEntity_Strict(r\RoomDoors[2]\buttons[0])
+	
+	r\Objects[4] = CreateButton(r\x - 496.0 * RoomScale, 0.7, r\z - 272.0 * RoomScale, 0, 180, 0)
+	EntityParent (r\Objects[4],r\obj)
 	
 	r\Objects[0] = LoadMesh_Strict("GFX\map\rooms\cont_914\914key.x")
 	r\Objects[1] = LoadMesh_Strict("GFX\map\rooms\cont_914\914knob.x")
@@ -60,12 +63,11 @@ Function UpdateEvent_Cont_914(e.Events)
 	
 	If PlayerRoom = e\room Then
 		
-		If e\room\RoomDoors[2]\open
-			GiveAchievement(Achv914)
+		If e\room\RoomDoors[2]\open Then
 			e\EventState2=1
 		EndIf
 		
-		If e\EventState2=1
+		If e\EventState2=1 Then
 			ShouldPlay = 22
 		EndIf
 		
@@ -76,6 +78,15 @@ Function UpdateEvent_Cont_914(e.Events)
 		ElseIf PickedEntity() = e\room\Objects[1]
 			DrawHandIcon = True
 			If keyhituse Then GrabbedEntity = e\room\Objects[1]
+		EndIf
+		
+		If (e\room\RoomDoors[2]\openstate >= 180 Lor e\room\RoomDoors[2]\openstate <= 0) Then
+			UpdateButton(e\room\Objects[4])
+			If d_I\ClosestButton = e\room\Objects[4] And keyhituse Then
+				PlaySound2(ButtonSFX2, Camera, e\room\Objects[4])
+				OpenCloseDoor(e\room\RoomDoors[2])
+				keyhituse=0
+			EndIf
 		EndIf
 		
 		If keydownuse Lor keyhituse Then

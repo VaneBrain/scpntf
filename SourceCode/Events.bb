@@ -157,6 +157,7 @@ Function InitEvents()
 	
 	;the dead guard
 	CreateEvent("room3_tunnel","room3_tunnel", 0, 0.2)
+	CreateEvent("cont_513","cont_513", 0)
 	
 	CreateEvent("room4_1","room4_1", 0)
 	
@@ -385,6 +386,8 @@ Function UpdateEvents()
 				UpdateEvent_Cont_457(e)
 			Case "cont_500_1499"
 				UpdateEvent_Cont_500_1499(e)
+			Case "cont_513"
+				UpdateEvent_Cont_513(e)
 			Case "cont_895","cont_895_106_spawn"
 				UpdateEvent_Cont_895(e)
 			Case "cont_914"

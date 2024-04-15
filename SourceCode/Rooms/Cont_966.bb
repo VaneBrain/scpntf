@@ -2,7 +2,7 @@
 Function FillRoom_Cont_966(r.Rooms)
 	Local d.Doors,sc.SecurityCams,it.Items
 	
-	d = CreateDoor(r\zone, r\x - 400.0 * RoomScale, 0, r\z, -90, r, False, False, 3)
+	d = CreateDoor(r\zone, r\x - 400.0 * RoomScale, 0, r\z, -90, r, False, False, False, "ABCD")
 	d = CreateDoor(r\zone, r\x, 0, r\z - 480.0 * RoomScale, 180, r, False, False, 3)
 	
 	sc.SecurityCams = CreateSecurityCam(r\x-312.0 * RoomScale, r\y + 450*RoomScale, r\z + 656*RoomScale, r)
