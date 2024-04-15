@@ -1673,7 +1673,7 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	
 End Function
 
-Global RoomScale# = 8.0 / 2048.0
+Const RoomScale# = 8.0 / 2048.0
 Const ZONEAMOUNT = 3
 Const MapWidth% = 18, MapHeight% = 18
 Global MapTemp%[(MapWidth + 1) * (MapHeight + 1)]

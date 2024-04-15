@@ -5,6 +5,7 @@
 Const MaxMenu3DStates = 5
 Const MaxMenu3DObjects = 24
 Const MaxMenu3DRenderingObjects = 4
+Const MenuRoomScale# = RoomScale
 ;[End Block]
 
 Type Menu3DInstance

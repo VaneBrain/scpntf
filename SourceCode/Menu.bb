@@ -4117,7 +4117,6 @@ Function DrawOptionsTooltip(option$,value#=0,ingame%=False)
 	Local lines% = 0, lines2% = 0
 	Local txt$ = ""
 	Local txt2$ = "", R% = 0, G% = 0, B% = 0
-	Local usetestimg% = False, extraspace% = 0
 	
 	SetFont fo\Font[Font_Default]
 	Color 255,255,255
@@ -4260,27 +4259,17 @@ Function DrawOptionsTooltip(option$,value#=0,ingame%=False)
 	End Select
 	
 	lines% = GetLineAmount(txt,fw,fh)
-	If usetestimg
-		extraspace = 210*MenuScale
-	EndIf
+	
 	If txt2$ = ""
-		DrawFrame(x,y,width,((StringHeight(txt)*lines)+(10+lines)*MenuScale)+extraspace)
+		DrawFrame(x,y,width,((StringHeight(txt)*lines)+(10+lines)*MenuScale))
 	Else
 		lines2% = GetLineAmount(txt2,fw,fh)
-		DrawFrame(x,y,width,(((StringHeight(txt)*lines)+(10+lines)*MenuScale)+(StringHeight(txt2)*lines2)+(10+lines2)*MenuScale)+extraspace)
+		DrawFrame(x,y,width,(((StringHeight(txt)*lines)+(10+lines)*MenuScale)+(StringHeight(txt2)*lines2)+(10+lines2)*MenuScale))
 	EndIf
 	RowText(txt,fx,fy,fw,fh)
 	If txt2$ <> ""
 		Color R,G,B
 		RowText(txt2,fx,(fy+(StringHeight(txt)*lines)+(5+lines)*MenuScale),fw,fh)
-	EndIf
-	If usetestimg
-		MidHandle Menu_TestIMG
-		If txt2$ = ""
-			DrawImage Menu_TestIMG,x+(width/2),y+100*MenuScale+((StringHeight(txt)*lines)+(10+lines)*MenuScale)
-		Else
-			DrawImage Menu_TestIMG,x+(width/2),y+100*MenuScale+(((StringHeight(txt)*lines)+(10+lines)*MenuScale)+(StringHeight(txt2)*lines2)+(10+lines2)*MenuScale)
-		EndIf
 	EndIf
 	
 End Function

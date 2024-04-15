@@ -719,11 +719,6 @@ Global room2gw_brokendoor% = False
 Global room2gw_x# = 0.0
 Global room2gw_z# = 0.0
 
-Global Menu_TestIMG
-Global menuroomscale# = 8.0 / 2048.0
-
-Global CurrMenu_TestIMG$ = ""
-
 Global ParticleAmount% = GetINIInt(gv\OptionFile,"options","particle amount", 2)
 
 Global NavImages%[5]
