@@ -12,8 +12,6 @@
 ;
 ;This is the main file of the NTF mod, you need to compile this file in order to be able to play the game.
 
-CheckForDlls()
-
 Include "SourceCode/Key.bb"
 
 Include "SourceCode/SteamConstants.bb"
@@ -69,6 +67,8 @@ Include "SourceCode\Controls.bb"
 Include "SourceCode\TypeInstances.bb"
 
 InitGlobalVariables()
+
+CheckForDlls()
 
 ;Create the folder in the AppData if it doesn't exist
 If (FileType(GetEnv$("AppData")+"\scpntf\")<>2) Then
