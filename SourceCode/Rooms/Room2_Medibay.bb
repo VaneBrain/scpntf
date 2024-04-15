@@ -2,9 +2,12 @@
 Function FillRoom_Room2_Medibay(r.Rooms)
 	Local it.Items
 	
-	r\Objects[0] = LoadMesh_Strict("GFX\map\rooms\room2_medibay\medibay_props.b3d",r\obj)
-	EntityType r\Objects[0],HIT_MAP
-	EntityPickMode r\Objects[0],2
+	r\Objects[0] = LoadRMesh("GFX\map\rooms\room2_medibay\medibay_props.rmesh",Null)
+	ScaleEntity (r\Objects[0],RoomScale,RoomScale,RoomScale)
+	EntityType GetChild(r\Objects[0],2), HIT_MAP
+	EntityPickMode GetChild(r\Objects[0],2), 2
+	PositionEntity(r\Objects[0],r\x,r\y,r\z,True)
+	EntityParent(r\Objects[0], r\obj)
 	
 	r\Objects[1] = CreatePivot(r\obj)
 	PositionEntity(r\Objects[1], r\x - 762.0 * RoomScale, r\y + 0.0 * RoomScale, r\z - 346.0 * RoomScale, True)
