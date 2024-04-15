@@ -315,6 +315,8 @@ Global CreditsFont%,CreditsFont2%
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 
+ShowDisclaimers()
+
 DrawLoading(0, True)
 
 ; - -Viewport.
@@ -5713,6 +5715,7 @@ Function SaveOptionsINI()
 	PutINIValue(gv\OptionFile, "binds", "Use key", KEY_USE)
 	PutINIValue(gv\OptionFile, "options", "fov", FOV)
 	;PutINIValue(gv\OptionFile, "options", "pack", "English") TODO
+	PutINIValue(gv\OptionFile, "options", "show disclaimers", opt\ShowDisclaimers)
 	SaveController()
 	SaveKeyBinds()
 	

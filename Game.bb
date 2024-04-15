@@ -48,6 +48,7 @@ Type Options
 	Field MouseSmooth#
 	Field HoldToAim%
 	Field HoldToCrouch%
+	Field ShowDisclaimers%
 	Field GraphicDriver%
 End Type
 
@@ -143,6 +144,7 @@ Function InitOptions()
 	opt\MouseSmooth# = GetINIFloat(gv\OptionFile, "options", "mouse smoothing", 1.0)
 	opt\HoldToAim% = GetINIInt(gv\OptionFile, "options", "hold to aim", 1)
 	opt\HoldToCrouch% = GetINIInt(gv\OptionFile, "options", "hold to crouch", 1)
+	opt\ShowDisclaimers% = GetINIInt(gv\OptionFile, "options", "show disclaimers", 1)
 	
 	LoadResolutions()
 	

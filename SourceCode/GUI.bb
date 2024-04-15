@@ -4315,5 +4315,77 @@ Function MouseOn%(x%, y%, width%, height%)
 	Return False
 End Function
 
+Function ShowDisclaimers()
+	If opt\ShowDisclaimers = 0 Then Return
+	
+	Local timer1# = 60*3, timer2# = 60*3
+	Local img1% = LoadImage_Strict("GFX\menu\disclaimer_warning.png")
+	Local img2% = LoadImage_Strict("GFX\menu\disclaimer_epilepsy.png")
+	img1 = ResizeImage2(img1, ImageWidth(img1) * MenuScale, ImageHeight(img1) * MenuScale)
+	img2 = ResizeImage2(img2, ImageWidth(img2) * MenuScale, ImageHeight(img2) * MenuScale)
+	
+	Local width% = ImageWidth(img1)
+	Local height% = ImageHeight(img1)
+	Local x# = (opt\GraphicWidth / 2) - (width * 0.5)
+	Local y# = (opt\GraphicHeight / 4) - (height * 0.5)
+	
+	Cls
+	Repeat
+		DrawBlock img1, x, y
+		
+		Color 255,255,255
+		SetFont fo\Font[Font_Menu]
+		Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2.5, Upper(GetLocalString("Disclaimer", "work_in_progress_title")), True, True)
+		SetFont fo\Font[Font_Default_Medium]
+		RowText(GetLocalString("Disclaimer", "work_in_progress_1"), opt\GraphicWidth / 2 - (opt\GraphicWidth/3), opt\GraphicHeight / 2, opt\GraphicWidth/1.5, 300, True)
+		
+		Local tmp% = GetLineAmount(GetLocalString("Disclaimer", "work_in_progress_1"), opt\GraphicWidth/1.5, 300)
+		RowText(GetLocalString("Disclaimer", "work_in_progress_2"), opt\GraphicWidth / 2 - (opt\GraphicWidth/3), opt\GraphicHeight / 2 + FontHeight()*2*tmp, opt\GraphicWidth/1.5, 300, True)
+		
+		If timer1 <= 0.0 Then
+			SetFont fo\Font[Font_Default]
+			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 1.1, Upper(GetLocalString("Disclaimer", "continue")), True, True)
+			If (GetKey()<>0 Lor MouseHit(1)) Then
+				Exit
+			EndIf
+		Else
+			timer1=timer1-1
+			ResetInput()
+		EndIf
+		
+		Flip 1
+	Forever
+	Cls
+	Repeat
+		DrawBlock img2, x, y
+		
+		Color 255,255,255
+		SetFont fo\Font[Font_Menu]
+		Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2.5, Upper(GetLocalString("Disclaimer", "epilepsy_title")), True, True)
+		SetFont fo\Font[Font_Default_Medium]
+		RowText(GetLocalString("Disclaimer", "epilepsy_1"), opt\GraphicWidth / 2 - (opt\GraphicWidth/3), opt\GraphicHeight / 2, opt\GraphicWidth/1.5, 300, True)
+		
+		tmp% = GetLineAmount(GetLocalString("Disclaimer", "epilepsy_1"), opt\GraphicWidth/1.5, 300)
+		RowText(GetLocalString("Disclaimer", "epilepsy_2"), opt\GraphicWidth / 2 - (opt\GraphicWidth/3), opt\GraphicHeight / 2 + FontHeight()*2*tmp, opt\GraphicWidth/1.5, 300, True)
+		
+		If timer2 <= 0.0 Then
+			SetFont fo\Font[Font_Default]
+			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 1.1, Upper(GetLocalString("Disclaimer", "continue")), True, True)
+			If (GetKey()<>0 Lor MouseHit(1)) Then
+				Exit
+			EndIf
+		Else
+			timer2=timer2-1
+			ResetInput()
+		EndIf
+		
+		Flip 1
+	Forever
+	
+	ResetInput()
+	FreeImage_Strict(img1)
+	FreeImage_Strict(img2)
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
