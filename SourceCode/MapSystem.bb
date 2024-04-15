@@ -3934,6 +3934,7 @@ Function CreateMap()
 					x = 0
 					y = 1
 					DebugLog "Trying to spawn "+rt\Name+" with shape "+rt\Shape
+					Local iterations% = 0
 					Repeat
 						If CurrGrid\Grid[x+(y*grid_size)]>0 And CurrGrid\RoomName[x+(y*grid_size)]="" Then
 							If CurrGrid\RoomType[x+(y*grid_size)] = rt\Shape Then
@@ -3950,6 +3951,8 @@ Function CreateMap()
 							y = y + 1
 							If y > grid_size-2 Then
 								y = 0
+								iterations = iterations + 1
+								If iterations >= 100 Then Exit
 							EndIf
 						EndIf
 					Forever
