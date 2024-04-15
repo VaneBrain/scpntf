@@ -88,8 +88,8 @@ Const MaxRoomLights% = 128 ;32
 Const MaxRoomEmitters% = 16
 Const MaxRoomObjects% = 30
 Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
-Const MapGridSize% = 18
-Const MapGridSizeEZ% = 12
+Const MapGridSize% = 12;18
+Const MapGridSizeEZ% = 9;12
 Const MapGrid_NoTile% = 0
 Const MapGrid_Tile% = 1
 Const MapGrid_StartTile% = 2
