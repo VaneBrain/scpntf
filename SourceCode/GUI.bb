@@ -1976,6 +1976,7 @@ Function UpdateGUI()
 				
 				If SelectedItem\itemtemplate\sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\itemtemplate\sound])
 				SelectedItem = Null
+				ResetInput()
 			EndIf
 		EndIf		
 	EndIf

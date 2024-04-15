@@ -1578,13 +1578,32 @@ Function ToggleGuns()
 	Local KeyPressed%[MaxGunSlots]
 	Local KeyPressedHolster% = KeyHit(KEY_HOLSTERGUN)
 	
-	For i = 0 To MaxGunSlots-1
-		If co\Enabled Then
-			KeyPressed[i] = GetDPadButtonPress()
-		Else
-			KeyPressed[i] = KeyHit(i + 2)
+	If SelectedItem <> Null Then
+		If SelectedItem\itemtemplate\tempname = "nav" Lor SelectedItem\itemtemplate\name = "Radio Transceiver" Then
+			g_I\GunChangeFLAG = False
+			g_I\HoldingGun = 0
 		EndIf
-	Next
+	Else
+		If g_I\Weapon_CurrSlot <> 0 And g_I\HoldingGun = 0 Then
+			If g_I\Weapon_InSlot[g_I\Weapon_CurrSlot-1] <> "" Then
+				g_I\GunChangeFLAG = False
+				For g = Each Guns
+					If g\name = g_I\Weapon_InSlot[g_I\Weapon_CurrSlot-1] Then
+						g_I\HoldingGun = g\ID
+						Exit
+					EndIf
+				Next
+			EndIf
+		EndIf
+		
+		For i = 0 To MaxGunSlots-1
+			If co\Enabled Then
+				KeyPressed[i] = GetDPadButtonPress()
+			Else
+				KeyPressed[i] = KeyHit(i + 2)
+			EndIf
+		Next
+	EndIf
 	
 	If KillTimer >= 0 And CanPlayerUseGuns And FPSfactor > 0.0 And ChatSFXOpened = False And (Not g_I\IronSight) Then
 		For i = 0 To MaxGunSlots-1
