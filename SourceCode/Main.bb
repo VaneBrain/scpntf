@@ -5720,21 +5720,28 @@ Function Graphics3DExt%(width%,height%,depth%=32,mode%=2)
 End Function
 
 Function ResizeImage2(image%,width%,height%)
-	Local img%, oldWidth%, oldHeight%
+	Local img% = CopyImage(image)
+	FreeImage image
+	ResizeImage(img,width,height)
+	Return img
 	
-    img% = CreateImage(width,height)
+	;TODO Broken with dgVoodoo implementation
 	
-	oldWidth% = ImageWidth(image)
-	oldHeight% = ImageHeight(image)
-	CopyRect 0,0,oldWidth,oldHeight,2048-oldWidth/2,2048-oldHeight/2,ImageBuffer(image),TextureBuffer(fresize_texture)
-	SetBuffer BackBuffer()
-	ScaleRender(0,0,4096.0 / Float(RealGraphicWidth) * Float(width) / Float(oldWidth), 4096.0 / Float(RealGraphicWidth) * Float(height) / Float(oldHeight))
-	;might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth,opt\GraphicHeight) if portrait sizes cause issues
-	;everyone uses landscape so it's probably a non-issue
-	CopyRect RealGraphicWidth/2-width/2,RealGraphicHeight/2-height/2,width,height,0,0,BackBuffer(),ImageBuffer(img)
-	
-    FreeImage image
-    Return img
+;	Local img%, oldWidth%, oldHeight%
+;	
+;    img% = CreateImage(width,height)
+;	
+;	oldWidth% = ImageWidth(image)
+;	oldHeight% = ImageHeight(image)
+;	CopyRect 0,0,oldWidth,oldHeight,2048-oldWidth/2,2048-oldHeight/2,ImageBuffer(image),TextureBuffer(fresize_texture)
+;	SetBuffer BackBuffer()
+;	ScaleRender(0,0,4096.0 / Float(RealGraphicWidth) * Float(width) / Float(oldWidth), 4096.0 / Float(RealGraphicWidth) * Float(height) / Float(oldHeight))
+;	;might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth,opt\GraphicHeight) if portrait sizes cause issues
+;	;everyone uses landscape so it's probably a non-issue
+;	CopyRect RealGraphicWidth/2-width/2,RealGraphicHeight/2-height/2,width,height,0,0,BackBuffer(),ImageBuffer(img)
+;	
+;    FreeImage image
+;    Return img
 End Function
 
 
@@ -6442,38 +6449,40 @@ Function GammaUpdate()
 		EndIf
 	EndIf
 	
+	;TODO Broken with dgVoodoo implementation
+	
 	;not by any means a perfect solution
 	;Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	If ScreenGamma>=1.0 Then
-		CopyRect 0,0,RealGraphicWidth,RealGraphicHeight,2048-RealGraphicWidth/2,2048-RealGraphicHeight/2,BackBuffer(),TextureBuffer(fresize_texture)
-		EntityBlend fresize_image,1
-		ClsColor 0,0,0 : Cls
-		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
-		EntityFX fresize_image,1+32
-		EntityBlend fresize_image,3
-		EntityAlpha fresize_image,ScreenGamma-1.0
-		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
-	ElseIf ScreenGamma<1.0 Then ;todo: maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		CopyRect 0,0,RealGraphicWidth,RealGraphicHeight,2048-RealGraphicWidth/2,2048-RealGraphicHeight/2,BackBuffer(),TextureBuffer(fresize_texture)
-		EntityBlend fresize_image,1
-		ClsColor 0,0,0 : Cls
-		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
-		EntityFX fresize_image,1+32
-		EntityBlend fresize_image,2
-		EntityAlpha fresize_image,1.0
-		SetBuffer TextureBuffer(fresize_texture2)
-		ClsColor 255*ScreenGamma,255*ScreenGamma,255*ScreenGamma
-		Cls
-		SetBuffer BackBuffer()
-		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
-		SetBuffer(TextureBuffer(fresize_texture2))
-		ClsColor 0,0,0
-		Cls
-		SetBuffer(BackBuffer())
-	EndIf
-	EntityFX fresize_image,1
-	EntityBlend fresize_image,1
-	EntityAlpha fresize_image,1.0
+;	If ScreenGamma>=1.0 Then
+;		CopyRect 0,0,RealGraphicWidth,RealGraphicHeight,2048-RealGraphicWidth/2,2048-RealGraphicHeight/2,BackBuffer(),TextureBuffer(fresize_texture)
+;		EntityBlend fresize_image,1
+;		ClsColor 0,0,0 : Cls
+;		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
+;		EntityFX fresize_image,1+32
+;		EntityBlend fresize_image,3
+;		EntityAlpha fresize_image,ScreenGamma-1.0
+;		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
+;	ElseIf ScreenGamma<1.0 Then ;todo: maybe optimize this if it's too slow, alternatively give players the option to disable gamma
+;		CopyRect 0,0,RealGraphicWidth,RealGraphicHeight,2048-RealGraphicWidth/2,2048-RealGraphicHeight/2,BackBuffer(),TextureBuffer(fresize_texture)
+;		EntityBlend fresize_image,1
+;		ClsColor 0,0,0 : Cls
+;		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
+;		EntityFX fresize_image,1+32
+;		EntityBlend fresize_image,2
+;		EntityAlpha fresize_image,1.0
+;		SetBuffer TextureBuffer(fresize_texture2)
+;		ClsColor 255*ScreenGamma,255*ScreenGamma,255*ScreenGamma
+;		Cls
+;		SetBuffer BackBuffer()
+;		ScaleRender(-1.0/Float(RealGraphicWidth),1.0/Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth),4096.0 / Float(RealGraphicWidth))
+;		SetBuffer(TextureBuffer(fresize_texture2))
+;		ClsColor 0,0,0
+;		Cls
+;		SetBuffer(BackBuffer())
+;	EndIf
+;	EntityFX fresize_image,1
+;	EntityBlend fresize_image,1
+;	EntityAlpha fresize_image,1.0
 	
 End Function
 

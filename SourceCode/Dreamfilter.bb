@@ -38,8 +38,8 @@ Function CreateBlurImage()
 End Function
 
 Function UpdateBlur(power#)
-	
-	EntityAlpha ark_blur_image, power#
+	;TODO Broken with dgVoodoo implementation
+	EntityAlpha ark_blur_image, 0.0 ;power#
 	
 	;CopyRect ark_sw / 2 - 1024, ark_sh / 2 - 1024, 2048, 2048, 0, 0, BackBuffer(), TextureBuffer(ark_blur_texture)
 	CopyRect 0, 0, opt\GraphicWidth, opt\GraphicHeight, 2048.0 - opt\GraphicWidth/2, 2048.0 - opt\GraphicHeight/2, BackBuffer(), TextureBuffer(ark_blur_texture)
