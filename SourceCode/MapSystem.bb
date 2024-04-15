@@ -4298,109 +4298,31 @@ Function UpdateRoomLights(cam%)
 	Local r.Rooms, i, random#, alpha#
 	
 	For r.Rooms = Each Rooms
-		If r\dist < HideDistance*0.7 Lor r = PlayerRoom Then
-			For i = 0 To r\MaxLights%
-				If r\Lights%[i]<>0 Then
-					If opt\EnableRoomLights% And (SecondaryLightOn>0.5) And cam%=Camera Then
-						EntityOrder r\LightSprites2[i],-1
-						If UpdateRoomLightsTimer=0.0 Then
-							ShowEntity r\LightSprites[i]
-							
-							If EntityDistanceSquared(cam%,r\Lights%[i])<PowTwo(8.5) Then
-								If r\LightHidden[i] Then
-									ShowEntity r\Lights%[i]
-									r\LightHidden[i] = False
-								EndIf
-							Else
-								If (Not r\LightHidden[i]) Then
-									HideEntity r\Lights%[i]
-									r\LightHidden[i] = True
-								EndIf
-							EndIf
-							
-							If (EntityDistanceSquared(cam%,r\LightSprites2[i])<PowTwo(8.5) Lor r\RoomTemplate\UseLightCones) Then
-								If EntityVisible(cam%,r\LightSpritesPivot[i]) Lor r\RoomTemplate\UseLightCones Then
-									If r\LightSpriteHidden%[i] Then
-										ShowEntity r\LightSprites2%[i]
-										r\LightSpriteHidden%[i] = False
-									EndIf
-									If PlayerRoom\RoomTemplate\Name$ = "173" Then
-										random# = Rnd(0.38,0.42)
-									Else
-										If r\LightFlicker%[i]<5 Then
-											random# = Rnd(0.38,0.42)
-										ElseIf r\LightFlicker%[i]>4 And r\LightFlicker%[i]<10 Then
-											random# = Rnd(0.35,0.45)
-										Else
-											random# = Rnd(0.3,0.5)
-										EndIf
-									EndIf
-									ScaleSprite r\LightSprites2[i],random#,random#
-									
-									alpha# = Float(Inverse(Max(Min((EntityDistance(cam%,r\LightSpritesPivot[i])+0.5)/7.5,1.0),0.0)))
-									
-									If alpha# > 0.0 Then
-										EntityAlpha r\LightSprites2[i],Max(3*(Brightness/255)*(r\LightIntensity[i]/2),1)*alpha#
-									Else
-										;Instead of rendering the sprite invisible, just hiding it if the player is far away from it
-										If (Not r\LightSpriteHidden%[i]) Then
-											HideEntity r\LightSprites2[i]
-											r\LightSpriteHidden%[i]=True
-										EndIf
-									EndIf
-									
-									If r\RoomTemplate\UseLightCones Then
-										If EntityDistanceSquared(cam%,r\LightSprites2[i])>=PowTwo(8.5) Lor (Not EntityVisible(cam%,r\LightSpritesPivot[i])) Then
-											HideEntity r\LightSprites2%[i]
-											r\LightSpriteHidden%[i] = True
-										EndIf
-									EndIf
-								Else
-									If (Not r\LightSpriteHidden%[i]) Then
-										HideEntity r\LightSprites2%[i]
-										r\LightSpriteHidden%[i] = True
-									EndIf
-								EndIf
-							Else
-								If (Not r\LightSpriteHidden%[i]) Then
-									HideEntity r\LightSprites2%[i]
-									r\LightSpriteHidden%[i] = True
-									If r\LightCone[i]<>0 Then
-										HideEntity r\LightCone[i]
-									EndIf
-									If r\LightConeSpark[i]<>0 Then
-										HideEntity r\LightConeSpark[i]
-									EndIf
-								EndIf
-								
-								If r\LightCone[i]<>0 Then
-									ShowEntity r\LightCone[i]
-								EndIf
-								
-								If r\LightConeSpark[i]<>0 Then
-									If r\LightConeSparkTimer[i]>0 And r\LightConeSparkTimer[i]<10 Then
-										ShowEntity r\LightConeSpark[i]
-										r\LightConeSparkTimer[i]=r\LightConeSparkTimer[i]+FPSfactor
-									Else
-										HideEntity r\LightConeSpark[i]
-										r\LightConeSparkTimer[i]=0
-									EndIf
-								EndIf
-								
-								If r\LightCone[i]<>0 Then
-									ScaleEntity r\LightCone[i],0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0)
-									If r\LightFlicker%[i]>4 Then
-										If Rand(400)=1 Then
-											;SetEmitter(r\LightSpritesPivot[i],ParticleEffect[0])
-											PlaySound2(IntroSFX[Rand(1,3)],cam,r\LightSpritesPivot[i])
-											ShowEntity r\LightConeSpark[i]
-											r\LightConeSparkTimer[i] = FPSfactor
-										EndIf
-									EndIf
-								EndIf
+		For i = 0 To r\MaxLights%
+			If r\Lights%[i]<>0 Then
+				If opt\EnableRoomLights% And (SecondaryLightOn>0.5) And cam%=Camera And (r\dist < HideDistance*0.7 Lor r = PlayerRoom) Then
+					EntityOrder r\LightSprites2[i],-1
+					If UpdateRoomLightsTimer=0.0 Then
+						ShowEntity r\LightSprites[i]
+						
+						If EntityDistanceSquared(cam%,r\Lights%[i])<PowTwo(8.5) Then
+							If r\LightHidden[i] Then
+								ShowEntity r\Lights%[i]
+								r\LightHidden[i] = False
 							EndIf
 						Else
-							If (EntityDistanceSquared(cam%,r\LightSprites2[i])<PowTwo(8.5) Lor r\RoomTemplate\UseLightCones) Then
+							If (Not r\LightHidden[i]) Then
+								HideEntity r\Lights%[i]
+								r\LightHidden[i] = True
+							EndIf
+						EndIf
+						
+						If (EntityDistanceSquared(cam%,r\LightSprites2[i])<PowTwo(8.5) Lor r\RoomTemplate\UseLightCones) Then
+							If EntityVisible(cam%,r\LightSpritesPivot[i]) Lor r\RoomTemplate\UseLightCones Then
+								If r\LightSpriteHidden%[i] Then
+									ShowEntity r\LightSprites2%[i]
+									r\LightSpriteHidden%[i] = False
+								EndIf
 								If PlayerRoom\RoomTemplate\Name$ = "173" Then
 									random# = Rnd(0.38,0.42)
 								Else
@@ -4412,14 +4334,46 @@ Function UpdateRoomLights(cam%)
 										random# = Rnd(0.3,0.5)
 									EndIf
 								EndIf
+								ScaleSprite r\LightSprites2[i],random#,random#
 								
-								If (Not r\LightSpriteHidden[i]) Then
-									ScaleSprite r\LightSprites2[i],random#,random#
+								alpha# = Float(Inverse(Max(Min((EntityDistance(cam%,r\LightSpritesPivot[i])+0.5)/7.5,1.0),0.0)))
+								
+								If alpha# > 0.0 Then
+									EntityAlpha r\LightSprites2[i],Max(3*(Brightness/255)*(r\LightIntensity[i]/2),1)*alpha#
+								Else
+									;Instead of rendering the sprite invisible, just hiding it if the player is far away from it
+									If (Not r\LightSpriteHidden%[i]) Then
+										HideEntity r\LightSprites2[i]
+										r\LightSpriteHidden%[i]=True
+									EndIf
+								EndIf
+								
+								If r\RoomTemplate\UseLightCones Then
+									If EntityDistanceSquared(cam%,r\LightSprites2[i])>=PowTwo(8.5) Lor (Not EntityVisible(cam%,r\LightSpritesPivot[i])) Then
+										HideEntity r\LightSprites2%[i]
+										r\LightSpriteHidden%[i] = True
+									EndIf
+								EndIf
+							Else
+								If (Not r\LightSpriteHidden%[i]) Then
+									HideEntity r\LightSprites2%[i]
+									r\LightSpriteHidden%[i] = True
+								EndIf
+							EndIf
+						Else
+							If (Not r\LightSpriteHidden%[i]) Then
+								HideEntity r\LightSprites2%[i]
+								r\LightSpriteHidden%[i] = True
+								If r\LightCone[i]<>0 Then
+									HideEntity r\LightCone[i]
+								EndIf
+								If r\LightConeSpark[i]<>0 Then
+									HideEntity r\LightConeSpark[i]
 								EndIf
 							EndIf
 							
 							If r\LightCone[i]<>0 Then
-								ScaleEntity r\LightCone[i],0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0)
+								ShowEntity r\LightCone[i]
 							EndIf
 							
 							If r\LightConeSpark[i]<>0 Then
@@ -4431,35 +4385,79 @@ Function UpdateRoomLights(cam%)
 									r\LightConeSparkTimer[i]=0
 								EndIf
 							EndIf
-						EndIf
-					ElseIf cam%=Camera Then
-						If SecondaryLightOn<=0.5 Then
-							HideEntity r\LightSprites[i]
-						Else
-							ShowEntity r\LightSprites[i]
-						EndIf
-						
-						If (Not r\LightHidden[i]) Then
-							HideEntity r\Lights%[i]
-							r\LightHidden[i] = True
-						EndIf
-						If (Not r\LightSpriteHidden[i]) Then
-							HideEntity r\LightSprites2[i]
-							r\LightSpriteHidden[i]=True
-						EndIf
-						If r\LightCone[i]<>0 Then
-							HideEntity r\LightCone[i]
-						EndIf
-						If r\LightConeSpark[i]<>0 Then
-							HideEntity r\LightConeSpark[i]
+							
+							If r\LightCone[i]<>0 Then
+								ScaleEntity r\LightCone[i],0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0)
+								If r\LightFlicker%[i]>4 Then
+									If Rand(400)=1 Then
+										;SetEmitter(r\LightSpritesPivot[i],ParticleEffect[0])
+										PlaySound2(IntroSFX[Rand(1,3)],cam,r\LightSpritesPivot[i])
+										ShowEntity r\LightConeSpark[i]
+										r\LightConeSparkTimer[i] = FPSfactor
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 					Else
-					;This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-						EntityOrder r\LightSprites2[i],0
+						If (EntityDistanceSquared(cam%,r\LightSprites2[i])<PowTwo(8.5) Lor r\RoomTemplate\UseLightCones) Then
+							If PlayerRoom\RoomTemplate\Name$ = "173" Then
+								random# = Rnd(0.38,0.42)
+							Else
+								If r\LightFlicker%[i]<5 Then
+									random# = Rnd(0.38,0.42)
+								ElseIf r\LightFlicker%[i]>4 And r\LightFlicker%[i]<10 Then
+									random# = Rnd(0.35,0.45)
+								Else
+									random# = Rnd(0.3,0.5)
+								EndIf
+							EndIf
+							
+							If (Not r\LightSpriteHidden[i]) Then
+								ScaleSprite r\LightSprites2[i],random#,random#
+							EndIf
+						EndIf
+						
+						If r\LightCone[i]<>0 Then
+							ScaleEntity r\LightCone[i],0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0),0.005+Max(((-0.4+random#)*0.025),0)
+						EndIf
+						
+						If r\LightConeSpark[i]<>0 Then
+							If r\LightConeSparkTimer[i]>0 And r\LightConeSparkTimer[i]<10 Then
+								ShowEntity r\LightConeSpark[i]
+								r\LightConeSparkTimer[i]=r\LightConeSparkTimer[i]+FPSfactor
+							Else
+								HideEntity r\LightConeSpark[i]
+								r\LightConeSparkTimer[i]=0
+							EndIf
+						EndIf
 					EndIf
+				ElseIf cam%=Camera Then
+					If SecondaryLightOn<=0.5 Then
+						HideEntity r\LightSprites[i]
+					Else
+						ShowEntity r\LightSprites[i]
+					EndIf
+					
+					If (Not r\LightHidden[i]) Then
+						HideEntity r\Lights%[i]
+						r\LightHidden[i] = True
+					EndIf
+					If (Not r\LightSpriteHidden[i]) Then
+						HideEntity r\LightSprites2[i]
+						r\LightSpriteHidden[i]=True
+					EndIf
+					If r\LightCone[i]<>0 Then
+						HideEntity r\LightCone[i]
+					EndIf
+					If r\LightConeSpark[i]<>0 Then
+						HideEntity r\LightConeSpark[i]
+					EndIf
+				Else
+				;This will make the lightsprites not glitch through the wall when they are rendered by the cameras
+					EntityOrder r\LightSprites2[i],0
 				EndIf
-			Next
-		EndIf
+			EndIf
+		Next
 	Next
 	
 	UpdateRoomLightsTimer = UpdateRoomLightsTimer + FPSfactor
