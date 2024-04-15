@@ -2797,8 +2797,10 @@ Function DrawGUI()
 		x2# = opt\GraphicWidth / 2
 		y2# = opt\GraphicHeight / 2 + height2*2.6
 		
-		Color 255,255,255
 		SetFont fo\Font[Font_Default]
+		Color 0,0,0
+		Text x2+1,y2+1,"Weapon Quick-Selection Slots:",1,1
+		Color 255,255,255
 		Text x2,y2,"Weapon Quick-Selection Slots:",1,1
 		
 		x2 = opt\GraphicWidth / 2 - (width2 * MaxItemAmount /2 + spacing2 * (MaxItemAmount / 2 - 1)) / 2
