@@ -115,7 +115,7 @@ Function UpdateEvent_Gate_A_Topside(e.Events)
 			PositionEntity e\room\Objects[0], EntityX(e\room\obj,True),EntityY(e\room\obj,True),EntityZ(e\room\obj,True)
 			ScaleEntity (e\room\Objects[0],RoomScale,RoomScale,RoomScale)
 			EntityType e\room\Objects[0], HIT_MAP
-			EntityPickMode e\room\Objects[0], 3
+			EntityPickMode e\room\Objects[0], 2
 			EntityParent(e\room\Objects[0],e\room\obj)
 			
 			DrawLoading(30)

@@ -26,7 +26,7 @@ Function FillRoom_Pocketdimension(r.Rooms)
 	
 	ScaleEntity (terrain,RoomScale,RoomScale,RoomScale)
 	EntityType terrain, HIT_MAP
-	EntityPickMode terrain, 3
+	EntityPickMode terrain, 2
 	PositionEntity(terrain,r\x,r\y+2944.0*RoomScale,r\z+32.0,True)
 	
 	r\RoomDoors[0] = CreateDoor(0, r\x,2048*RoomScale,r\z+32.0-1024*RoomScale,0,r,False)
