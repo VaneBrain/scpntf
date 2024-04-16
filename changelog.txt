@@ -1,3 +1,86 @@
+v0.2.10
+
+[GENERAL]
+- Added dgVoodoo library (by Dege) as an attempt to fix crashes and performance issues that many users encountered.
+- Added disclaimers at the beginning of the game, warning about the game being in early access and seizure warnings.
+- Fixed poor performance with text, caused by the localization system.
+- Fixed loading screens image size getting bigger with each loading screen appearance.
+- Improved the performance of some GUI functions.
+- An attempt to smooth out the mouse look.
+- Some memory usage optimizations and fixed memory leaks (many of which are fixed by Jabka).
+- Fixed an issue with USP where the model was incorrectly mirrored.
+- Changes related to launcher:
+	* Added the ability to select GPU, replaces the graphics mode dropdown menu;
+	* The fullscreen mode now applies only if game resolution matches monitor resolution.
+
+[SINGLEPLAYER]
+- General map generation improvements:
+	* Fixed a bug that caused the game to freeze upon starting a new game, caused by the map generation failure.
+	* Fixed softlocks in SCP-513, SCP-914 and SCP-966 containment chambers.
+	* Decreased the map size for Entrance Zone from 12 to 9 units;
+	* Decreased the map size for Light and Heavy Containment Zones from 18 to 12 units;
+	* An attempt to fix the map layout of LCZ and HCZ being identical.
+
+- Weapon related changes:
+	* Fixed a bug with shotgun where it be could turned into a rifle by spamming the reload button;
+	* Fixed the guns shooting if player has an item eqiuped from the invetory;
+	* Fixed Radio Transceiver channel switching not working because of weapon selection;
+	* Player now holsters the weapon when using S-Nav or Radio items and brings the weapon back when the items are not in use;
+	* Fixed the player using iron sight after discarding an item with the right mouse button.
+	
+- Many improvements for S-NAV Navigators:
+	* Generally optimized the code for S-NAV Navigators;
+	* Fixed performance issues caused by S-Nav Navigators caused by duplicate rendering logic;
+	* Fixed S-Nav Navigator Ultimate crashing the game if SCP-173 or SCP-106 where contained or do not exist;
+	* Moved the SCP circle detection right where the player's triangle position is located.
+	
+- Improvements in Pocket Dimesion:
+	* Fixed trenches. They now work just like in original SCP - Containment Breach;
+	* Fixed fog colors in some cases, as well as fog color change after loading a save file;
+	* Fixed decals not appearing after leaving Pocket Dimesion;
+	* Fixed a game crash when leaving Pocket Dimesion caused by failing to find a good room to teleport to.
+	
+- Many fixes for SCP-970 room:
+	* Fixed occasional game crash related to items in the inventory;
+	* Fixed the updating code for doors when player is going through the doors inside the room;
+	* Fixed camera hickup when going through doors;
+	* Other minor fixes.
+	
+- Fixed a game crash when player gets fully infected by SCP-008.
+- Fixed the gamemode reset after loading a save file while having Classic Mode ticked/unticked in the New Game tab.
+- Fixed a bug where SCP-427 was not applying any effects on the player (by HonestResolv3).
+- Fixed player falling down through metal grates in the grated hallway room (room2_pipes_1) after loading a save file.
+- Fixed SCP-1048-A reappearing in some conditions when the ear bear suppose to be hidden.
+- Fixed SCP-096's idle ambient sound playing even if player teleports far away.
+- Added a small delay for D-Class before they start shooting.
+- Fixed a bug that caused the player to load into a new zone if player dies or get's kidnapped by SCP-106 in the checkpoint room.
+- Fixed a bug where the light sprites would be drawn in the room where player died if player respawns far away.
+- Fixed a bug where the announcements would play even if player hasn't open the Gate A blast doors yet.
+- Fixed blood decals from the Entrance Zone lockroom (lockroom_2) appearing in other 2C shaped rooms.
+- Fixed MTF teammates somtimes getting stuck at the Entrance Zone checkpoint.
+- Fixed SCP-049's catwalk event in the four-way room (room4_1).
+- Fixed medibay (room2_medibay) props being untextured.
+- Fixed SCP-012's paper glowing inside it's chamber.
+- Fixed the smoke appearing in wrong places in the tunnel room (room2_tunnel_2) depending on room's rotation.
+- Optimized and improved the code for events in following rooms: SCP-173 containment chamber (cont_173), SCP-500 and SCP-1499 chamber (cont_500_1499), Toilets room (room2_toilets).
+- Some code improvements related to doors and buttons.
+
+[MULTIPLAYER]
+- Added text filtering to the server list (this includes server name, gamemode name and the map).
+- In Waves, an attempt to fix items breaking and glitching during the Multiplayer playthrough.
+- In Waves, moved the fuse sprite a bit higher to not obstruct the model on the floor.
+- In Waves, fixed a bug where dying by a tentacle would not count up as an actual death.
+- Fixed player tags not appearing for users with AMD GPUs.
+
+...and other small fixes and improvements overall.
+
+[KNOWN ISSUES]
+There are few known issues about this version that are not present in original version 0.2.9. Specifically:
+	* Brightness setting and blur effect currently aren’t working at all.
+	* On some computers, the blinking fade-in can be bugged and appear semi-transparent.
+
+----------------------------------------------------------------------------------
+
 v0.2.9
 Save files from version 0.2.8 are compatible with this version.
 
@@ -18,5 +101,230 @@ Save files from version 0.2.8 are compatible with this version.
 [MULTIPLAYER]
 - In Waves, fixed SCP-1048-A getting stuck in the doorway on the Offices map;
 - In Waves, fixed valve handles being hard to use.
+
+----------------------------------------------------------------------------------
+
+v0.2.8
+
+[SINGLEPLAYER]
+- Added a hint for the players about quick saving the game;
+- Added a little sound for the broken elevator in the Light Containment Zone checkpoint;
+- Fixed the game crashing when the player contained SCP-173 and reached events that involve SCP-173;
+- Fixed double gateway doors in Entrance Zone checkpoint in Classic Mode;
+- Fixed a bug where clipboards were unusable;
+- Fixed wrong font for item names when using a clipboard;
+- Fixed a bug where the elevator in Light Containment Zone would break after loading a save file, caused by clipboard items (just.. don't ask how);
+
+[MULTIPLAYER]
+- In Waves, added a limit for how many instances of SCP-939 and SCP-1048-A can exist at the same time:
+    * For SCP-939 there is a limit of 2 instances for one player, which increases by 1 for any additional players;
+    * For SCP-1048-A there is a limit of 2 instances for one player, which increases by 2 for any additional players;
+- Fixed the game crashing when a client wrote a chat message and immediately disconnected from the server;
+
+----------------------------------------------------------------------------------
+
+v0.2.7
+Save files from version 0.2.6 are compatible with this version.
+
+[SINGLEPLAYER]
+- Player now spawns with an S-NAV 310 Navigator;
+- In Classic Mode, the D-Class now spawn in the entrance zone;
+- Fixed "injure" console command when the player enters a value higher than 100 HP (by HonestResolv3);
+
+[MULTIPLAYER]
+- Fixed a bug where sometimes players would appear invisible for others;
+- Fixed the Ear Bears getting stuck in the vent on the Old Sewers map (the vent was lowered down).
+
+----------------------------------------------------------------------------------
+
+v0.2.6
+
+[SINGLEPLAYER]
+- Added achievements for containing SCP-106 and SCP-173;
+- Added the ability for tasks to fail (like failing to contain SCP-106);
+- Fixed an issue where items could disappear after a zone transition;
+- Fixed a bug where SCP-173 would be uncontained when transitioning to another zone;
+- Some slight adjustments to the pushing of SCP-173's cage;
+- Caged SCP-173 and MTF units should not teleport to Pocket Dimension anymore;
+- Fixed MTF's flee state jiddering when SCPs are too close to them;
+- Fixed MTF constantly repeat the lines of SCP being spotted;
+- Fixed MTF dialogue playing while they are in the flee state;
+- Increased the trigger distance of MTF for disabling tesla gates;
+- Fixed some of the issues in the zombie event in SCP-049's chamber;
+
+[OTHER]
+- The Steam and Discord rich presence now updates every 5 seconds instead of every frame;
+- Many fixes and improvements by HonestResolv3:
+	* Blinking, sprinting, health, kevlar icons and bars change colors (red, green, or white) to represent buffs or detriments to their respective item;
+	* Fixed SCP-895 not showing up with S-NAV Ultimate;
+	* Added help description for notarget console command;
+	* You can't use "kill" console command if "godmode" is active;
+	* Fixed "godmode" not protecting the player from most entities that deal damage;
+	* Tesla gates won't activate if player has "notarget" activated;
+	* Fixed SCP-106, SCP-205 and SCP-966 being unaffected by "notarget";
+	* Fixed SCP-008 zombie crashing the game when spawned in Multiplayer via console;
+	* Fixed Apache helicopter crashing the game when spawned via console;
+	* Fixed SCP-035 tentacles not being possible to kill in Singleplayer;
+	* Fixed breathing sounds play when pressing sprint button while crouching;
+	* Fixed an inconsistancy with fuses in classic mode in Checkpoint room and Sewers room, causing time paradox and space-time discontinuity for some of the players;
+		* We are sorry if you had to deal with it. For anyone else who created a worm hole inside their living room please spill milk into it to make it stop expanding;
+	* Some other fixes and improvements.
+
+----------------------------------------------------------------------------------
+
+v0.2.5
+
+[SINGLEPLAYER]
+- Introducing Classic Mode:
+	* With Classic Mode you can play the game without major story events;
+	* Also you can finally contain SCP-173;
+- D-Class changes:
+	* Added a small chance of D-Class to "surrender";
+	* Decreased D-Class health from 80/100/120 to 60/75/90 (Safe/Euclid/Keter difficulties);
+	* Balanced the chances of what guns each D-Class gets assigned to:
+		* Increased the chance of spawning with USP or Beretta from 33% to 42%;
+		* Decreased the chance of spawning with P90 or MP5K from 12% to 6%;
+		* Decreased the chance of spawning with SPAS-12 from 10% to 4%;
+- Fixed SCP-173's speed. Now it's consistent as it should be;
+- Some other fixes and improvements;
+	
+[MULTIPLAYER]
+- Decreased the network data buffering;
+	* This will prevent buffering of network packages that are sent frequently, like player updating packets. This should increase the network performance;
+- Improved the encryption security;
+- Rebalanced zombie's item drop chance:
+	* Removed 50% chance of dropping nothing for both surgeon and guard/MTF zombies;
+	* Increased the chance of dropping First Aid Kit, Blue First Aid Kit and Syringe from 16.667% to 33.333% for surgeon zombies;
+	* Added a chance of dropping a Ballistic Vest with 50% chance for guard/MTF zombies;
+- Rebalanced zombie damage system:
+	* The base health damage (meaning it's the default one on Safe settings) is now in the range from 6 to 10 with additional 2 damage per difficulty;
+	* The base kevlar damage is now in the range from 10 to 14 with additional 4 damage per difficulty;
+- Rebalanced SCP-939's damage system:
+	* The base health damage (meaning it's the default one on Safe settings) is now in the range from 20 to 30 with additional 5 damage per difficulty;
+	* The base kevlar damage is now in the range from 25 to 35 with additional 5 damage per difficulty;
+- Reduced the sound range of SCP-1048-A and SCP-939 sounds;
+
+[OTHER]
+- Many fixes and improvements by HonestResolv3:
+	* Fixed spawning certain SCPs via console crashing the game;
+	* SCP-939 cannot deplete health and kevlar if GodMode is enabled;
+	* SCP-939 can be spawned in Singleplayer now;
+	* Fixed SCP-1048-A event activating if NoTarget is enabled;
+	* Fixed SCP-1048-A event killing the player if Godmode is enabled;
+	* Fixed SCP-457 still trying to attack you while NoTarget is enabled;
+	* Some other small fixes and improvements;
+
+----------------------------------------------------------------------------------
+
+v0.2.4
+Save files from version 0.2.3 are compatible with this version.
+
+-Fixed a game crash that can occur when D-Class shoots the player.
+-Fixed Continue button still working with incompatible save files.
+-Fixed description of Objectives disappearing after loading a save file.
+-Fixed player shooting after pressing the elevator button.
+-Fixed a bug when player was reloading the weapon while typing in a chat.
+
+----------------------------------------------------------------------------------
+
+v0.2.3
+
+[GENERAL]
+-Many code fixes and improvements by Jabka.
+-Few bump mapping texture improvements by MetridSiardily.
+-Restricted the spawn of Singleplayer NPCs into Multiplayer (and vice versa).
+
+[SINGLEPLAYER]
+-Added objective system, telling current objective that player has to do.
+-Fixed some buttons appearing in death screen if player used Continue from Main Menu.
+-Fixed wrong music playing in SCP-049's containment chamber.
+-Fixed some bugs in the checkpoint when players come back to it:
+	*Fixed airlock doors being closed.
+	*Fixed SCP-106 kidnapping player in elevator.
+	*Fixed hitboxes of sinked teammates still being active.
+-Fixed D-Class's alert lines playing if the D-Class is already dead.
+
+[MULTIPLAYER]
+-Added voting system for next map.
+-Added sorting by name, gamemode, map and players for server list.
+-Added new music by Firefox for Waves ("Conflict Arises").
+-Revamped Host Server menu section:
+	*Each map now has own preview image.
+	*Each gamemode now has own preview image and description.
+	*Fixed the value 0 appearing in the max players and timeout input boxes when empty.
+-Revamped Syringes. They now add stamina regeneration boost for 10 seconds.
+-Fuses now have an icon displaying around the map when dropped by construction worker zombies.
+-Changes to SCP-035:
+	*Reduced his health from 15000 to 12000
+	*Fixed his agitation state not working (when the spine tentacles spawn)
+	*Increased the cooldown timer for when tentacles can spawn from 5 to 10 seconds.
+-Fixed zombie/SCP-939/SCP-035 death message appearing again if player is already dead.
+-Fixed crouch and shoot lagging in Multiplayer for clients.
+-Added failsafes for player models, nametags and player weapons (so they won't be invisible and crash the game, hopefully).
+-Fixed few places in Offices map where NPCs could've get stuck.
+-Fixed double lights in one of the generator rooms in Old Sewers map.
+-Fixed an unlit brush in Old Sewers map.
+
+...and other small fixes and improvements!
+
+----------------------------------------------------------------------------------
+
+v0.2.2
+
+-Added Continue button in the Main Menu which will load up the last saved game.
+-Added Waves and Team Deathmatch loading screens that explain the basic information about the gamemodes.
+-Players can now reload while aiming.
+-Improvements in Options menu:
+    *Revamped Controls settings. The key binding option is now in a separate menu tab.
+    *Added "Hold to aim" and "Hold to crouch" options.
+    *Removed unused settings.
+    *Restrict the FPS slider to 144 FPS (instead of 240).
+-Improvements for the Tesla Gates:
+    *The code for the Tesla Gates has been reworked.
+    *Optimized distance calculation of the player near the Tesla Gates.
+    *D-Class and zombies can now be killed by the Tesla Gates.
+    *SCP-049 can now get stunned by the Tesla Gates.
+-Fixes in Old Sewers:
+    *Fixed some spawning points that caused NPCs to get stuck.
+    *Fixed valve handle texture appearing gray instead of red.
+    *Removed one of the pipes that was sticking into the wall.
+-In Waves gamemode, the last wave (aka Boss wave) now spawns infinite amount of enemies.
+-Loading screen images now scale according to the game's resolution.
+-Added few more restricted symbols for the save file names to prevent crashes.
+-Fixed elevators in SCP-939 basement and SCP-049 containment chamber not always working properly.
+-Fixed incorrect kill count in Waves gamemode.
+-Fixed Show FPS option description not appearing.
+-Fixed S-NAV Navigators not showing the map layout.
+    *S-NAV 300 Navigator now shows low signal with ane effect instead of showing rooms that the player was in before.
+-Fixed floating buttons in room2_offices_4 and room2_servers_1.
+-An attempt to fix "Encryption Error" during connection to the server (thanks juanjp600!).
+-Fixed some other connection issues when player is connecting to the server.
+-Fixed resolution being too zoomed in on high DPI monitors.
+-Optimized few hallway rooms.
+-Removed lockroom_1 from spawning in Entrance Zone.
+
+...and other small fixes and improvements!
+
+----------------------------------------------------------------------------------
+
+v0.2.1
+Thank you everyone for your bug reports! We made an attempt to fix most critical issues.
+
+-Fixed "Catastrophic error" crash at game's launch due to resolution selection.
+-Fixed a bug where some people couldn't press some of the buttons in the main menu or settings.
+-Fixed NPCs in Waves gamemode not following anyone else, but host.
+-Fixed dead NPCs sliding in Waves mode.
+-Fixed NPC crash in Waves when NPC falls down and get's removed by the game.
+-Fixed the issue with team switching in Team Deathmatch mode.
+-Fixed a crash that accured in Light Containment Zone.
+-Fixed SCP-966 not rendering even when Night-Vision Goggles are on.
+-Fixed SCP-173's being too lightspeed.
+-Fixed reserved weapon ammo not saving after dropping the weapon from inventory and picking it back up.
+-Fixed message display for some items.
+-Fixed arrows for page navigation not drawing in the server list.
+-Fixed error message not showing full information about the cause of error.
+-You can no longer equip the gasmask if you already have one.
+-You now press the interact key for getting the drawing from SCP-1048.
+-Slight fix for aim offset of M9 Beretta.
 
 ----------------------------------------------------------------------------------

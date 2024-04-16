@@ -181,8 +181,8 @@ End Type
 
 InitController()
 
-Const VersionNumber$ = "0.2.9"
-Const CompatibleNumber$ = "0.2.8"
+Const VersionNumber$ = "0.2.10"
+Const CompatibleNumber$ = "0.2.10"
 Const BuildMessage$ = ""
 
 Global MenuWhite%, MenuBlack%
