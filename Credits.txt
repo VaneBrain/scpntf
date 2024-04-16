@@ -21,7 +21,7 @@
 		Class401
 		CommanderMark
 		Dawid Mleczko ("Mleczyk76")
-		Egor Oleynik ("Chumnaya Karkusa")
+		Egor Oleynik ("Wolfnaya")
 		Elan Sullivan
 		Emil215p
 		EternalError
@@ -56,14 +56,13 @@
 		Max Taylor
 		Micro
 		Moonstiee
-		Munted
 		Night
 		Nikita Sidorov ("Jabka")
 		Onemario1234
 		Orgil Pount ("Destructoid")
 		Ornix
-		Pavel Lvovich Gorfunkel ("-Mark-")
-		Polkovnik Abramov (Arseny)
+		Pavel Lvovich Gorfunkel
+		Polkovnik Abramov ("Arseny")
 		Prosth
 		RadReed
 		Reilly Grindle ("Mirocaine")
