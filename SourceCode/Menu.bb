@@ -2791,7 +2791,7 @@ Function RenderMainMenu()
 									Rect x+1*MenuScale,y+1*MenuScale,width-2*MenuScale,height-2*MenuScale
 								EndIf
 								Color 255,255,255
-								Text(x + width / 2, y + height / 2, Steam_FilterText(gv\SteamIDUpper, gv\SteamIDLower, "[" + se\region + "] " + se\name), True, True)
+								Text(x + width / 2, y + height / 2, Steam_FilterText(se\id_upper, se\id_lower, "[" + se\region + "] " + se\name), True, True)
 								x = x + width
 								width = 200 * MenuScale
 								DrawFrame(x, y, width, height, 0, 0, 1024, 1024, 1)
@@ -2800,7 +2800,7 @@ Function RenderMainMenu()
 									Rect x+1*MenuScale,y+1*MenuScale,width-2*MenuScale,height-2*MenuScale
 								EndIf
 								Color 255,255,255
-								Text(x + width / 2, y + height / 2, Steam_FilterText(gv\SteamIDUpper, gv\SteamIDLower, se\gamemode), True, True)
+								Text(x + width / 2, y + height / 2, Steam_FilterText(se\id_upper, se\id_lower, se\gamemode), True, True)
 								x = x + width
 								width = 200 * MenuScale
 								DrawFrame(x, y, width, height, 0, 0, 1024, 1024, 1)
@@ -2809,7 +2809,7 @@ Function RenderMainMenu()
 									Rect x+1*MenuScale,y+1*MenuScale,width-2*MenuScale,height-2*MenuScale
 								EndIf
 								Color 255,255,255
-								Text(x + width / 2, y + height / 2, Steam_FilterText(gv\SteamIDUpper, gv\SteamIDLower, se\map), True, True)
+								Text(x + width / 2, y + height / 2, Steam_FilterText(se\id_upper, se\id_lower, se\map), True, True)
 								x = x + width
 								width = 150 * MenuScale
 								DrawFrame(x, y, width, height, 0, 0, 1024, 1024, 1)
