@@ -1848,44 +1848,40 @@ Function QuickLoadEvents()
 			;[End Block]
 		Case "cont_205"
 			;[Block]
-			If e\EventState=0 Lor e\room\Objects[0]=0 Then
-				If e\EventStr = "load0"
-					e\room\Objects[3] = LoadAnimMesh_Strict("GFX\npcs\205_demon1.b3d")
-					QuickLoadPercent = 10
-					e\EventStr = "load1"
-				ElseIf e\EventStr = "load1"
-					e\room\Objects[4] = LoadAnimMesh_Strict("GFX\npcs\205_demon2.b3d")
-					QuickLoadPercent = 20
-					e\EventStr = "load2"
-				ElseIf e\EventStr = "load2"
-					e\room\Objects[5] = LoadAnimMesh_Strict("GFX\npcs\205_demon3.b3d")
-					QuickLoadPercent = 30
-					e\EventStr = "load3"
-				ElseIf e\EventStr = "load3"
-					e\room\Objects[6] = LoadAnimMesh_Strict("GFX\npcs\205_woman.b3d")
-					QuickLoadPercent = 40
-					e\EventStr = "load4"
-				ElseIf e\EventStr = "load4"
-					QuickLoadPercent = 50
-					e\EventStr = "load5"
-				ElseIf e\EventStr = "load5"
-					For i = 3 To 6
-						PositionEntity e\room\Objects[i], EntityX(e\room\Objects[0],True), EntityY(e\room\Objects[0],True), EntityZ(e\room\Objects[0],True), True
-						RotateEntity e\room\Objects[i], -90, EntityYaw(e\room\Objects[0],True), 0, True
-						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
-					Next
-					QuickLoadPercent = 70
-					e\EventStr = "load6"
-				ElseIf e\EventStr = "load6"
-						;GiveAchievement(Achv205)
-					
-					HideEntity(e\room\Objects[3])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[5])
-					QuickLoadPercent = 100
-					e\EventStr = "loaddone"
-						;e\EventState = 1
-				EndIf
+			If e\EventStr = "load0"
+				e\room\Objects[3] = LoadAnimMesh_Strict("GFX\npcs\205_demon1.b3d")
+				QuickLoadPercent = 10
+				e\EventStr = "load1"
+			ElseIf e\EventStr = "load1"
+				e\room\Objects[4] = LoadAnimMesh_Strict("GFX\npcs\205_demon2.b3d")
+				QuickLoadPercent = 20
+				e\EventStr = "load2"
+			ElseIf e\EventStr = "load2"
+				e\room\Objects[5] = LoadAnimMesh_Strict("GFX\npcs\205_demon3.b3d")
+				QuickLoadPercent = 30
+				e\EventStr = "load3"
+			ElseIf e\EventStr = "load3"
+				e\room\Objects[6] = LoadAnimMesh_Strict("GFX\npcs\205_woman.b3d")
+				QuickLoadPercent = 40
+				e\EventStr = "load4"
+			ElseIf e\EventStr = "load4"
+				QuickLoadPercent = 50
+				e\EventStr = "load5"
+			ElseIf e\EventStr = "load5"
+				For i = 3 To 6
+					PositionEntity e\room\Objects[i], EntityX(e\room\Objects[0],True), EntityY(e\room\Objects[0],True), EntityZ(e\room\Objects[0],True), True
+					RotateEntity e\room\Objects[i], -90, EntityYaw(e\room\Objects[0],True), 0, True
+					ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
+				Next
+				QuickLoadPercent = 70
+				e\EventStr = "load6"
+			ElseIf e\EventStr = "load6"
+				HideEntity(e\room\Objects[3])
+				HideEntity(e\room\Objects[4])
+				HideEntity(e\room\Objects[5])
+				HideEntity(e\room\Objects[6])
+				QuickLoadPercent = 100
+				e\EventStr = "loaddone"
 			EndIf
 			;[End Block]
 		Case "testroom_860"

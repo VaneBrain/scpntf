@@ -38,193 +38,184 @@ Function FillRoom_Cont_205(r.Rooms)
 End Function
 
 Function UpdateEvent_Cont_205(e.Events)
-	
+	;TODO: Perhaps rewrite this event for v0.3.0 to make the code look better and less likely to bug out. 
+	;I'm keeping it the way it is to keep compatibility of saves from v0.2.10 on v0.2.11. -Vane Brain
 	If PlayerRoom = e\room Then
-		If e\EventState=0 Lor e\room\Objects[0]=0 Then
-			If e\EventStr = "" And QuickLoadPercent = -1
+		If e\EventState = 0 And e\room\RoomDoors[1]\open = True Then
+			If e\room\Objects[3] <> 0 Then
+				e\room\Objects[3] = FreeEntity_Strict(e\room\Objects[3])
+				e\room\Objects[4] = FreeEntity_Strict(e\room\Objects[4])
+				e\room\Objects[5] = FreeEntity_Strict(e\room\Objects[5])
+				e\room\Objects[6] = FreeEntity_Strict(e\room\Objects[6])
+			EndIf
+			e\EventState = 1
+		EndIf
+		If e\EventState > 0 Then
+			If e\room\Objects[3] = 0 Then
 				QuickLoadPercent = 0
 				QuickLoad_CurrEvent = e
 				e\EventStr = "load0"
 			EndIf
-			
-			If e\room\Objects[3]<>0
-				HideEntity(e\room\Objects[3])
-				HideEntity(e\room\Objects[4])
-				HideEntity(e\room\Objects[5])
-				HideEntity(e\room\Objects[6])
-			EndIf
-			
-			If e\room\RoomDoors[1]\open = True
-				e\EventState = 1
-				GiveAchievement(Achv205)
-			EndIf
-		Else
-			ShouldPlay = 16
-			If (e\EventState<65) Then
-				If (DistanceSquared(EntityX(Collider), EntityX(e\room\Objects[0],True), EntityZ(Collider), EntityZ(e\room\Objects[0],True))<PowTwo(2.0)) And (Not NoTarget) Then
-					PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
+			If e\EventStr = "loaddone" Then
+				ShouldPlay = 16
+				If e\EventState < 65 Then
+					If (DistanceSquared(EntityX(Collider), EntityX(e\room\Objects[0],True), EntityZ(Collider), EntityZ(e\room\Objects[0],True))<PowTwo(2.0)) And (Not NoTarget) Then
+						PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
+						
+						e\EventState = Max(e\EventState, 65)
+						
+						ShowEntity(e\room\Objects[3])
+						ShowEntity(e\room\Objects[4])
+						ShowEntity(e\room\Objects[5])
+						HideEntity(e\room\Objects[6])
+						
+						SetAnimTime(e\room\Objects[3], 492)
+						SetAnimTime(e\room\Objects[4], 434)
+						SetAnimTime(e\room\Objects[5], 434)
+						
+						e\room\RoomDoors[0]\open = False
+					EndIf
 					
-					e\EventState = Max(e\EventState, 65)
+					If e\EventState>7 Then
+						If (Rand(0,300)=1) Then
+							e\room\RoomDoors[0]\open = Not e\room\RoomDoors[0]\open
+						EndIf
+					EndIf 
 					
-					ShowEntity(e\room\Objects[3])
-					ShowEntity(e\room\Objects[4])
-					ShowEntity(e\room\Objects[5])
-					HideEntity(e\room\Objects[6])
-					
-					SetAnimTime(e\room\Objects[3], 492)
-					SetAnimTime(e\room\Objects[4], 434)
-					SetAnimTime(e\room\Objects[5], 434)
-					
-					e\room\RoomDoors[0]\open = False
+					e\EventState2 = e\EventState2 + FPSfactor							
 				EndIf
 				
-				If e\EventState>7 Then
-					If (Rand(0,300)=1) Then
-						e\room\RoomDoors[0]\open = Not e\room\RoomDoors[0]\open
-					EndIf
-				EndIf 
-				
-				e\EventState2 = e\EventState2 + FPSfactor							
-			EndIf
-			
-			Select e\EventState
-				Case 1
-					ShowEntity e\room\Objects[1]
-					HideEntity(e\room\Objects[5])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[3])
-					;sitting
-					ShowEntity(e\room\Objects[6])
-					Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 526, 530, 0.2)
-					If e\EventState2 > 20*70 Then e\EventState = e\EventState+1
-				Case 3
-					ShowEntity e\room\Objects[1]
-					HideEntity(e\room\Objects[5])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[3])
-					;laying down
-					ShowEntity(e\room\Objects[6])
-					Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 377, 525, 0.2)
-					If e\EventState2 > 30*70 Then e\EventState = e\EventState+1
-				Case 5
-					ShowEntity e\room\Objects[1]
-					HideEntity(e\room\Objects[5])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[3])
-					;standing
-					ShowEntity(e\room\Objects[6])
-					Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 228, 376, 0.2)
-					If e\EventState2 > 40*70 Then 
-						e\EventState = e\EventState+1
-						PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[6], 10, 0.3)
-					EndIf	
-				Case 7
-					ShowEntity e\room\Objects[1]
-					ShowEntity(e\room\Objects[6])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[3])
-					;first demon appears
-					ShowEntity(e\room\Objects[5])
-					;le sexy demon pose
-					Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 500, 648, 0.2)
-					If e\EventState2 > 60*70 Then 
-						e\EventState = e\EventState+1
-						PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[6], 10, 0.5)
-					EndIf
-				Case 9
-					ShowEntity e\room\Objects[1]
-					ShowEntity(e\room\Objects[6])
-					ShowEntity(e\room\Objects[5])
-					HideEntity(e\room\Objects[3])
-					;second demon appears
-					ShowEntity(e\room\Objects[4])
-					;idle
-					Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2, 200, 0.2)
-					Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4, 125, 0.2)
-					
-					If e\EventState2 > 80*70 Then 
-						e\EventState = e\EventState+1
-						PlaySound_Strict(LoadTempSound("SFX\SCP\205\Horror.ogg"))
-					EndIf
-				Case 11
-					ShowEntity e\room\Objects[1]
-					ShowEntity(e\room\Objects[6])
-					ShowEntity(e\room\Objects[5])
-					ShowEntity(e\room\Objects[4])
-					;third demon
-					ShowEntity(e\room\Objects[3])
-					;idle
-					Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2, 226, 0.2)
-					Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2, 200, 0.2)
-					Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4, 125, 0.2)
-					
-					If e\EventState2 > 85*70 Then e\EventState = e\EventState+1
-				Case 13
-					ShowEntity e\room\Objects[1]
-					ShowEntity(e\room\Objects[6])
-					ShowEntity(e\room\Objects[5])
-					ShowEntity(e\room\Objects[4])
-					ShowEntity(e\room\Objects[3])
-					If (AnimTime(e\room\Objects[6])<>227) Then SetAnimTime(e\room\Objects[6], 227)
-					
-					Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2, 491, 0.05)
-					Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 197, 433, 0.05)
-					Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 2, 433, 0.05)
-				Case 66
-					ShowEntity e\room\Objects[1]
-					Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 492, 534, 0.1, False)
-					Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 434, 466, 0.1, False)
-					Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 434, 494, 0.1, False)
-					
-					If AnimTime(e\room\Objects[3])>515 Then
-						If AnimTime(e\room\Objects[3])>533 Then 
-							e\EventState = 67
-							e\EventState2 = 0										
-							e\EventState3 = 0
-							HideEntity e\room\Objects[1]
+				Select e\EventState
+					Case 1
+						ShowEntity e\room\Objects[1]
+						HideEntity(e\room\Objects[5])
+						HideEntity(e\room\Objects[4])
+						HideEntity(e\room\Objects[3])
+						;sitting
+						ShowEntity(e\room\Objects[6])
+						Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 526, 530, 0.2)
+						If e\EventState2 > 20*70 Then e\EventState = e\EventState+1
+					Case 3
+						ShowEntity e\room\Objects[1]
+						HideEntity(e\room\Objects[5])
+						HideEntity(e\room\Objects[4])
+						HideEntity(e\room\Objects[3])
+						;laying down
+						ShowEntity(e\room\Objects[6])
+						Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 377, 525, 0.2)
+						If e\EventState2 > 30*70 Then e\EventState = e\EventState+1
+					Case 5
+						ShowEntity e\room\Objects[1]
+						HideEntity(e\room\Objects[5])
+						HideEntity(e\room\Objects[4])
+						HideEntity(e\room\Objects[3])
+						;standing
+						ShowEntity(e\room\Objects[6])
+						Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 228, 376, 0.2)
+						If e\EventState2 > 40*70 Then 
+							e\EventState = e\EventState+1
+							PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[6], 10, 0.3)
+						EndIf	
+					Case 7
+						ShowEntity e\room\Objects[1]
+						ShowEntity(e\room\Objects[6])
+						HideEntity(e\room\Objects[4])
+						HideEntity(e\room\Objects[3])
+						;first demon appears
+						ShowEntity(e\room\Objects[5])
+						;le sexy demon pose
+						Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 500, 648, 0.2)
+						If e\EventState2 > 60*70 Then 
+							e\EventState = e\EventState+1
+							PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[6], 10, 0.5)
 						EndIf
-					EndIf
-				Case 67
-					If (Rand(150)=1) Then
-						If (Not NoTarget) Then
-							DeathMSG = GetLocalStringR("Singleplayer", "cont_205_death", Designation)
+					Case 9
+						ShowEntity e\room\Objects[1]
+						ShowEntity(e\room\Objects[6])
+						ShowEntity(e\room\Objects[5])
+						HideEntity(e\room\Objects[3])
+						;second demon appears
+						ShowEntity(e\room\Objects[4])
+						;idle
+						Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2, 200, 0.2)
+						Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4, 125, 0.2)
+						
+						If e\EventState2 > 80*70 Then 
+							e\EventState = e\EventState+1
+							PlaySound_Strict(LoadTempSound("SFX\SCP\205\Horror.ogg"))
+						EndIf
+					Case 11
+						ShowEntity e\room\Objects[1]
+						ShowEntity(e\room\Objects[6])
+						ShowEntity(e\room\Objects[5])
+						ShowEntity(e\room\Objects[4])
+						;third demon
+						ShowEntity(e\room\Objects[3])
+						;idle
+						Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2, 226, 0.2)
+						Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2, 200, 0.2)
+						Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4, 125, 0.2)
+						
+						If e\EventState2 > 85*70 Then e\EventState = e\EventState+1
+					Case 13
+						ShowEntity e\room\Objects[1]
+						ShowEntity(e\room\Objects[6])
+						ShowEntity(e\room\Objects[5])
+						ShowEntity(e\room\Objects[4])
+						ShowEntity(e\room\Objects[3])
+						If (AnimTime(e\room\Objects[6])<>227) Then SetAnimTime(e\room\Objects[6], 227)
+						
+						Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2, 491, 0.05)
+						Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 197, 433, 0.05)
+						Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 2, 433, 0.05)
+					Case 66
+						ShowEntity e\room\Objects[1]
+						Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 492, 534, 0.1, False)
+						Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 434, 466, 0.1, False)
+						Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 434, 494, 0.1, False)
+						
+						If AnimTime(e\room\Objects[3])>515 Then
+							If AnimTime(e\room\Objects[3])>533 Then 
+								e\EventState = 67
+								e\EventState2 = 0										
+								e\EventState3 = 0
+								HideEntity e\room\Objects[1]
+							EndIf
+						EndIf
+					Case 67
+						If (Rand(150)=1) Then
+							If (Not NoTarget) Then
+								DeathMSG = GetLocalStringR("Singleplayer", "cont_205_death", Designation)
+								
+								DamageSPPlayer(Rnd(10,20))
+								PlaySound_Strict DamageSFX[Rand(2,3)]
+								CameraShake = 0.5
 							
-							DamageSPPlayer(Rnd(10,20))
-							PlaySound_Strict DamageSFX[Rand(2,3)]
-							CameraShake = 0.5
-						
-							e\EventState2 = Rnd(-0.1, 0.1)
-							e\EventState3 = Rnd(-0.1, 0.1)
-						
-							TranslateEntity(Collider, e\EventState2,0,e\EventState3)
-							e\EventState2 = CurveValue(e\EventState2, 0, 10.0)								
-							e\EventState3 = CurveValue(e\EventState3, 0, 10.0)
+								e\EventState2 = Rnd(-0.1, 0.1)
+								e\EventState3 = Rnd(-0.1, 0.1)
+							
+								TranslateEntity(Collider, e\EventState2,0,e\EventState3)
+								e\EventState2 = CurveValue(e\EventState2, 0, 10.0)								
+								e\EventState3 = CurveValue(e\EventState3, 0, 10.0)
+							EndIf
 						EndIf
-					EndIf
-				Default
-					If (Rand(3)=1) Then
-						HideEntity e\room\Objects[1]
-					Else
-						ShowEntity e\room\Objects[1]
-					EndIf
-					
-					e\EventState3 = e\EventState3 + FPSfactor
-					If (e\EventState3>50) Then
-						ShowEntity e\room\Objects[1]
-						e\EventState = e\EventState+1
-						e\EventState3=0
-					EndIf
+					Default
+						If (Rand(3)=1) Then
+							HideEntity e\room\Objects[1]
+						Else
+							ShowEntity e\room\Objects[1]
+						EndIf
+						
+						e\EventState3 = e\EventState3 + FPSfactor
+						If (e\EventState3>50) Then
+							ShowEntity e\room\Objects[1]
+							e\EventState = e\EventState+1
+							e\EventState3=0
+						EndIf
 				End Select
 			EndIf
-		ElseIf (e\room\Objects[3]<>0) Then
-			HideEntity(e\room\Objects[3])
-			HideEntity(e\room\Objects[4])
-			HideEntity(e\room\Objects[5])
-			HideEntity(e\room\Objects[6])
-		Else
-			e\EventState = 0
-			e\EventStr = ""
 		EndIf
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:
