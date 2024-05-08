@@ -2478,6 +2478,7 @@ Function UpdateCredits()
 	
 End Function
 
+;TODO: Make SaveMSG type and include width and height fields. Calculate them during SaveMSG creation.
 Function SetSaveMSG(txt$)
 	
 	Save_MSG = txt
@@ -2488,11 +2489,7 @@ End Function
 
 Function UpdateSaveMSG()
 	Local scale# = opt\GraphicHeight/768.0
-	;Local width% = 200*scale
-	Local width = StringWidth(Save_MSG)+20*scale
 	Local height% = 30*scale
-	Local x% = (opt\GraphicWidth/2)-(width/2)
-	Local y% = (-height)+Save_MSG_Y
 	
 	If Save_MSG <> ""
 		If Save_MSG_Timer < 70*5
@@ -2515,8 +2512,7 @@ End Function
 
 Function RenderSaveMSG()
 	Local scale# = opt\GraphicHeight/768.0
-	;Local width% = 200*scale
-	Local width = StringWidth(Save_MSG)+20*scale
+	Local width% = StringWidth(Save_MSG)+20*scale
 	Local height% = 30*scale
 	Local x% = (opt\GraphicWidth/2)-(width/2)
 	Local y% = (-height)+Save_MSG_Y
