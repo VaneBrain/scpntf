@@ -718,7 +718,7 @@ Function UpdateChunksMP()
 			Else
 				If Int(mp_I\MapInList\TriggerAreas[i]\x)-1 = mp_I\Map\CurrChunk Then
 					If EntityDistanceSquared(mp_I\Map\Triggers[i],mpl\CameraPivot)<PowTwo(GetCameraFogRangeFar(Camera)) Then
-						If EntityInView(mp_I\Map\Triggers[i],Camera) Then
+						If EntityInView(mp_I\Map\Triggers[i],Camera) And EntityVisible(mpl\CameraPivot, mp_I\Map\Triggers[i]) Then
 							If Int(mp_I\MapInList\TriggerAreas[i]\y)-1=0 Then
 								EntityAlpha GetChild(mp_I\Map\obj,RMESH_BSP),1.0
 							Else
@@ -734,7 +734,7 @@ Function UpdateChunksMP()
 					EndIf
 				ElseIf Int(mp_I\MapInList\TriggerAreas[i]\y)-1 = mp_I\Map\CurrChunk Then
 					If EntityDistanceSquared(mp_I\Map\Triggers[i],mpl\CameraPivot)<PowTwo(GetCameraFogRangeFar(Camera)) Then
-						If EntityInView(mp_I\Map\Triggers[i],Camera) Then
+						If EntityInView(mp_I\Map\Triggers[i],Camera) And EntityVisible(mpl\CameraPivot, mp_I\Map\Triggers[i]) Then
 							If Int(mp_I\MapInList\TriggerAreas[i]\x)-1=0 Then
 								EntityAlpha GetChild(mp_I\Map\obj,RMESH_BSP),1.0
 							Else
