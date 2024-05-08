@@ -1811,13 +1811,12 @@ Function RecvDataClient()
 						
 						hasItem% = Steam_PullByte()
 						If hasItem Then
-							Local itemName$ = Steam_PullString()
 							Local itemTempName$ = Steam_PullString()
-							If Players[i]\Item = Null Lor Players[i]\Item\itemtemplate\name <> itemName Lor Players[i]\Item\itemtemplate\tempname <> itemTempName Then
+							If Players[i]\Item = Null Lor Players[i]\Item\itemtemplate\tempname <> itemTempName Then
 								If Players[i]\Item <> Null Then
 									Delete Players[i]\Item
 								EndIf
-								it = CreateItem(itemName, itemTempName, 0, 0, 0)
+								it = CreateItem("", itemTempName, 0, 0, 0)
 								Players[i]\Item = CreateInventoryItem(it)
 								RemoveItem(it)
 							EndIf
@@ -1852,7 +1851,6 @@ Function RecvDataClient()
 				If temp>0
 					For i=1 To temp
 						itID = Steam_PullInt()
-						itName = Steam_PullString()
 						itTempName = Steam_PullString()
 						itX = Steam_PullFloat()
 						itY = Steam_PullFloat()
@@ -1872,7 +1870,7 @@ Function RecvDataClient()
 							RotateEntity itFound\collider,0,CurveAngle(itYaw,EntityYaw(itFound\collider),10.0),0
 							itFound\noDelete = True
 						Else
-							it = CreateItem(itName,itTempName,itX,itY,itZ)
+							it = CreateItem("",itTempName,itX,itY,itZ)
 							RotateEntity it\collider,0,itYaw,0
 							it\ID = itID
 							it\noDelete = True
@@ -2247,7 +2245,6 @@ Function SyncServer()
 						Next
 						If Players[j]\Item <> Null Then
 							Steam_PushByte(1)
-							Steam_PushString(Players[j]\Item\itemtemplate\name)
 							Steam_PushString(Players[j]\Item\itemtemplate\tempname)
 						Else
 							Steam_PushByte(0)
@@ -2272,7 +2269,6 @@ Function SyncServer()
 				Steam_PushInt(temp)
 				For it.Items = Each Items
 					Steam_PushInt(it\ID)
-					Steam_PushString(it\itemtemplate\name)
 					Steam_PushString(it\itemtemplate\tempname)
 					Steam_PushFloat(EntityX(it\collider))
 					Steam_PushFloat(EntityY(it\collider))

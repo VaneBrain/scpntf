@@ -404,7 +404,7 @@ Function CreateItem.Items(name$, tempname$, x#, y#, z#, r%=0,g%=0,b%=0,a#=1.0,in
 	tempname = Lower (tempname)
 	
 	For it.ItemTemplates = Each ItemTemplates
-		If Lower(it\name) = name Then
+		If Lower(it\name) = name Lor name = "" Then
 			If Lower(it\tempname) = tempname Then
 				i\itemtemplate = it
 				i\collider = CreatePivot()
