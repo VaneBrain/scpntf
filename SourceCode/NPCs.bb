@@ -4246,9 +4246,9 @@ Function NPC_GoToRoom(n.NPCs, IdleAnim.Vector3D, MoveAnim.Vector3D, n_speed#=0.0
 		MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
 		If n\PathTimer = 0.0 Then
 			Local roomfound% = False
-			While roomfound = False
-				If n\NPCRoom=Null Then
-					GetNPCRoom(n)
+			;While roomfound = False
+				If n\NPCRoom = Null Then
+					n\NPCRoom = GetNPCRoom(n)
 				EndIf
 				For r.Rooms = Each Rooms
 					If IsRoomAdjacent(r,n\NPCRoom) Then
@@ -4262,7 +4262,7 @@ Function NPC_GoToRoom(n.NPCs, IdleAnim.Vector3D, MoveAnim.Vector3D, n_speed#=0.0
 						EndIf
 					EndIf
 				Next
-			Wend
+			;Wend
 			If n\Idle > 0.1 Then
 				n\CurrSpeed = 0.0
 			EndIf
@@ -4458,7 +4458,7 @@ Function IsTarget(n.NPCs, target.NPCs)
 	Return False
 End Function
 
-Function GetNPCRoom(n.NPCs)
+Function GetNPCRoom.Rooms(n.NPCs)
 	Local r.Rooms
 	Local x#, z#
 	
@@ -4466,17 +4466,14 @@ Function GetNPCRoom(n.NPCs)
 		x = Abs(r\x-EntityX(n\Collider,True))
 		z = Abs(r\z-EntityZ(n\Collider,True))
 		
-		If x<16 And z < 16 Then
-			If x < 4.0 Then
-				If z < 4.0 Then
-					If Abs(EntityY(n\Collider) - EntityY(r\obj)) < 1.5 Then
-						n\NPCRoom = r
-						Exit
-					EndIf
-				EndIf
+		If x < 16.0 And z < 16.0 Then
+			If Abs(EntityY(n\Collider) - EntityY(r\obj)) < 4.0 Then
+				Return r
 			EndIf
 		EndIf
 	Next
+	
+	Return Null
 End Function
 
 Function PreloadAllNPCAnimations()
