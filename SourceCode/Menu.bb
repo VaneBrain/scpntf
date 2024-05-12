@@ -2557,7 +2557,7 @@ Function RenderMainMenu()
 				x = 60 * MenuScale
 				y = y + height + 20 * MenuScale
 				width = 580 * MenuScale
-				height = 465 * MenuScale
+				height = 470 * MenuScale
 				
 				DrawFrame(x, y, width, height)
 				;[End Block]
@@ -2585,7 +2585,7 @@ Function RenderMainMenu()
 						Exit
 					EndIf
 				Next
-				height = 200 + (80 * temp) * MenuScale
+				height = 190 * MenuScale + (80 * temp) * MenuScale
 				
 				DrawFrame(x, y, width, height)
 				;[End Block]
