@@ -1709,47 +1709,47 @@ Function QuickLoadEvents()
 	Select e\EventName
 		Case "surveil_room"
 			;[Block]
-			If e\EventState = 0 And e\EventStr <> ""
-				If e\EventStr <> "" And Left(e\EventStr,4) <> "load"
-					QuickLoadPercent = QuickLoadPercent + 5
-					If Int(e\EventStr) > 9
-						e\EventStr = "load2"
-					Else
-						e\EventStr = Int(e\EventStr) + 1
-					EndIf
-				ElseIf e\EventStr = "load2"
-					Local skip = False
-					If e\room\NPC[0]=Null Then
-						For n.NPCs = Each NPCs
-							If n\NPCtype = NPCtype049
-								skip = True
-								Exit
-							EndIf
-						Next
-						
-						If (Not skip)
-							e\room\NPC[0] = CreateNPC(NPCtype049,EntityX(e\room\Objects[7],True),EntityY(e\room\Objects[7],True)+5,EntityZ(e\room\Objects[7],True))
-							e\room\NPC[0]\HideFromNVG = True
-							PositionEntity e\room\NPC[0]\Collider,EntityX(e\room\Objects[7],True),EntityY(e\room\Objects[7],True)+5,EntityZ(e\room\Objects[7],True)
-							ResetEntity e\room\NPC[0]\Collider
-							RotateEntity e\room\NPC[0]\Collider,0,e\room\angle+180,0
-							e\room\NPC[0]\State = 0
-							e\room\NPC[0]\PrevState = 2
-							
-							DebugLog(EntityX(e\room\Objects[7],True)+", "+EntityY(e\room\Objects[7],True)+", "+EntityZ(e\room\Objects[7],True))
-						Else
-							DebugLog "Skipped 049 spawning in room2sl"
-						EndIf
-					EndIf
-					QuickLoadPercent = 80
-					e\EventStr = "load3"
-				ElseIf e\EventStr = "load3"
-					e\EventState = 1
-					If e\EventState2 = 0 Then e\EventState2 = -(70*5)
-					
-					QuickLoadPercent = 100
-				EndIf
-			EndIf
+;			If e\EventState = 0 And e\EventStr <> ""
+;				If e\EventStr <> "" And Left(e\EventStr,4) <> "load"
+;					QuickLoadPercent = QuickLoadPercent + 5
+;					If Int(e\EventStr) > 9
+;						e\EventStr = "load2"
+;					Else
+;						e\EventStr = Int(e\EventStr) + 1
+;					EndIf
+;				ElseIf e\EventStr = "load2"
+;					Local skip = False
+;					If e\room\NPC[0]=Null Then
+;						For n.NPCs = Each NPCs
+;							If n\NPCtype = NPCtype049
+;								skip = True
+;								Exit
+;							EndIf
+;						Next
+;						
+;						If (Not skip)
+;							e\room\NPC[0] = CreateNPC(NPCtype049,EntityX(e\room\Objects[7],True),EntityY(e\room\Objects[7],True)+5,EntityZ(e\room\Objects[7],True))
+;							e\room\NPC[0]\HideFromNVG = True
+;							PositionEntity e\room\NPC[0]\Collider,EntityX(e\room\Objects[7],True),EntityY(e\room\Objects[7],True)+5,EntityZ(e\room\Objects[7],True)
+;							ResetEntity e\room\NPC[0]\Collider
+;							RotateEntity e\room\NPC[0]\Collider,0,e\room\angle+180,0
+;							e\room\NPC[0]\State = 0
+;							e\room\NPC[0]\PrevState = 2
+;							
+;							DebugLog(EntityX(e\room\Objects[7],True)+", "+EntityY(e\room\Objects[7],True)+", "+EntityZ(e\room\Objects[7],True))
+;						Else
+;							DebugLog "Skipped 049 spawning in room2sl"
+;						EndIf
+;					EndIf
+;					QuickLoadPercent = 80
+;					e\EventStr = "load3"
+;				ElseIf e\EventStr = "load3"
+;					e\EventState = 1
+;					If e\EventState2 = 0 Then e\EventState2 = -(70*5)
+;					
+;					QuickLoadPercent = 100
+;				EndIf
+;			EndIf
 			;[End Block]
 		Case "room2_closets"
 			;[Block]
