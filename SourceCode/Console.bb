@@ -36,7 +36,7 @@ Function UpdateConsole(commandSet%)
 		
 		Local x% = 0, y% = opt\GraphicHeight-300*MenuScale, width% = opt\GraphicWidth, height% = 300*MenuScale-30*MenuScale
 		Local StrTemp$, temp%,  i%
-		Local ev.Events, r.Rooms, it.Items
+		Local ev.Events, r.Rooms, it.Items, g.Guns
 		
 		DrawFrame x,y,width,height+30*MenuScale
 		
@@ -519,6 +519,14 @@ Function UpdateConsole(commandSet%)
 									Exit
 								EndIf
 							Next
+							
+							If it <> Null Then
+								For g = Each Guns
+									If Lower(g\DisplayName) = Lower(it\name) Then
+										it\state = g\MaxCurrAmmo
+									EndIf
+								Next
+							EndIf
 							
 							If temp = False Then CreateConsoleMsg("Item not found.",255,150,0)
 							;[End Block]
@@ -1444,6 +1452,14 @@ Function UpdateConsole(commandSet%)
 									Exit
 								EndIf
 							Next
+							
+							If it <> Null Then
+								For g = Each Guns
+									If Lower(g\DisplayName) = Lower(it\name) Then
+										it\state = g\MaxCurrAmmo
+									EndIf
+								Next
+							EndIf
 							
 							If temp = False Then CreateConsoleMsg("Item not found.",255,150,0)
 							;[End Block]
