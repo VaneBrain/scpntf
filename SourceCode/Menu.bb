@@ -3431,7 +3431,7 @@ Function UpdateLauncher()
 		
 		Color 255,255,255
 		Text(80, 130, GetLocalString("Launcher", "resolution") + ":", True)
-		DrawFrame(5, 150, 120, 30, 0, 0, 1024, 1024, FRAME_THICK, 512)
+		DrawFrame(5, 150, 120, 30)
 		Text(65, 165, currentWidth + "x" + currentHeight, True, True)
 		Local frameheight = 0
 		y = 0
@@ -3444,7 +3444,7 @@ Function UpdateLauncher()
 				EndIf
 				
 				Text(80, 200, GetLocalString("Launcher", "driver") + ":", True)
-				DrawFrame(5, 220, 120, 30, 0, 0, 1024, 1024, FRAME_THICK, 512)
+				DrawFrame(5, 220, 120, 30)
 				If opt\GraphicDriver = 0 Then
 					txt = GetLocalString("Launcher", "primary_driver")
 				Else
@@ -3467,7 +3467,7 @@ Function UpdateLauncher()
 						txt2 = GfxDriverName(i+1)
 					EndIf
 				Next
-				DrawFrame(5, 247, StringWidth(txt2)+30, 20*(i+1), 0, 0, 1024, 1024, FRAME_THICK, 512)
+				DrawFrame(5, 247, StringWidth(txt2)+30, 20*(i+1))
 				For i = 0 To CountGfxDrivers()-1
 					If i = 0 Then
 						txt2 = GetLocalString("Launcher", "primary_driver")
@@ -3489,7 +3489,7 @@ Function UpdateLauncher()
 				Next
 				
 				Text(80, 200, GetLocalString("Launcher", "driver")+":", True)
-				DrawFrame(5, 220, 120, 30, 0, 0, 1024, 1024, FRAME_THICK, 512)
+				DrawFrame(5, 220, 120, 30)
 				If opt\GraphicDriver = 0 Then
 					txt = GetLocalString("Launcher", "primary_driver")
 				Else
@@ -3605,16 +3605,24 @@ End Function
 
 Function DrawTiledImageRect(img%, srcX%, srcY%, srcwidth#, srcheight#, x%, y%, width%, height%)
 	
+	Local TempSrcWidth%, TempSrcHeight%
 	Local x2% = x
-	While x2 < x+width
-		If x2 + srcwidth > x + width Then srcwidth = (x + width) - x2
-		Local y2% = y
-		While y2 < y+height
-			DrawBlockRect(img, x2, y2, srcX, srcY, srcwidth, Min((y + height) - y2, srcheight))
-			y2 = y2 + srcheight
-		Wend
-		x2 = x2 + srcwidth
-	Wend
+	
+    While x2 < x + width
+        TempSrcWidth = srcwidth
+        If x2 + srcwidth > x + width Then TempSrcWidth = (x + width) - x2
+        
+        Local y2% = y
+		
+        While y2 < y + height
+            TempSrcHeight = srcheight
+            If y2 + srcheight > y + height Then TempSrcHeight = (y + height) - y2
+            
+            DrawBlockRect(img, x2, y2, srcX, srcY, TempSrcWidth, TempSrcHeight)
+            y2 = y2 + TempSrcHeight
+        Wend
+        x2 = x2 + TempSrcWidth
+    Wend
 	
 End Function
 
@@ -3746,11 +3754,11 @@ End Function
 
 Const FRAME_THICK = 3
 
-Function DrawFrame(x%, y%, width%, height%, xoffset%=0, yoffset%=0, srcwidth% = 1024, srcheight% = 1024, frameoffset%=FRAME_THICK, tile%=256)
+Function DrawFrame(x%, y%, width%, height%, xoffset%=0, yoffset%=0, srcwidth% = 1024, srcheight% = 1024, frameoffset%=FRAME_THICK)
 	Color 255, 255, 255
-	DrawTiledImageRect(MenuWhite, xoffset, (y Mod tile), srcwidth%, srcheight%, x, y, width, height)
+	DrawTiledImageRect(MenuWhite, xoffset, 0, srcwidth%, srcheight%, x, y, width, height)
 	
-	DrawTiledImageRect(MenuBlack, yoffset, (y Mod tile), srcwidth%, srcheight%, x+frameoffset*MenuScale, y+frameoffset*MenuScale, width-(frameoffset*2)*MenuScale, height-(frameoffset*2)*MenuScale)	
+	DrawTiledImageRect(MenuBlack, yoffset, 0, srcwidth%, srcheight%, x+frameoffset*MenuScale, y+frameoffset*MenuScale, width-(frameoffset*2)*MenuScale, height-(frameoffset*2)*MenuScale)	
 End Function
 
 Function DrawButton%(x%, y%, width%, height%, txt$, bigfont% = True, waitForMouseUp%=False, usingAA%=True, currButton%=-1, currButtonTab%=0, currButtonSub%=0)
