@@ -650,7 +650,7 @@ Function UpdateGuns()
 									ChangeGunFrames(g,g\Anim_Shoot,False)
 									If Ceil(AnimTime(g\obj)) = g\Anim_Shoot\x Then
 										PlayGunSound(g\name,g\MaxShootSounds,0,True)
-										CameraShake = g\Knockback/2.0
+										CameraShake = g\Knockback/3.0
 										user_camera_pitch = user_camera_pitch - g\Knockback
 										g_I\GunLightTimer = FPSfactor
 										shooting = True
@@ -771,22 +771,20 @@ Function UpdateGuns()
 										ChangeGunFrames(g,g\Anim_NoAmmo_Shoot,False)
 										If Ceil(AnimTime(g\obj)) = g\Anim_NoAmmo_Shoot\x Then
 											PlayGunSound("slideback2",1,1,False)
-											If CameraShake <= (g\Knockback/2)-FPSfactor-0.05 Then
-												PlayGunSound(g\name,g\MaxShootSounds,0,True)
-												CameraShake = g\Knockback/2.0
-												user_camera_pitch = user_camera_pitch - g\Knockback
-												g_I\GunLightTimer = FPSfactor
-												ShowEntity g\MuzzleFlash
-												TurnEntity g\MuzzleFlash,0,0,Rnd(360)
-												ScaleSprite g\MuzzleFlash,Rnd(0.025,0.03),Rnd(0.025,0.03)
-											EndIf
+											PlayGunSound(g\name,g\MaxShootSounds,0,True)
+											CameraShake = g\Knockback/3.0
+											user_camera_pitch = user_camera_pitch - g\Knockback
+											g_I\GunLightTimer = FPSfactor
+											ShowEntity g\MuzzleFlash
+											TurnEntity g\MuzzleFlash,0,0,Rnd(360)
+											ScaleSprite g\MuzzleFlash,Rnd(0.025,0.03),Rnd(0.025,0.03)
 											shooting = True
 										EndIf
 									Else
 										ChangeGunFrames(g,g\Anim_Shoot,False)
 										If Ceil(AnimTime(g\obj)) = g\Anim_Shoot\x Then
 											PlayGunSound(g\name,g\MaxShootSounds,0,True)
-											CameraShake = g\Knockback/2.0
+											CameraShake = g\Knockback/3.0
 											user_camera_pitch = user_camera_pitch - g\Knockback
 											g_I\GunLightTimer = FPSfactor
 											shooting = True
@@ -891,7 +889,7 @@ Function UpdateGuns()
 									ChangeGunFrames(g,g\Anim_Shoot,False)
 									If Ceil(AnimTime(g\obj)) = g\Anim_Shoot\x Then
 										PlayGunSound(g\name,g\MaxShootSounds,0,True)
-										CameraShake = g\Knockback/2.0
+										CameraShake = g\Knockback/3.0
 										user_camera_pitch = user_camera_pitch - g\Knockback
 										g_I\GunLightTimer = FPSfactor
 										shooting = True
