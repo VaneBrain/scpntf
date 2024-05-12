@@ -72,7 +72,7 @@ Function CreateNPCtype939MP(n.NPCs)
 	
 End Function
 
-Function UpdateNPCtype939(n.NPCs)
+Function UpdateNPCtype939(n.NPCs) ;TODO: REWRITE THIS ALL! IT'S HORRIBLE!
 	Local dist#,prevFrame#,temp%,angle#
 	
 	If (Not n\IsDead) Then
@@ -221,57 +221,54 @@ Function UpdateNPCtype939(n.NPCs)
 				EndIf
 					
 		End Select
-	Else
-		If Rand(1,2)=1
-			If n\Frame => 174
-				SetNPCFrame(n, 174)
+		If n\HP <= 0 Then
+			n\IsDead = True
+			EntityType n\Collider,HIT_DEAD
+			If Rand(2) = 1 Then
+				SetNPCFrame(n, 73)
 			Else
-				AnimateNPC(n, 165, 174, 0.5, False)
+				SetNPCFrame(n, 165)
 			EndIf
-		Else
-			If n\Frame => 164
-				SetNPCFrame(n, 174)
-			Else
-				AnimateNPC(n, 73, 164, 0.5, False)
-			EndIf
+			MoveEntity n\Collider, 0, 0.01, 0
 		EndIf
-	EndIf
-		
-	If n\HP <= 0
-		n\IsDead = True
+	Else
+		If n\Frame < 165 Then
+			AnimateNPC(n, 73, 164, 0.5, False)
+		Else
+			AnimateNPC(n, 165, 174, 0.5, False)
+		EndIf
 	EndIf
 		
 	If n\State < 3 And (Not NoTarget) And (Not n\IgnorePlayer) Then
 		dist = EntityDistance(n\Collider, Collider)
-			
+		
 		If dist < 4.0 Then dist = dist - EntityVisible(Collider, n\Collider) ;TODO wtf is this?
-			If PlayerSoundVolume*1.2>dist Lor dist < 1.5 Then
-				If n\State3 = 0 Then
-					If n\Sound <> 0 Then FreeSound_Strict n\Sound : n\Sound = 0
-					n\Sound = LoadSound_Strict("SFX\SCP\939\"+(n\ID Mod 3)+"Attack"+Rand(1,3)+".ogg")
-					PlayNPCSound(n, n\Sound)										
-					
-					PlayNPCSound(n, LoadTempSound("SFX\SCP\939\attack.ogg"))
-					n\State3 = 1
-				EndIf
+		If PlayerSoundVolume*1.2>dist Lor dist < 1.5 Then
+			If n\State3 = 0 Then
+				If n\Sound <> 0 Then FreeSound_Strict n\Sound : n\Sound = 0
+				n\Sound = LoadSound_Strict("SFX\SCP\939\"+(n\ID Mod 3)+"Attack"+Rand(1,3)+".ogg")
+				PlayNPCSound(n, n\Sound)										
 				
-				n\State = 3
-			ElseIf PlayerSoundVolume*1.6>dist
-				If n\State<>1 And n\Reload <= 0 Then
-					If n\Sound <> 0 Then FreeSound_Strict n\Sound : n\Sound = 0
-					n\Sound = LoadSound_Strict("SFX\SCP\939\"+(n\ID Mod 3)+"Alert"+Rand(1,3)+".ogg")
-					PlayNPCSound(n, n\Sound)	
-					
-					n\Frame = 175
-					n\Reload = 70 * 3	
-				EndIf
-				
-				n\State = 1
-			
+				PlayNPCSound(n, LoadTempSound("SFX\SCP\939\attack.ogg"))
+				n\State3 = 1
 			EndIf
 			
-		n\Reload = n\Reload - FPSfactor
+			n\State = 3
+		ElseIf PlayerSoundVolume*1.6>dist
+			If n\State<>1 And n\Reload <= 0 Then
+				If n\Sound <> 0 Then FreeSound_Strict n\Sound : n\Sound = 0
+				n\Sound = LoadSound_Strict("SFX\SCP\939\"+(n\ID Mod 3)+"Alert"+Rand(1,3)+".ogg")
+				PlayNPCSound(n, n\Sound)	
+				
+				n\Frame = 175
+				n\Reload = 70 * 3	
+			EndIf
 			
+			n\State = 1
+		EndIf
+		
+		n\Reload = n\Reload - FPSfactor
+		
 	EndIf				
 		
 	RotateEntity n\Collider, 0, EntityYaw(n\Collider), 0, True	
