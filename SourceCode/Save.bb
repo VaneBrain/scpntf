@@ -24,8 +24,8 @@ Function SaveGame(file$, newzone%=-1)
 	;Save global data in here
 	Local f% = WriteFile(file + "main.ntf")
 	
-	WriteString f, VersionNumber
-	;WriteString f, CompatibleNumber
+	;WriteString f, VersionNumber
+	WriteString f, CompatibleNumber
 	
 	WriteString f, CurrentTime()
 	WriteString f, CurrentDate()
