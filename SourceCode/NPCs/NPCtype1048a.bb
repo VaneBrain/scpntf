@@ -361,7 +361,7 @@ Function UpdateNPCtype1048aMP(n.NPCs)
 			n\IsDead=True
 			EntityType n\Collider,HIT_DEAD
 		EndIf
-		If n\State <> MP1048a_STATE_ATTACK Then
+		If n\State = MP1048a_STATE_WANDER Lor n\State = MP1048a_STATE_DETECTED Then
 			n\SoundChn = LoopSound2(n\Sound,n\SoundChn,Camera,n\Collider,5)
 		EndIf	
 	Else
