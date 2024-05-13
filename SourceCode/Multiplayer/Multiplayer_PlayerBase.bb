@@ -834,7 +834,7 @@ Function AnimatePlayerModelsAndSpectate()
 						mp_I\SpectatePlayer = mp_I\PlayerID
 					EndIf
 					
-					If (Not MenuOpen) And (Not ConsoleOpen) And (Not InLobby()) And (Not IsModerationOpen()) And (Not IsInVote()) Then
+					If (Not MenuOpen) And (Not ConsoleOpen) And (Not InLobby()) And (Not IsModerationOpen()) And (Not IsInVote()) And (Not Animating(Players[i]\obj_upper)) Then
 						If MouseHit1 Then
 							FindPlayerToSpectate(1)
 						EndIf
