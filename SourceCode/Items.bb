@@ -9,6 +9,8 @@ Global ClosestItem.Items
 
 Global LastItemID%
 
+Const ItemDistanceCheckTime# = 35.0
+
 Type ItemTemplates
 	Field name$
 	Field tempname$
@@ -525,10 +527,11 @@ Function UpdateItems()
 		i\Dropped = 0
 		
 		If (Not i\Picked) Then
-			If i\disttimer < MilliSecs() Then
-				i\dist = EntityDistance(Camera, i\collider)
-				i\disttimer = MilliSecs() + 700
-				If i\dist < HideDist Then ShowEntity i\collider
+			If i\disttimer <= 0.0 Then
+				i\dist = EntityDistance(mpl\CameraPivot, i\collider)
+				i\disttimer = ItemDistanceCheckTime
+			Else
+				i\disttimer = Max(0.0, i\disttimer - FPSfactor)
 			EndIf
 			
 			If i\dist < HideDist Then

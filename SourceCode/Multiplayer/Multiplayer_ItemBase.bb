@@ -162,9 +162,11 @@ Function UpdateMPItems()
 			EndIf
 			
 			If (Not i\Picked) Then
-				If i\disttimer < MilliSecs() Then
+				If i\disttimer <= 0.0 Then
 					i\dist = EntityDistance(Players[mp_I\PlayerID]\Collider, i\collider)
-					i\disttimer = MilliSecs() + 700
+					i\disttimer = ItemDistanceCheckTime
+				Else
+					i\disttimer = Max(0.0, i\disttimer - FPSfactor)
 				EndIf
 				
 				If i\dist < HideDist Then
