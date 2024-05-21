@@ -192,7 +192,7 @@ Function UpdateEvent_Gate_A_Entrance(e.Events)
 	EndIf
 	
 	If e\EventState = 3 And (Not IsStreamPlaying_Strict(IntercomStreamCHN)) Then
-		BeginTask(TASK_CHECKPOINT)
+		BeginTask(TASK_ELECLOCATE)
 		e\EventState = 4
 	ElseIf e\EventState = 4 And e\room\dist >= 25.0 Then
 		If SelectedDifficulty\saveType = SAVEONSCREENS Then
