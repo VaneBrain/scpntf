@@ -1,4 +1,3 @@
-
 Function FillRoom_Electrical_Center(r.Rooms)
 	Local d.Doors,it.Items,sc.SecurityCams
 	Local i,n
@@ -21,7 +20,7 @@ Function FillRoom_Electrical_Center(r.Rooms)
 End Function
 
 Function UpdateEvent_Electrical_Center(e.Events)
-	
+
 	If PlayerRoom = e\room Then
 		
 		EntityPick(Camera, 1.5)
@@ -31,6 +30,8 @@ Function UpdateEvent_Electrical_Center(e.Events)
 				e\EventState = Max(e\EventState,1)
 				PlaySound_Strict HorrorSFX[7]
 				PlaySound_Strict LeverSFX
+			EndTask(TASK_ELECLOCATE)
+			BeginTask(TASK_ELECFOUND)
 			EndIf 
 		EndIf
 		
@@ -47,16 +48,20 @@ Function UpdateEvent_Electrical_Center(e.Events)
 			SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
 		EndIf
 		
-		;Remote Door Control
-		RemoteDoorOn = UpdateLever(e\room\Levers[2]\obj)
-		
-		If e\EventState > 0 And e\EventState < 200 Then
-			e\EventState = e\EventState + FPSfactor
-			RotateEntity(e\room\Levers[1]\obj, CurveValue(-80, EntityPitch(e\room\Levers[1]\obj), 5), EntityYaw(e\room\Levers[1]\obj), 0)
-		EndIf 
-		
-	EndIf
-	
+        ; Remote Door Control
+        RemoteDoorOn = UpdateLever(e\room\Levers[2]\obj)
+        If RemoteDoorOn Then
+            If e\EventState > 0 And e\EventState < 200 Then
+                EndTask(TASK_ELEFOUND)
+                e\EventState = e\EventState + FPSfactor
+                RotateEntity(e\room\Levers[1]\obj, CurveValue(-80, EntityPitch(e\room\Levers[1]\obj), 5), EntityYaw(e\room\Levers[1]\obj), 0)
+            EndIf
+        Else
+            EndTask(TASK_ELECFOUND)  ; Ensure TASK_ELECFOUND is ended when RemoteDoorOn is False - drmaynard
+            BeginTask(TASK_CHECKPOINT)  ; Now we simply go to the next task - drmynard
+        EndIf
+        
+    EndIf	
 End Function
 
 ;~IDEal Editor Parameters:
