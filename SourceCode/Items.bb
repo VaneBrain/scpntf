@@ -528,7 +528,7 @@ Function UpdateItems()
 		
 		If (Not i\Picked) Then
 			If i\disttimer <= 0.0 Then
-				i\dist = EntityDistance(mpl\CameraPivot, i\collider)
+				i\dist = EntityDistance(Camera, i\collider)
 				i\disttimer = ItemDistanceCheckTime
 			Else
 				i\disttimer = Max(0.0, i\disttimer - FPSfactor)
