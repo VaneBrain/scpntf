@@ -1558,17 +1558,25 @@ Function UpdateMainMenu()
 					EndIf
 				EndIf
 				
-				If DrawButton(x+300*MenuScale, y+95*MenuScale, 170*MenuScale, 30*MenuScale, mp_O\Gamemode\name, False) Then
+				If DrawButton(x + 300*MenuScale, y + 95*MenuScale, 170*MenuScale, 30*MenuScale, mp_O\Gamemode\name, False) Then
+					MainMenuTab = MenuTab_SelectMPGamemode
+				EndIf
+				
+				If DrawButton(x + 470 * MenuScale, y + 95 * MenuScale, 30*MenuScale, 30*MenuScale, ">",False,False,True,3,MainMenuTab,1) Then
 					MainMenuTab = MenuTab_SelectMPGamemode
 				EndIf
 				
 				If mp_O\Gamemode\ID = Gamemode_Waves Then
-					If DrawButton(x + 470 * MenuScale, y + 95 * MenuScale, 30*MenuScale, 30*MenuScale, "...",False,False,True,3,MainMenuTab,1) Then
+					If DrawButton(x + 502 * MenuScale, y + 95 * MenuScale, 30*MenuScale, 30*MenuScale, "...",False,False,True,3,MainMenuTab,1) Then
 						MainMenuTab = MenuTab_MPGamemodeSettings
 					EndIf
 				EndIf
 				
-				If DrawButton(x+300*MenuScale, y+135*MenuScale, 170*MenuScale, 30*MenuScale, mp_O\MapInList\Name, False) Then
+				If DrawButton(x + 300*MenuScale, y + 135*MenuScale, 170*MenuScale, 30*MenuScale, mp_O\MapInList\Name, False) Then
+					MainMenuTab = MenuTab_SelectMPMap
+				EndIf
+				
+				If DrawButton(x + 470 * MenuScale, y + 135 * MenuScale, 30*MenuScale, 30*MenuScale, ">",False,False,True,3,MainMenuTab,1) Then
 					MainMenuTab = MenuTab_SelectMPMap
 				EndIf
 				
@@ -2375,7 +2383,7 @@ Function RenderMainMenu()
 					y = y + 35*MenuScale
 					
 					Color 255,255,255
-					Text(x + 20 * MenuScale, y, GetLocalString("Options","showFPS")+":")
+					Text(x + 20 * MenuScale, y, GetLocalString("Options","showfps")+":")
 					If MouseAndControllerSelectBox(x+375*MenuScale,y-6*MenuScale,20*MenuScale,20*MenuScale,6,MainMenuTab)
 						DrawOptionsTooltip("showfps")
 					EndIf
