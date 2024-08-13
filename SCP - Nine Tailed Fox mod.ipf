@@ -60,6 +60,7 @@
  AbsPath="\SourceCode\Rooms\Gate_B_Topside.bb" PrjFolder="\Rooms" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\SourceCode\GUI.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\SourceCode\Guns.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
+ AbsPath="\SourceCode\IniControler.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\SourceCode\Items.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\SourceCode\Key.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\SourceCode\KeyBinds.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
