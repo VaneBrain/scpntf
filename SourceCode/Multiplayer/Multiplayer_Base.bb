@@ -1005,11 +1005,7 @@ Function MPMainLoop()
 		Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 200, Msg, True, False)
 	EndIf
 	
-	Color 255, 255, 255
-	SetFont fo\ConsoleFont
-	If opt\ShowFPS Then
-		Text 20, 20, "FPS: " + ft\fps : SetFont fo\Font[Font_Default]
-	EndIf
+	ShowStats()
 	
 	RenderAchievementMsg()
 	
@@ -1232,11 +1228,7 @@ Function MPMainLoopClient()
 		Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 200, Msg, True, False)
 	EndIf
 	
-	Color 255, 255, 255
-	SetFont fo\ConsoleFont
-	If opt\ShowFPS Then
-		Text 20, 20, "FPS: " + ft\fps : SetFont fo\Font[Font_Default]
-	EndIf
+	ShowStats()
 	
 	RenderAchievementMsg()
 	
@@ -1558,7 +1550,8 @@ Function RecvDataClient()
 			Case PACKET_PING
 				;[Block]
 				;The packet itself doesn't contain any data, instead it just serves as a trigger to determine the ping value
-				Players[mp_I\PlayerID]\Ping = (MilliSecs()-mp_I\LastPingMillisecs); - ft\DeltaTime
+				;Players[mp_I\PlayerID]\Ping = (MilliSecs()-mp_I\LastPingMillisecs); - ft\DeltaTime
+				Players[mp_I\PlayerID]\Ping = Steam_GetPing(Players[0]\SteamIDUpper, Players[0]\SteamIDLower)
 				;[End Block]
 			Case PACKET_PLAYER
 				;[Block]

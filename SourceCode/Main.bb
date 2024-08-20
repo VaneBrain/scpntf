@@ -1679,11 +1679,7 @@ Function MainLoop()
 		EndIf
 	EndIf
 	
-	Color 255, 255, 255
-	SetFont fo\ConsoleFont
-	If opt\ShowFPS Then
-		Text 20, 20, "FPS: " + ft\fps : SetFont fo\Font[Font_Default]
-	EndIf
+	ShowStats()
 	
 	DrawQuickLoading()
 	
@@ -6536,6 +6532,26 @@ Function UpdateRichPresence()
 	Else
 		gv\RichPresenceTimer = gv\RichPresenceTimer - FPSfactor
 	EndIf
-End Function	
+End Function
+
+Function ShowStats()
+	If opt\ShowFPS Then
+		Color 255, 255, 255
+		SetFont fo\ConsoleFont
+		Text 20, 20, "FPS: " + ft\fps
+		
+		If gopt\GameMode = GAMEMODE_MULTIPLAYER And mp_I\PlayState = GAME_CLIENT Then
+			If Players[mp_I\PlayerID]\Ping >= 200 Then
+				Color 200, 0, 0
+			ElseIf Players[mp_I\PlayerID]\Ping >= 150 Then
+				Color 200, 200, 0
+			EndIf
+			Text 120, 20, "Ping: " + Players[mp_I\PlayerID]\Ping + " ms"
+		EndIf
+		
+		SetFont fo\Font[Font_Default]
+	EndIf
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
