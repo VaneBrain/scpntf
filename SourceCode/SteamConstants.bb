@@ -18,6 +18,13 @@ Const k_EP2PSendUnreliableNoDelay% = 1
 Const k_EP2PSendReliable% = 2
 Const k_EP2PSendReliableWithBuffering% = 3
 
+;Flags used for message sending
+;These values are used in bitmask parameters to functions such as SendMessageToUser
+Const k_nSteamNetworkingSend_Unreliable% = 0
+Const k_nSteamNetworkingSend_NoNagle% = 1
+Const k_nSteamNetworkingSend_NoDelay% = 4
+Const k_nSteamNetworkingSend_Reliable% = 8
+
 ;Steam Achievement Constants
 Const ACHV_939_5MIN$ = "ACHV_939_5MIN"
 Const ACHV_BURNING_MAN$ = "ACHV_BURNING_MAN"
@@ -31,6 +38,18 @@ Const STAT_FUSE$ = "STAT_FUSE"
 Const STAT_LOBOTOMY$ = "STAT_LOBOTOMY"
 Const STAT_ZOMBIES$ = "STAT_ZOMBIES"
 Const STAT_ONE_SHOT$ = "STAT_ONE_SHOT"
+
+Function Steam_LoadPacket%(channel% = 0)
+	Return Steam_ReceiveMessagesOnChannel(channel)
+End Function
+
+Function Steam_SendPacketToUser%(upperID%, lowerID%, flag% = k_nSteamNetworkingSend_Unreliable, cacheData% = 0, channel% = 0)
+	Return Steam_SendMessageToUser(upperID, lowerID, flag, cacheData, channel)
+End Function
+
+Function Steam_CloseConnection%(upperID%, lowerID%)
+	Return Steam_CloseSessionWithUser(upperID, lowerID)
+End Function
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

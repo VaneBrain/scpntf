@@ -41,9 +41,15 @@ Steam_PullString$():"_PullString@0"
 Steam_GetSenderIDUpper%():"_GetSenderIDUpper@0"
 Steam_GetSenderIDLower%():"_GetSenderIDLower@0"
 
-Steam_LoadPacket%():"_LoadPacket@0"
-Steam_SendPacketToUser%(upperID%, lowerID%, flag%):"_SendPacketToUser@12"
-Steam_CloseConnection%(upperID%, lowerID%):"_CloseConnection@8"
+Steam_ReadP2PPacket%():"_ReadP2PPacket@0"
+Steam_SendP2PPacket%(upperID%, lowerID%, flag%, cacheData%):"_SendP2PPacket@16"
+Steam_CloseP2PSessionWithUser%(upperID%, lowerID%):"_CloseP2PSessionWithUser@8"
+
+Steam_ReceiveMessagesOnChannel%(channel%):"_ReceiveMessagesOnChannel@4"
+Steam_SendMessageToUser%(upperID%, lowerID%, flag%, cacheData%, channel%):"_SendMessageToUser@20"
+Steam_CloseSessionWithUser%(upperID%, lowerID%):"_CloseSessionWithUser@8"
+Steam_GetPing%(upperID%, lowerID%):"_GetPing@8"
+Steam_ClearPacketOutput():"_ClearPacketOutput@0"
 
 Steam_CreateLobby(type%,maxMembers%):"_BS_CreateLobby@8"
 Steam_JoinLobby(upperID%,lowerID%):"_BS_JoinLobby@8"
