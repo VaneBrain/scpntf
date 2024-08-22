@@ -416,6 +416,9 @@ Function ShootGunMP(playerID%,Accuracy#,DamageOnEntity%,Range#=0.0)
 			If pID = 0 And mp_I\PlayState = GAME_SERVER Then
 				mpl\DamageTimer = 70
 				PlaySound_Strict BullethitSFX
+				If Rand(1,3) = 1 Then
+					PlaySound_Strict NTF_PainSFX[Rand(0,7)]
+				EndIf
 			ElseIf pID > 0 Then
 				Players[pID]\InjuryType = INJURY_BULLET
 			EndIf

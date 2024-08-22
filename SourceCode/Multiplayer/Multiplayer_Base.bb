@@ -1678,6 +1678,9 @@ Function RecvDataClient()
 							If injuryType = INJURY_BULLET Then
 								mpl\DamageTimer = 70
 								PlaySound_Strict BullethitSFX
+								If Rand(1,3) = 1 Then
+									PlaySound_Strict NTF_PainSFX[Rand(0,7)]
+								EndIf
 							EndIf
 						EndIf
 						x# = Steam_PullFloat()
