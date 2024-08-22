@@ -132,6 +132,12 @@ Function UpdateEvent_Checkpoints(e.Events)
 			e\EventState = e\EventState + (0.01*FPSfactor)
 			EntityAlpha e\room\Objects[CHECKPOINT_DARK_SPRITE_ID],Min(e\EventState,1.0)
 			If e\EventState > 1.05 Then
+				If Curr106 <> Null Then
+					If (Not Contained106) And Curr106\State <= 0 Then
+						Curr106\State = Rand(22000, 27000)
+						PositionEntity Curr106\Collider,0,500,0
+					EndIf
+				EndIf
 				SaveGame(SavePath + CurrSave\Name + "\")
 				prevZone = NTF_CurrZone
 				For ne = Each NewElevator
