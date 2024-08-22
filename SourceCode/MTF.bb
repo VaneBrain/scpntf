@@ -1639,6 +1639,26 @@ Function UpdateNewElevators()
 	
 End Function
 
+Function ResetNewElevator(ne.NewElevator, default_floor% = 1)
+	If ne <> Null Then
+		If PlayerNewElevator = ne\ID Then
+			PlayerNewElevator = 0
+			PlayerInNewElevator = False
+		EndIf
+		ne\state = 0.0
+		ne\currfloor = default_floor
+		ne\tofloor = default_floor
+		ne\door\open = True
+		PositionEntity ne\obj,EntityX(ne\obj),ne\floory[default_floor-1],EntityZ(ne\obj)
+		PositionEntity ne\door\frameobj,EntityX(ne\door\frameobj),EntityY(ne\obj,True),EntityZ(ne\door\frameobj)
+		PositionEntity ne\door\obj,EntityX(ne\door\obj),EntityY(ne\obj,True),EntityZ(ne\door\obj)
+		PositionEntity ne\door\obj2,EntityX(ne\door\obj2),EntityY(ne\obj,True),EntityZ(ne\door\obj2)
+		PositionEntity ne\door\buttons[0],EntityX(ne\door\buttons[0]),EntityY(ne\obj,True)+0.6,EntityZ(ne\door\buttons[0])
+		PositionEntity ne\door\buttons[1],EntityX(ne\door\buttons[1]),EntityY(ne\obj,True)+0.7,EntityZ(ne\door\buttons[1])
+		StopStream_Strict(ne\soundchn)
+	EndIf
+End Function
+
 Function DeleteNewElevators()
 	Local ne.NewElevator
 	

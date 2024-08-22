@@ -257,6 +257,22 @@ Function UpdateEvent_Checkpoints(e.Events)
 		EndIf
 	EndIf
 	
+	If PlayerRoom <> e\room And PlayerNewElevator <> 0 Then
+		For ne = Each NewElevator
+			If PlayerNewElevator = ne\ID And ne\room = e\room Then
+				Select NTF_CurrZone
+					Case EZ
+						ResetNewElevator(ne, 3)
+					Case LCZ
+						ResetNewElevator(ne, 2)
+					Case HCZ
+						ResetNewElevator(ne, 1)
+				End Select
+				Exit
+			EndIf
+		Next
+	EndIf
+	
 End Function
 
 ;~IDEal Editor Parameters:
