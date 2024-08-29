@@ -1438,12 +1438,11 @@ Function CreateNewElevator.NewElevator(obj%,currfloor%,door.Doors,id#,r.Rooms,fl
 End Function
 
 Function StartNewElevator(door.Doors,newfloor%)
-	Local ne.NewElevator, ne_found.NewElevator
+	Local ne.NewElevator
 	Local playerinside% = False
 	
 	For ne = Each NewElevator
 		If ne\door = door
-			ne_found = ne
 			Exit
 		EndIf
 	Next
@@ -1626,6 +1625,7 @@ Function UpdateNewElevators()
 				ne\state = ne\state + FPSfactor
 			ElseIf ne\state >= 100.0 Then
 				UseDoor(ne\door)
+				PlayerNewElevator = 0
 				PlayerInNewElevator = False
 				ne\state = 0.0
 			EndIf

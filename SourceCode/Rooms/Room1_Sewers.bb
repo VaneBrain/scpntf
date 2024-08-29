@@ -177,18 +177,15 @@ Function UpdateEvent_Room1_Sewers(e.Events)
 			elevFloor = 2
 		EndIf
 		If (Not PlayerInNewElevator) Then
-			PositionEntity e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\frameobj,EntityX(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\frameobj),elevY*RoomScale,EntityZ(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\frameobj)
-			PositionEntity e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\obj,EntityX(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\obj),elevY*RoomScale,EntityZ(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\obj)
-			PositionEntity e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\obj2,EntityX(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\obj2),elevY*RoomScale,EntityZ(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\obj2)
-			PositionEntity e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\buttons[0],EntityX(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\buttons[0]),elevY*RoomScale+0.6,EntityZ(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\buttons[0])
-			PositionEntity e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\buttons[1],EntityX(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\buttons[1]),elevY*RoomScale+0.7,EntityZ(e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\buttons[1])
 			For ne = Each NewElevator
 				If ne\door = e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID] Then
+					ResetNewElevator(ne, elevFloor)
 					If ne\currfloor = elevFloor And ne\state = 0.0 Then
 						e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\open = True
 					Else
 						e\room\RoomDoors[ROOM1_SEWERS_ELEVATOR_DOOR_ID]\open = False
 					EndIf
+					Exit
 				EndIf
 			Next
 		EndIf
@@ -315,6 +312,15 @@ Function UpdateEvent_Room1_Sewers(e.Events)
 		EndIf
 	Else
 		HideEntity e\room\Objects[ROOM1_SEWERS_ROOM_ID]
+	EndIf
+	
+	If (Not PlayerInReachableRoom()) Then
+		For ne = Each NewElevator
+			If PlayerNewElevator = ne\ID And ne\room = e\room Then
+				ResetNewElevator(ne, 2)
+				Exit
+			EndIf
+		Next
 	EndIf
 	
 End Function

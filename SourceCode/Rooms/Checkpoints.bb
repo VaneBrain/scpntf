@@ -263,7 +263,7 @@ Function UpdateEvent_Checkpoints(e.Events)
 		EndIf
 	EndIf
 	
-	If PlayerRoom <> e\room And PlayerNewElevator <> 0 Then
+	If (Not PlayerInReachableRoom()) Then
 		For ne = Each NewElevator
 			If PlayerNewElevator = ne\ID And ne\room = e\room Then
 				Select NTF_CurrZone
