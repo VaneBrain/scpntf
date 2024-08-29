@@ -5692,7 +5692,7 @@ End Function
 
 
 Function RenderWorld2(tween#)
-	Local temp%, temp2%, dist#, pitchvalue#, yawvalue#, xvalue#, yvalue#
+	Local dist#
 	Local np.NPCs
 	Local i%, k%, l%
 	
@@ -5720,7 +5720,9 @@ Function RenderWorld2(tween#)
 		For i% = 0 To MaxItemAmount - 1
 			If (Inventory[i]<>Null) Then
 				If (WearingNightVision = 1 And Inventory[i]\itemtemplate\tempname = "nvgoggles") Lor (WearingNightVision = 2 And Inventory[i]\itemtemplate\tempname = "supernv") Then
-					Inventory[i]\state = Inventory[i]\state - (FPSfactor * (0.02 * WearingNightVision))
+					If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (d_I\SelectedDoor = Null) And (Not ConsoleOpen) And (Not Using294) And (SelectedScreen = Null) Then
+						Inventory[i]\state = Inventory[i]\state - (FPSfactor * (0.02 * WearingNightVision))
+					EndIf
 					power%=Int(Inventory[i]\state)
 					If Inventory[i]\state<=0.0 Then ;this nvg can't be used
 						hasBattery = 0
@@ -5748,10 +5750,12 @@ Function RenderWorld2(tween#)
 		IsNVGBlinking% = True
 		ShowEntity NVBlink%
 	EndIf
-	
-	If BlinkTimer < - 16 Or BlinkTimer > - 6
+	;TODO Rewrite the code for the blue NVG. Perhaps move it to an own function.
+	If BlinkTimer < - 16 Lor BlinkTimer > - 6 Then
 		If WearingNightVision=2 And hasBattery<>0 Then ;show a HUD
-			NVTimer=NVTimer-FPSfactor
+			If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (d_I\SelectedDoor = Null) And (Not ConsoleOpen) And (Not Using294) And (SelectedScreen = Null) Then
+				NVTimer=NVTimer-FPSfactor
+			EndIf
 			
 			If NVTimer<=0.0 Then
 				For np.NPCs = Each NPCs
@@ -5765,65 +5769,44 @@ Function RenderWorld2(tween#)
 					NVTimer = 600.0
 				EndIf
 			EndIf
+		EndIf
+	EndIf
+	
+	;render sprites
+	CameraProjMode ark_blur_cam,2
+	CameraProjMode Camera,0
+	RenderWorld()
+	CameraProjMode ark_blur_cam,0
+	
+	If BlinkTimer < - 16 Lor BlinkTimer > - 6 Then
+		If WearingNightVision=2 And hasBattery<>0 Then ;show a HUD
 			
-			Color 255,255,255
+			Color 100,100,255
 			
-			SetFont fo\Font[Font_Digital_Large]
+			SetFont fo\Font[Font_Digital_Small]
 			
-			Local plusY% = 0
-			If hasBattery=1 Then plusY% = 40
-			
-			Text opt\GraphicWidth/2,(20+plusY)*MenuScale,"REFRESHING DATA IN",True,False
-			
-			Text opt\GraphicWidth/2,(60+plusY)*MenuScale,Max(f2s(NVTimer/60.0,1),0.0),True,False
-			Text opt\GraphicWidth/2,(100+plusY)*MenuScale,"SECONDS",True,False
-			
-			temp% = CreatePivot() : temp2% = CreatePivot()
-			PositionEntity temp, EntityX(Collider), EntityY(Collider), EntityZ(Collider)
-			
-			Color 255,255,255;*(NVTimer/600.0)
+			Text opt\GraphicWidth/2,140*MenuScale,"REFRESHING DATA IN",True,False
+			Text opt\GraphicWidth/2,165*MenuScale,Max(f2s(NVTimer/60.0,1),0.0),True,False
+			Text opt\GraphicWidth/2,190*MenuScale,"SECONDS",True,False
 			
 			For np.NPCs = Each NPCs
 				If np\NVName<>"" And (Not np\HideFromNVG) Then ;don't waste your time if the string is empty
-					PositionEntity temp2,np\NVX,np\NVY,np\NVZ
-					dist# = EntityDistance(temp2,Collider)
-					If dist<23.5 Then ;don't draw text if the NPC is too far away
-						PointEntity temp, temp2
-						yawvalue# = WrapAngle(EntityYaw(Camera) - EntityYaw(temp))
-						xvalue# = 0.0
-						If yawvalue > 90 And yawvalue <= 180 Then
-							xvalue# = Sin(90)/90*yawvalue
-						Else If yawvalue > 180 And yawvalue < 270 Then
-							xvalue# = Sin(270)/yawvalue*270
-						Else
-							xvalue = Sin(yawvalue)
-						EndIf
-						pitchvalue# = WrapAngle(EntityPitch(Camera) - EntityPitch(temp))
-						yvalue# = 0.0
-						If pitchvalue > 90 And pitchvalue <= 180 Then
-							yvalue# = Sin(90)/90*pitchvalue
-						Else If pitchvalue > 180 And pitchvalue < 270 Then
-							yvalue# = Sin(270)/pitchvalue*270
-						Else
-							yvalue# = Sin(pitchvalue)
-						EndIf
-						
-						If (Not IsNVGBlinking%)
-							Text opt\GraphicWidth / 2 + xvalue * (opt\GraphicWidth / 2),opt\GraphicHeight / 2 - yvalue * (opt\GraphicHeight / 2),np\NVName,True,True
-							Text opt\GraphicWidth / 2 + xvalue * (opt\GraphicWidth / 2),opt\GraphicHeight / 2 - yvalue * (opt\GraphicHeight / 2) + 30.0 * MenuScale,f2s(dist,1)+" m",True,True
+					dist# = DistanceSquared(EntityX(Collider, True), np\NVX, EntityY(Collider, True), np\NVY, EntityZ(Collider, True), np\NVZ)
+					If dist<256.0 Then ;don't draw text if the NPC is too far away
+						If (Not IsNVGBlinking%) Then
+							CameraProject(Camera, np\NVX, np\NVY + 0.5, np\NVZ)
+							Text ProjectedX(), ProjectedY(), np\NVName, True, True
+							Text ProjectedX(), ProjectedY() - 25.0, f2s(dist,1)+" m", True, True
 						EndIf
 					EndIf
 				EndIf
 			Next
 			
-			temp = FreeEntity_Strict(temp)
-			temp2 = FreeEntity_Strict(temp2)
-			
 			Color 0,0,55
 			For k=0 To 10
 				Rect 45,opt\GraphicHeight*0.5-(k*20),54,10,True
 			Next
-			Color 0,0,255
+			Color 100,100,255
 			For l=0 To Floor((power%+50)*0.01)
 				Rect 45,opt\GraphicHeight*0.5-(l*20),54,10,True
 			Next
@@ -5841,20 +5824,12 @@ Function RenderWorld2(tween#)
 			Next
 			DrawImage NVGImages,40,opt\GraphicHeight*0.5+30,0
 		EndIf
-	EndIf
-	
-	;render sprites
-	CameraProjMode ark_blur_cam,2
-	CameraProjMode Camera,0
-	RenderWorld()
-	CameraProjMode ark_blur_cam,0
-	
-	If BlinkTimer < - 16 Or BlinkTimer > - 6 Then
+		
 		If (WearingNightVision=1 Or WearingNightVision=2) And (hasBattery=1) And ((MilliSecs() Mod 800) < 400) Then
 			Color 255,0,0
-			SetFont fo\Font[Font_Digital_Large]
+			SetFont fo\Font[Font_Digital_Small]
 			
-			Text opt\GraphicWidth/2,20*MenuScale,"WARNING: LOW BATTERY",True,False
+			Text opt\GraphicWidth/2,100*MenuScale,"WARNING: LOW BATTERY",True,False
 			Color 255,255,255
 		EndIf
 	EndIf
