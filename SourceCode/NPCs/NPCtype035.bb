@@ -509,7 +509,7 @@ Function UpdateNPCtypeTentacleMP(n.NPCs)
 		
 		PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 		RotateEntity n\obj, EntityPitch(n\Collider)-90, EntityYaw(n\Collider)-180, EntityRoll(n\Collider), True
-	Else
+	Else ;TODO Rewrite this a little
 		If (Not n\Target\IsDead) Then
 			If n\State = TENTACLE_SPAWN Then
 				If n\Frame>286 Then
@@ -524,7 +524,7 @@ Function UpdateNPCtypeTentacleMP(n.NPCs)
 					n\Sound2 = LoadSound_Strict("SFX\Room\035Chamber\TentacleSpawn.ogg")
 					n\SoundChn2 = PlaySound2(n\Sound2, Camera, n\Target\Collider)
 				EndIf
-			Else
+			ElseIf n\State <> TENTACLE_FREEZE Then
 				If n\State = TENTACLE_IDLE Then
 					AnimateNPC(n, 33, 174, Rnd(0.1,0.5), True)
 					If n\Target\State = MP035_STATE_ATTACK Then
