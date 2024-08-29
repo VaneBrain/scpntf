@@ -1242,7 +1242,6 @@ Function MainLoop()
 			EndIf
 			MouseLook()
 			MovePlayer()
-			UpdateNightVision()
 			InFacility = CheckForPlayerInFacility()
 			UpdateDoors()
 			UpdateScreens()

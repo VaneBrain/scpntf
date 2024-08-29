@@ -906,7 +906,6 @@ Function MPMainLoop()
 			If (Not IsPlayerListOpen()) Then
 				UpdateIronSight()
 			EndIf
-			UpdateNightVision()
 		EndIf
 		UpdateDamageOverlay()
 		UpdateChunksMP()
@@ -1144,7 +1143,6 @@ Function MPMainLoopClient()
 			If (Not IsPlayerListOpen()) Then
 				UpdateIronSight()
 			EndIf
-			UpdateNightVision()
 		EndIf
 		UpdateDamageOverlay()
 		;PlaceSpray()
