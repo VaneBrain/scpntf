@@ -716,9 +716,10 @@ Function UpdateMainMenu()
 					height = 390 * MenuScale
 					
 					y=y+25*MenuScale
-					ScreenGamma = (SlideBar(x + 310*MenuScale, y, 150*MenuScale, (ScreenGamma-0.5)*100.0,2,MainMenuTab,0,Upper(GetLocalString("Options", "low")),Upper(GetLocalString("Options", "high")))/100.0)+0.5
+					;TODO Fix ScreenGamma, which was broken with the addition of dgVoodoo
+					;ScreenGamma = (SlideBar(x + 310*MenuScale, y, 150*MenuScale, (ScreenGamma-0.5)*100.0,2,MainMenuTab,0,Upper(GetLocalString("Options", "low")),Upper(GetLocalString("Options", "high")))/100.0)+0.5
 					
-					y=y+35*MenuScale
+					;y=y+35*MenuScale
                     FOV = (SlideBar(x + 310*MenuScale, y,150*MenuScale, (FOV-40)*2.0,3,MainMenuTab,0,40,90)/2.0)+40
 					
 					y=y+35*MenuScale
@@ -2105,17 +2106,19 @@ Function RenderMainMenu()
 				
 				If MainMenuTab = MenuTab_Options_Graphics Then
 					;[Block]
-					height = 400 * MenuScale
+					;TODO Fix ScreenGamma, which was broken with the addition of dgVoodoo
+					;height = 400 * MenuScale
+					height = 365 * MenuScale
 					DrawFrame(x, y, width, height)
 					
 					y=y+30*MenuScale
-					Color 255,255,255
-					Text(x + 20 * MenuScale, y, GetLocalString("Options","gamma")+":")
-					If MouseAndControllerSelectBox(x+300*MenuScale,y-6*MenuScale,170*MenuScale+14,20,6,MainMenuTab) And OnSliderID=0
-						DrawOptionsTooltip("gamma",ScreenGamma)
-					EndIf
+					;Color 255,255,255
+					;Text(x + 20 * MenuScale, y, GetLocalString("Options","gamma")+":")
+					;If MouseAndControllerSelectBox(x+300*MenuScale,y-6*MenuScale,170*MenuScale+14,20,6,MainMenuTab) And OnSliderID=0
+					;	DrawOptionsTooltip("gamma",ScreenGamma)
+					;EndIf
 					
-					y=y+35*MenuScale
+					;y=y+35*MenuScale
 					Color 255,255,255
 					Text(x + 20 * MenuScale, y, GetLocalString("Options","fov")+":")
 					If MouseOn(x+300*MenuScale,y-6*MenuScale,170*MenuScale+14,20)
