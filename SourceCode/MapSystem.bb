@@ -739,7 +739,7 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 			Case "model", "model_nocoll"
 				;[Block]
 				file = ReadString(f)
-				If file<>""
+				If file <> "" Then
 					Local model = CreatePropObj("GFX\Map\props\"+file)
 					
 					temp1=ReadFloat(f) : temp2=ReadFloat(f) : temp3=ReadFloat(f)
@@ -758,6 +758,16 @@ Function LoadRMesh(file$,rt.RoomTemplates, doublesided=True)
 						EntityType model,0
 					EndIf
 					EntityPickMode model,2
+					If gopt\GameMode = GAMEMODE_MULTIPLAYER Then
+						If mp_I\Gamemode\ID = Gamemode_Waves Then
+							EntityAutoFade(model, 18.0, 18.0)
+						Else
+							EntityAutoFade(model, 24.0, 24.0)
+						EndIf
+					Else
+						EntityAutoFade(model, 16.0, 16.0)
+					EndIf
+					
 				Else
 					DebugLog "file = 0"
 					temp1=ReadFloat(f) : temp2=ReadFloat(f) : temp3=ReadFloat(f)
