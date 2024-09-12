@@ -6213,6 +6213,7 @@ Function TeleportEntity(entity%,x#,y#,z#,customradius#=0.3,isglobal%=False,pickr
 End Function
 
 Function PlayStartupVideos()
+	CatchErrors("PlayStartupVideos()")
 	
 	If GetINIInt(gv\OptionFile,"options","play startup video",1)=0 Then Return
 	
@@ -6265,6 +6266,7 @@ Function PlayStartupVideos()
 	
 	ShowPointer()
 	
+	CatchErrors("PlayStartupVideos()/Uncaught")
 End Function
 
 Function ProjectImage(img, w#, h#, Quad%, Texture%)
