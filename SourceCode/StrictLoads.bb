@@ -608,6 +608,10 @@ Function LoadFont_Strict(file$, height%)
 	Return tmp
 End Function
 
+Function RuntimeError(message$)
+	CatchErrors(message)
+	MemoryAccessViolation()
+End Function
 
 
 
