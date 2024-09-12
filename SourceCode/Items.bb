@@ -347,6 +347,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("SCP-198","scp198","GFX\items\scp198.b3d","GFX\items\INVscp198.jpg","",0.04)
 	CreateItemTemplate("SCP-109","scp109","GFX\items\scp109.b3d","GFX\items\INVscp109.jpg","",0.0009)
 	it = CreateItemTemplate("Document SCP-109", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc109.jpg", 0.003) : it\sound = 0
+	it = CreateItemTemplate("Ammo Crate", "ammocrate", "GFX\items\ammo_crate.x", "GFX\items\INVfreezer.jpg", "", 0.01) : it\fastPickable = true
 ;	CreateItemTemplate("Silencer", "silencer", "GFX\weapons\Silencer.b3d","GFX\weapons\INVsilencer.jpg","",0.02)
 	
 	CreateItemTemplate("Fuse", "fuse", "GFX\items\fuse.b3d", "GFX\items\INVfuse.jpg", "", 0.025)
@@ -785,35 +786,49 @@ Function PickItem(item.Items)
 								Exit
 							EndIf
 						Next
+						Msg = item\itemtemplate\name + " has been picked up."
 					Else
 						Msg = GetLocalString("Items","cannot_carry")
-						MsgTimer = 70 * 5
 					EndIf
+					MsgTimer = 70 * 5
 				Else
-					If g\CurrReloadAmmo < g\MaxReloadAmmo Then
-						If g\GunType = GUNTYPE_SHOTGUN Then
-							Local prev = g\CurrReloadAmmo
-							g\CurrReloadAmmo = Min(g\CurrReloadAmmo+(g\MaxCurrAmmo),g\MaxReloadAmmo)
-							Msg = (g\CurrReloadAmmo - prev) + " " + item\itemtemplate\name + " shotgun shells have been picked up."
-							MsgTimer = 70 * 5
-						Else
-							g\CurrReloadAmmo = Min(g\CurrReloadAmmo+1,g\MaxReloadAmmo)
-							Msg = "A " + item\itemtemplate\name + " magazine has been picked up."
-							MsgTimer = 70 * 5
-						EndIf
-						PlaySound_Strict LoadTempSound("SFX\Guns\" + item\itemtemplate\tempname + "\pickup.ogg")
-						RemoveItem(item)
+					If item\state = 0 And item\state2 = 0 Then
+						Msg = "This " + item\itemtemplate\name + " has no ammo in it"
 					Else
-						Msg = "You can't carry any more magazines for the " + item\itemtemplate\name
-						MsgTimer = 70 * 5
+						If g\CurrReloadAmmo < g\MaxReloadAmmo Then
+							If g\GunType = GUNTYPE_SHOTGUN Then
+								Local prev = g\CurrReloadAmmo
+								g\CurrReloadAmmo = Min(g\CurrReloadAmmo+(item\state)+(item\state2),g\MaxReloadAmmo)
+								Msg = (g\CurrReloadAmmo - prev) + " " + item\itemtemplate\name + " shotgun shell(s) has been picked up."
+							Else
+								Local prev2 = g\CurrReloadAmmo
+								If item\state >= g\MaxCurrAmmo And item\state2 > 0 Then
+									g\CurrReloadAmmo = Min(g\CurrReloadAmmo+1+item\state2,g\MaxReloadAmmo)
+								ElseIf item\state2 > 0 Then
+									g\CurrReloadAmmo = Min(g\CurrReloadAmmo+(item\state2),g\MaxReloadAmmo)
+								ElseIf item\state >= g\MaxCurrAmmo
+									g\CurrReloadAmmo = Min(g\CurrReloadAmmo+1,g\MaxReloadAmmo)
+								EndIf
+								Msg = (g\CurrReloadAmmo - prev2) + " " + item\itemtemplate\name + " magazine(s) has been picked up."
+							EndIf
+							If item\state > 0 Or item\state2 > 0 Then
+								PlaySound_Strict LoadTempSound("SFX\Guns\" + item\itemtemplate\tempname + "\pickup.ogg")
+								RemoveItem(item)
+							Else
+								Msg = "This " + item\itemtemplate\name + " has no ammo in it"
+							EndIf
+						Else
+							Msg = "You can't carry any more ammo for the " + item\itemtemplate\name
+						EndIf
 					EndIf
+					MsgTimer = 70 * 5
 				EndIf
-				Exit
-			EndIf
-		Next
-		If TaskExists(TASK_FINDWEAPON) Then
-			EndTask(TASK_FINDWEAPON)
-		EndIf	
+			Exit
+		EndIf
+	Next
+	If TaskExists(TASK_FINDWEAPON) Then
+		EndTask(TASK_FINDWEAPON)
+	EndIf	
 	Else
 		Select item\itemtemplate\tempname
 			Case "vest"
@@ -836,6 +851,39 @@ Function PickItem(item.Items)
 					RemoveItem(item)
 				Else
 					Msg = "You are not in need to replace your kevlar."
+					MsgTimer = 70 * 5
+				EndIf
+			Case "ammocrate"
+				Local AmmoGiven = False
+				For n = 0 To MaxItemAmount - 1
+					If Inventory[n] <> Null Then
+						For g = Each Guns
+							If Inventory[n]\itemtemplate\tempname = g\name Then
+								If g\GunType = GUNTYPE_SHOTGUN And g\CurrReloadAmmo <> g\MaxReloadAmmo Then
+									g\CurrReloadAmmo = Min(g\CurrReloadAmmo+(g\MaxCurrAmmo*2),g\MaxReloadAmmo)
+									AmmoGiven = True
+								ElseIf g\CurrReloadAmmo <> g\MaxReloadAmmo
+									g\CurrReloadAmmo = Min(g\CurrReloadAmmo+2, g\MaxReloadAmmo)
+									AmmoGiven = True
+								EndIf
+							EndIf
+						Next
+					EndIf
+				Next
+				
+				If AmmoGiven Then
+					Msg = "You picked up an ammo crate which gave you some ammo for any weapons you have"
+					MsgTimer = 70 * 5
+					If item\itemtemplate\sound <> 66 Then PlaySound_Strict(PickSFX[item\itemtemplate\sound])
+					item\Picked = True
+					item\Dropped = -1
+					
+					item\itemtemplate\found=True
+					ItemAmount = ItemAmount + 1
+					
+					HideEntity(item\collider)
+				Else
+					Msg = "You do not need anymore ammo for your weapons at the moment"
 					MsgTimer = 70 * 5
 				EndIf
 		End Select
