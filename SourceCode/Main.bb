@@ -6255,7 +6255,7 @@ Function PlayStartupVideos()
 			BlitzMovie_DrawD3D(0, (RealGraphicHeight/2-ScaledGraphicHeight/2), RealGraphicWidth, ScaledGraphicHeight)
 			Flip 1
 			Delay 10
-		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
+		Until (GetKey() Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 		
 		StopStream_Strict(SplashScreenAudio)
 		BlitzMovie_Stop()
