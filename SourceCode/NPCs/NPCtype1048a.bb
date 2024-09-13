@@ -187,8 +187,9 @@ Function UpdateNPCtype1048a(n.NPCs)
 			p\Achange = -Rnd(0.02,0.03)
 		Next
 		n\IsDead = True
+		n\HideFromNVG = True
 	EndIf
-	If n\IsDead And n\State2 = 0.0 Then
+	If n\IsDead Then
 		HideEntity(n\obj)
 	EndIf
 End Function
