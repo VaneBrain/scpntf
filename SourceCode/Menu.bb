@@ -3379,7 +3379,7 @@ Function UpdateLauncher()
 	
 	Local UpdaterIMG% = CreateImage(400,445)
 	
-	AppTitle "SCP: Nine-Tailed Fox Launcher"
+	AppTitle AppTitleLauncher
 	CountGfxDrivers()
 	
 	Repeat

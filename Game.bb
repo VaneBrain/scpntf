@@ -12,6 +12,14 @@
 ;
 ;This is the main file of the NTF mod, you need to compile this file in order to be able to play the game.
 
+Const NameOfTheGame$ = "SCP: Nine-Tailed Fox"
+Const VersionNumber$ = "0.2.11"
+Const CompatibleNumber$ = "0.2.10"
+Const BuildMessage$ = ""
+Const AppTitleMain$ = NameOfTheGame+" v"+VersionNumber
+Const AppTitleLauncher$ = NameOfTheGame+" Launcher"
+Const UserAgent$ = "SCPNTF"
+
 Include "SourceCode/Key.bb"
 
 Include "SourceCode/SteamConstants.bb"
@@ -67,6 +75,13 @@ Include "SourceCode\Controls.bb"
 Include "SourceCode\TypeInstances.bb"
 
 InitGlobalVariables()
+
+InitErrorMsgs(11, True)
+SetErrorMsg(0, "An error occured in "+NameOfTheGame+" v"+VersionNumber+Chr(10)+"Save compatible version: "+CompatibleNumber+". Engine version: "+SystemProperty("blitzversion"))
+SetErrorMsg(1, "OS: "+SystemProperty("os")+" "+gv\OSBit+" bit (Build: "+SystemProperty("osbuild")+")")
+SetErrorMsg(3, "CPU: "+Trim(SystemProperty("cpuname"))+" (Arch: "+SystemProperty("cpuarch")+", "+GetEnv("NUMBER_OF_PROCESSORS")+" Threads)")
+SetErrorMsg(8, "Error: _CaughtError_")
+SetErrorMsg(10, Chr(10)+"Please take a screenshot of this error and send it to us!")
 
 CheckForDlls()
 

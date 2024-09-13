@@ -126,10 +126,6 @@ End Type
 
 InitController()
 
-Const VersionNumber$ = "0.2.10"
-Const CompatibleNumber$ = "0.2.10"
-Const BuildMessage$ = ""
-
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2 = LoadSound_Strict("SFX\Interact\Button2.ogg")
@@ -240,7 +236,7 @@ Global GameSaved%
 
 Global CanSave% = True
 
-AppTitle "SCP: Nine-Tailed Fox v"+VersionNumber
+AppTitle AppTitleMain
 Delay 100
 ;---------------------------------------------------------------------------------------------------------------------
 
@@ -863,13 +859,6 @@ Type SCP427
 	Field SoundCHN[2]
 End Type
 
-InitErrorMsgs(9)
-SetErrorMsg(0, "An error occured in SCP: Nine Tailed Fox Mod v"+VersionNumber+Chr(10)+"Save compatible version: "+CompatibleNumber+". Engine version: "+SystemProperty("blitzversion"))
-SetErrorMsg(1, "OS: "+SystemProperty("os")+" "+gv\OSBit+" bit (Build: "+SystemProperty("osbuild")+")")
-SetErrorMsg(2, "CPU: "+Trim(SystemProperty("cpuname"))+" (Arch: "+SystemProperty("cpuarch")+", "+GetEnv("NUMBER_OF_PROCESSORS")+" Threads)")
-
-SetErrorMsg(8, Chr(10)+"Please take a screenshot of this error and send it to us!")
-
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ;----------------------------------------------       		MAIN LOOP                 ---------------------------------------------------------------
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -882,22 +871,23 @@ Function GlobalGameLoop()
 	Repeat
 		Local CurrDelta% = MilliSecs()
 		
-		SetErrorMsg(3, "GPU: "+GfxDriverName(CountGfxDrivers())+" ("+((TotalVidMem()/1024)-(AvailVidMem()/1024))+" MB/"+(TotalVidMem()/1024)+" MB)")
-		SetErrorMsg(4, "Triangles rendered: "+CurrTrisAmount+", Active textures: "+ActiveTextures()+Chr(10))
+		SetErrorMsg(2, "RAM: "+((TotalPhys()/1024)-(AvailPhys()/1024))+" MB/"+(TotalPhys()/1024)+" MB (Usage: "+MemoryLoad()+"%)")
+		SetErrorMsg(4, "GPU: "+GfxDriverName(CountGfxDrivers())+" ("+((TotalVidMem()/1024)-(AvailVidMem()/1024))+" MB/"+(TotalVidMem()/1024)+" MB)")
+		SetErrorMsg(5, "Triangles rendered: "+CurrTrisAmount+", Active textures: "+ActiveTextures()+Chr(10))
 		If gopt\GameMode <> GAMEMODE_MULTIPLAYER Then
 			If PlayerRoom <> Null Then
-				SetErrorMsg(5, "Map seed: "+RandomSeed + ", Room: " + PlayerRoom\RoomTemplate\Name+" (" + Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5) + ", angle: "+PlayerRoom\angle + ")")
+				SetErrorMsg(6, "Map seed: "+RandomSeed + ", Room: " + PlayerRoom\RoomTemplate\Name+" (" + Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5) + ", angle: "+PlayerRoom\angle + ")")
 				
 				For ev.Events = Each Events
 					If ev\room = PlayerRoom Then
-						SetErrorMsg(6, "Room event: "+ev\EventName+" (" +ev\EventState+", "+ev\EventState2+", "+ev\EventState3+")"+Chr(10))
+						SetErrorMsg(7, "Room event: "+ev\EventName+" (" +ev\EventState+", "+ev\EventState2+", "+ev\EventState3+")"+Chr(10))
 						Exit
 					EndIf
 				Next
 			EndIf
 		ElseIf gopt\GameMode = GAMEMODE_MULTIPLAYER Then
-			SetErrorMsg(5, "Map: "+mp_I\MapInList\Name)
-			SetErrorMsg(6, "Gamemode: "+mp_I\Gamemode\name+Chr(10))
+			SetErrorMsg(6, "Map: "+mp_I\MapInList\Name)
+			SetErrorMsg(7, "Gamemode: "+mp_I\Gamemode\name+Chr(10))
 		EndIf
 		
 		CatchErrors("Global main loop")
@@ -6054,52 +6044,7 @@ Function ScaledMouseY%()
 End Function
 
 Function CatchErrors(location$)
-	;errtxt = errtxt+"Video memory: "+((TotalVidMem()/1024)-(AvailVidMem()/1024))+" MB/"+(TotalVidMem()/1024)+" MB"+Chr(10)
-	;errtxt = errtxt+"Global memory status: "+((TotalPhys()/1024)-(AvailPhys()/1024))+" MB/"+(TotalPhys()/1024)+" MB"+Chr(10)
-	SetErrorMsg(7, "Error located in: "+location)
-	;[Block]
-;	Local errF%
-;	If Len(errStr)>0 Then
-;		If FileType(gv\ErrorFile)=0 Then
-;			errF = WriteFile(gv\ErrorFile)
-;			WriteLine errF,"An error occured in SCP - Containment Breach!"
-;			WriteLine errF,"Version: "+VersionNumber
-;			WriteLine errF,"Save compatible version: "+CompatibleNumber
-;			WriteLine errF,"Date and time: "+CurrentDate()+" at "+CurrentTime()
-;			WriteLine errF,"Total video memory (MB): "+TotalVidMem()/1024/1024
-;			WriteLine errF,"Available video memory (MB): "+AvailVidMem()/1024/1024
-;			WriteLine errF,"Global memrory status: "+(AvailPhys()/1024)+" MB/"+(TotalPhys()/1024)+" MB ("+AvailPhys()+" KB/"+TotalPhys()+" KB)"
-;			WriteLine errF,"Triangles rendered: "+CurrTrisAmount
-;			WriteLine errF,"Active textures: "+ActiveTextures()
-;			WriteLine errF,""
-;			WriteLine errF,"Error(s):"
-;		Else
-;			Local canwriteError% = True
-;			errF = OpenFile(gv\ErrorFile)
-;			While (Not Eof(errF))
-;				Local l$ = ReadLine(errF)
-;				If Left(l,Len(location))=location
-;					canwriteError = False
-;					Exit
-;				EndIf
-;			Wend
-;			If canwriteError
-;				SeekFile errF,FileSize(gv\ErrorFile)
-;			EndIf
-;		EndIf
-;		If canwriteError
-;			WriteLine errF,location+" ***************"
-;			While Len(errStr)>0
-;				WriteLine errF,errStr
-;				DebugLog errStr
-;				;errStr = ErrorLog()
-;			Wend
-;		EndIf
-;		Msg = "Blitz3D Error! Details in "+Chr(34)+gv\ErrorFile+Chr(34)
-;		MsgTimer = 20*70
-;		CloseFile errF
-;	EndIf
-	;[End Block]
+	SetErrorMsg(9, "Location: "+location)
 End Function
 
 Function PlayAnnouncement(file$) ;This function streams the announcement currently playing

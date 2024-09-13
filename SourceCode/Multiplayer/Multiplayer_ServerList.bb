@@ -23,7 +23,7 @@ Function RequestServer(command$="")
 	If tcp<>0 Then
 		WriteLine tcp, "GET "+Protocol+"://"+ServerAddress$+"/"+PhpAddress$+"/?action="+command+" HTTP/1.1"
 		WriteLine tcp, "Host: "+ServerAddress
-		WriteLine tcp, "User-Agent: SCPNTF"
+		WriteLine tcp, "User-Agent: "+UserAgent+"/"+VersionNumber
 		WriteLine tcp, "Connection: Close"
 		WriteLine tcp, ""
 		
@@ -62,13 +62,13 @@ Function ListServers()
 		
 		WriteLine tcp, "GET "+Protocol+"://"+ServerAddress$+"/"+PhpAddress$+"/?action=listservers&sort="+category+order+" HTTP/1.1"
 		WriteLine tcp, "Host: "+ServerAddress
-		WriteLine tcp, "User-Agent: SCPNTF"
+		WriteLine tcp, "User-Agent: "+UserAgent+"/"+VersionNumber
 		WriteLine tcp, "Connection: Close"
 		WriteLine tcp, ""
 		
 		While (Not Eof(tcp))
 			l = ReadLine(tcp)
-			If Piece(l,1,"|")=VersionNumber Then
+			If Piece(l,1,"|")=UserAgent+"/"+VersionNumber Then
 				se = New Server
 				se\ID = mp_I\ServerListAmount
 				mp_I\ServerListAmount = mp_I\ServerListAmount + 1
@@ -114,7 +114,7 @@ Function AddServer(version$,id_lower%,id_upper%,region$,name$,password%,gamemode
 	If map = "" Then map = "Unknown"
 	If gamemode = "" Then gamemode = "Unknown"
 	
-	RequestServer("addserver&version="+version+"&id_lower="+id_lower+"&id_upper="+id_upper+"&region="+region+"&name="+name+"&password="+password+"&gamemode="+gamemode+"&map="+map+"&pl_on="+pl_on+"&pl_max="+pl_max)
+	RequestServer("addserver&version="+UserAgent+"/"+version+"&id_lower="+id_lower+"&id_upper="+id_upper+"&region="+region+"&name="+name+"&password="+password+"&gamemode="+gamemode+"&map="+map+"&pl_on="+pl_on+"&pl_max="+pl_max)
 	
 End Function
 
