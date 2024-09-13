@@ -924,6 +924,7 @@ Function LeaveMPGame(playbuttonsfx%=False)
 	mp_I\ServerListPage = 0
 	mp_I\SelectedListServer = 0
 	mp_I\ServerListSort = 0
+	mp_I\PlayState = 0
 	ResetInput()
 	
 End Function
