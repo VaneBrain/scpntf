@@ -20,6 +20,7 @@ Save files from version 0.2.10 are compatible with this version.
 	* SCP-1048-A should no longer appear in blue Night Vision Goggles after the explosion;
 	* Removed the built in Night Vision Goggles, which was possible to activate by pressing F key.
 - Fixed a bug that caused the game to freeze when an NTF teammate goes into the search mode in some areas (such as SCP-049's containment chamber or SCP-939 storage area).
+- Fixed occasional crash in Singleplayer caused by the game not properly resetting after leaving Multiplayer.
 - Fixed SCP-939's death animations not playing correctly.
 - Fixed SCP-939's death animations not being set after loading a save file.
 - Fixed a game crash when saving inside SCP-205 containment chamber and then attempting to load the save.
