@@ -1873,7 +1873,7 @@ Function RecvDataClient()
 				EndIf
 				For it = Each Items
 					If (Not it\noDelete) Then
-						PlayItemPickSoundMP(it,-1)
+						;PlayItemPickSoundMP(it,-1)
 						RemoveItem(it)
 					EndIf
 				Next
