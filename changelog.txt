@@ -1,3 +1,52 @@
+v0.2.11
+Save files from version 0.2.10 are compatible with this version.
+
+[GENERAL]
+- Upgraded the game engine to the latest version, providing improved error reporting, along with various optimizations and bug fixes.
+- Improved the loading speed of localization strings (by ZiYueCommentary).
+- Reduced the camera shake amount from the knockback for all weapons.
+- Fixed weapons with low knockback (such as Beretta M9) not playing it's shooting sound when firing the last bullet.
+- Fixed SPAS-12 aiming position to be more screen centered (by scp-963-2).
+- Few miscellaneous SFX fixes, like adding missing crowbar holster sound (by SlendyOfDaMawn).
+- An attempt to optimize the rendering of props by adding culling distance.
+- The option to change the brightness of the game has been temporarily removed until brightness functionality is fixed.
+
+[SINGLEPLAYER]
+- Improvements for Night Vision Goggles:
+	* Improved visibility of text and battery charge indicator while using blue Night Vision Goggles;
+	* Improved the calculation of NPC position while using blue Night Vision Goggles;
+	* Scaled down the font size when using blue and green versions of Night Vision Goggles;
+	* Fixed a bug when Night Vision Goggles were updating their stats (like battery charge) even when the game was paused;
+	* SCP-1048-A should no longer appear in blue Night Vision Goggles after the explosion;
+	* Removed the built in Night Vision Goggles, which was possible to activate by pressing F key.
+- Fixed a bug that caused the game to freeze when an NTF teammate goes into the search mode in some areas (such as SCP-049's containment chamber or SCP-939 storage area).
+- Fixed SCP-939's death animations not playing correctly.
+- Fixed SCP-939's death animations not being set after loading a save file.
+- Fixed a game crash when saving inside SCP-205 containment chamber and then attempting to load the save.
+- The checkpoint elevators now reset their position if player used the elevator but was captured by SCP-106.
+- SCP-106's timer and state now reset if player moves to another zone via checkpoint elevator. This way players won't face the Old Man within seconds after getting back to the zone.
+- Fixed the world model of "Note from Daniel" using paper version instead of the sticky note.
+- Fixed render clipping on the security camera feed that was visible in some cases.
+- Removed Surveillance Room event (surveil_room) until a better alternative is created.
+
+[MULTIPLAYER]
+- Updated netcode:
+	* Enhanced networking by integrating Steam Datagram Relay, improving connection stability and performance, especially in high-latency scenarios.
+	* Few small optimizations in sending and receiving item packets.
+- Added latency display next to the FPS counter. The latency indicator changes color based on the latency value for better visibility.
+- Added additional buttons in Host Server menu tab to hint in possibility of selecting Multiplayer maps and gamemodes.
+- Added a delay before spectator can switch to other players after dying.
+- Players now emit pain sounds when getting shot by an enemy.
+- Fixed text filtering not working correctly in the server list.
+- Fixed the GUI frame of the lobby chat incorrectly rendering on resolutions higher than 1080p.
+- In Waves, fixed the shriek sound of SCP-1048-A looping during the freeze state.
+- In Waves, fixed SCP-035's tentacles (the ones on the spine) attacking players even after everyone was killed.
+- An attempt to fix the duplicate item picking sound for clients.
+
+...and other small fixes and improvements overall.
+	
+----------------------------------------------------------------------------------
+
 v0.2.10
 
 [GENERAL]
