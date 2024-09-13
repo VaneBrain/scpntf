@@ -1422,7 +1422,7 @@ Function UpdateMainMenu()
 						ShouldDeleteGadgets=True
 					EndIf
 					
-					If DrawButton(x + width * 0.3 + 280 * MenuScale, y + 300 * MenuScale, 150 * MenuScale, 40 * MenuScale, GetLocalString("Menu", "retry"), False, False, True) Then
+					If DrawButton(x + width * 0.3 + 280 * MenuScale, y + 300 * MenuScale, 150 * MenuScale, 40 * MenuScale, GetLocalString("Serverlist", "retry"), False, False, True) Then
 						mp_I\SelectedListServer = 0
 						mp_I\HasRefreshed = False
 						ShouldDeleteGadgets = True
