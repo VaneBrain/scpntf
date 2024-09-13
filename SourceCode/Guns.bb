@@ -1989,7 +1989,7 @@ Function ShootGun(g.Guns)
 		RotateEntity p\pvt, EntityPitch(g_I\GunPivot)-180, EntityYaw(g_I\GunPivot),0
 		
 		If g\GunType <> GUNTYPE_MELEE Then
-			PlaySound2(Gunshot3SFX, Camera, p\pvt, 0.4, Rnd(0.8,1.0))
+			PlaySound2(Gunshot3SFX, Camera, p\pvt, 5.0, Rnd(0.8,1.0))
 		Else
 			PlayGunSound(g\name+"\hitwall",g\MaxWallhitSounds,0,True,True)
 		EndIf
