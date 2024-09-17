@@ -11,19 +11,22 @@ Const TASK_RENDER_TIME = 70*5
 Const TASK_OPENINV = 0
 Const TASK_CLICKKEYCARD = 1
 Const TASK_OPENDOOR = 2
-Const TASK_CHECKPOINT = 3
+Const TASK_ELECLOCATE = 3
+Const TASK_ELECFOUND = 4
+Const TASK_CHECKPOINT = 5
 ;Checkpoint tasks (story mode)
-Const TASK_FIXELEVATOR = 4
+Const TASK_FIXELEVATOR = 6
 ;Sewers tasks (story mode)
-Const TASK_FINDWEAPON = 5
-Const TASK_FINDFUSE = 6
-Const TASK_FINDFUSEBOX = 7
+Const TASK_FINDWEAPON = 7
+Const TASK_FINDFUSE = 8
+Const TASK_FINDFUSEBOX = 9
 ;Checkpoint tasks (classic mode)
-Const TASK_GOTOZONE = 8
-Const TASK_CONTAIN173 = 9
-Const TASK_CONTAIN106 = 10
-Const TASK_173TOCHAMBER = 11
-Const TASK_106RECALL = 12
+Const TASK_GOTOZONE = 10
+Const TASK_CONTAIN173 = 11
+Const TASK_CONTAIN106 = 12
+Const TASK_173TOCHAMBER = 13
+Const TASK_106RECALL = 14
+
 
 Type NewTask
 	Field ID%
@@ -32,7 +35,7 @@ Type NewTask
 	Field Timer#
 End Type
 
-Function BeginTask.NewTask(ID%)
+ Function BeginTask.NewTask(ID%)
 	Local t.NewTask
 	
 	For t = Each NewTask
@@ -70,6 +73,10 @@ Function BeginTask.NewTask(ID%)
 			t\txt = GetLocalString("Tasks", "173_tochamber")
 		Case TASK_106RECALL
 			t\txt = GetLocalString("Tasks", "106_recall")
+		Case TASK_ELECLOCATE
+			t\txt = GetLocalString("Tasks", "elec_locate")
+		Case TASK_ELECFOUND
+			t\txt = GetLocalString("Tasks", "elec_found")
 	End Select
 	t\Timer = TASK_RENDER_TIME
 	t\Status = TASK_STATUS_NEW
