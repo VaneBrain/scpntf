@@ -572,10 +572,8 @@ Function FreeImage_Strict%(image%)
 End Function
 
 ;don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict(File$,flags=1,texdeletetype%=0)
-	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
-	
-	Local tmp
+Function LoadTexture_Strict%(File$,flags=1,texdeletetype%=0)
+	Local tmp%
 	
 	If FileType(File$) <> 1 Then RuntimeError "Texture " + File$ + " not found."
 	tmp = LoadTextureCheckingIfInCache(File$,texdeletetype,flags)

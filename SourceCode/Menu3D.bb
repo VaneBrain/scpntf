@@ -249,7 +249,7 @@ Function Load3DMenu(customprogress$="")
 	
 	;First, we need to determine the room
 	If customprogress="" Then
-		m3d\Progress = GetINIString(gv\OptionFile,"options","progress","intro")
+		m3d\Progress = IniGetString(gv\OptionFile,"options","progress","intro")
 	Else
 		m3d\Progress = customprogress
 	EndIf
@@ -322,9 +322,9 @@ Function Load3DMenu(customprogress$="")
 	
 	;After that, we need to load all important assets that are required for every room
 	m3d\Scene = CreatePivot()
-	Brightness% = GetINIFloat(gv\OptionFile, "options", "brightness", 20)
-	CameraFogNear# = GetINIFloat(gv\OptionFile, "options", "camera fog near", 0.5)
-	CameraFogFar# = GetINIFloat(gv\OptionFile, "options", "camera fog far", 6.0)
+	Brightness% = IniGetFloat(gv\OptionFile, "options", "brightness", 20)
+	CameraFogNear# = IniGetFloat(gv\OptionFile, "options", "camera fog near", 0.5)
+	CameraFogFar# = IniGetFloat(gv\OptionFile, "options", "camera fog far", 6.0)
 	StoredCameraFogFar# = CameraFogFar
 	m3d\Pivot = CreatePivot()
 	m_I\Cam = CreateCamera(m3d\Pivot)
@@ -549,7 +549,7 @@ Function Load3DMenu(customprogress$="")
 			m3d\Objects[0] = LoadAnimMesh_Strict("GFX\npcs\scp-966.b3d",m3d\Scene)
 			PositionEntity m3d\Objects[0],0,0,512.0*RoomScale
 			EntityFX m3d\Objects[0],1
-			temp# = GetINIFloat("DATA\NPCs.ini", "SCP-966", "scale")/40.0
+			temp# = IniGetFloat("Data\NPCs.ini", "SCP-966", "scale")/40.0
 			ScaleEntity m3d\Objects[0], temp, temp, temp
 			HideEntity m3d\Objects[0]
 			;[End Block]
@@ -709,7 +709,7 @@ Function Load3DMenu(customprogress$="")
 			m3d\Rendering = 1
 			m3d\Objects[0] = LoadMesh_Strict("GFX\npcs\173\173body.b3d",m3d\Scene)
 			m3d\Objects[8] = LoadMesh_Strict("GFX\npcs\173\173head.b3d",m3d\Scene)
-			temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-173", "scale") / MeshDepth(m3d\Objects[0]))
+			temp# = (IniGetFloat("Data\NPCs.ini", "SCP-173", "scale") / MeshDepth(m3d\Objects[0]))
 			ScaleEntity m3d\Objects[0],temp,temp,temp
 			ScaleEntity m3d\Objects[8],temp,temp,temp
 			PositionEntity m3d\Objects[0], 0.0, 0.0, -940.0* RoomScale
@@ -1733,7 +1733,7 @@ Function ReloadAll()
 	MaskImage(Panel294, 255,0,255)
 ;	For i = 0 To MAXACHIEVEMENTS-1
 ;		Local loc2% = GetINISectionLocation(AchvIni, "s"+Str(i))
-;		Local image$ = GetINIString2(AchvIni, loc2, "image") 
+;		Local image$ = IniGetString2(AchvIni, loc2, "image") 
 ;		Achievements[i]\IMG = LoadImage_Strict("GFX\menu\achievements\"+image+".jpg")
 ;		Achievements[i]\IMG = ResizeImage2(Achievements[i]\IMG,ImageWidth(Achievements[i]\IMG)*opt\GraphicHeight/768.0,ImageHeight(Achievements[i]\IMG)*opt\GraphicHeight/768.0)
 ;	Next

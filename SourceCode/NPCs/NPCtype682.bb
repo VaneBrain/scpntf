@@ -20,7 +20,7 @@ Function CreateNPCtype682(n.NPCs)
 	
 	MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-939", "speed") / 100.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-939", "speed") / 100.0)
 	
 End Function
 

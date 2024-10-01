@@ -19,9 +19,9 @@ Function CreateNPCtype049(n.NPCs)
 			;n\obj = LoadAnimMesh_Strict("GFX\npcs\scp-049.b3d")
 	n\obj = CopyEntity(NPC049OBJ)
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-049", "speed") / 100.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-049", "speed") / 100.0)
 	
-	temp = GetINIFloat("DATA\NPCs.ini", "SCP-049", "scale")
+	temp = IniGetFloat("Data\NPCs.ini", "SCP-049", "scale")
 	ScaleEntity n\obj, temp, temp, temp	
 	
 	n\CanUseElevator = True

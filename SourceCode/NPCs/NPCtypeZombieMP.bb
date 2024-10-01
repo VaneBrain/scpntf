@@ -424,13 +424,13 @@ Function CreateNPCtypeZombieMP_Guard(n.NPCs,model%=-1)
 		EndIf
 		n\obj = CopyEntity(mp_I\GuardZombieModel[n\State3])
 		
-		temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-049-2", "scale") / 2.5)
+		temp# = (IniGetFloat("Data\NPCs.ini", "SCP-049-2", "scale") / 2.5)
 		ScaleEntity n\obj, temp, temp, temp
 		
 		MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
 	EndIf
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-049-2", "speed") / 50.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-049-2", "speed") / 50.0)
 	
 	If n\State3 = 1 Then
 		If n\Sound = 0 Then

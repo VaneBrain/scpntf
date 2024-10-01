@@ -39,11 +39,11 @@ Function CreateNPCtype939(n.NPCs)
 	If n\obj = 0 Then 
 		n\obj = LoadAnimMesh_Strict("GFX\NPCs\scp-939.b3d")
 		
-		temp# = GetINIFloat("DATA\NPCs.ini", "SCP-939", "scale")/2.5
+		temp# = IniGetFloat("Data\NPCs.ini", "SCP-939", "scale")/2.5
 		ScaleEntity n\obj, temp, temp, temp		
 	EndIf
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-939", "speed") / 100.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-939", "speed") / 100.0)
 	
 	n\CollRadius = 0.3
 	
@@ -60,10 +60,10 @@ Function CreateNPCtype939MP(n.NPCs)
 	
 	n\obj = CopyEntity(mp_I\SCP939Model)
 	
-	Local temp# = GetINIFloat("DATA\NPCs.ini", "SCP-939", "scale")/2.5
+	Local temp# = IniGetFloat("Data\NPCs.ini", "SCP-939", "scale")/2.5
 	ScaleEntity n\obj, temp, temp, temp	
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-939", "speed") / 150.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-939", "speed") / 150.0)
 	n\HP = 250
 	n\PathTimer = 70*5
 	n\NVName = "SCP-939"

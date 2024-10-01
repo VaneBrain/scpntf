@@ -1109,7 +1109,7 @@ Function UpdateConsole(commandSet%)
 								Default
 									Cheat\Mini173 = Not Cheat\Mini173
 							End Select
-							Local scale# = (GetINIFloat("DATA\NPCs.ini", "SCP-173", "scale") / MeshDepth(Curr173\obj))
+							Local scale# = (IniGetFloat("Data\NPCs.ini", "SCP-173", "scale") / MeshDepth(Curr173\obj))
 							If Cheat\Mini173 Then
 								CreateConsoleMsg("MINI SCP-173 ON")
 								scale# = scale# / 3.0
@@ -1150,7 +1150,7 @@ Function UpdateConsole(commandSet%)
 							If n\obj = 0 Then 
 								n\obj = LoadAnimMesh_Strict(n\Model)
 								
-								Local temp2# = (GetINIFloat("DATA\NPCs.ini", "SCP-049-2", "scale") / 2.5)
+								Local temp2# = (IniGetFloat("Data\NPCs.ini", "SCP-049-2", "scale") / 2.5)
 								ScaleEntity n\obj, temp2#, temp2#, temp2#
 								
 								MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
@@ -1263,7 +1263,7 @@ Function UpdateConsole(commandSet%)
 								StrTemp$ = ""
 							EndIf
 							If StrTemp <> ""
-								PutINIValue(gv\OptionFile,"options","progress",StrTemp)
+								IniWriteString(gv\OptionFile,"options","progress",StrTemp)
 								Null3DMenu()
 								Load3DMenu(StrTemp)
 								CreateConsoleMsg("Loaded 3D menu background: "+StrTemp)
@@ -1322,7 +1322,7 @@ Function UpdateConsole(commandSet%)
 									psp\Checkpoint106Passed = True
 								EndIf
 								
-								PutINIValue(gv\OptionFile, "options", "intro enabled", IntroEnabled%)
+								IniWriteString(gv\OptionFile, "options", "intro enabled", IntroEnabled%)
 							Else
 								CreateConsoleMsg("Cannot recognize zone number "+Int(StrTemp2),255,150,0)
 							EndIf

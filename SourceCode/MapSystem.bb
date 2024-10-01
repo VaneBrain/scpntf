@@ -1605,12 +1605,12 @@ Function LoadRoomTemplates(file$)
 		If Left(TemporaryString,1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			If TemporaryString<>"room ambience" Then
-				StrTemp = Lower(TemporaryString)+"\"+GetINIString(file, TemporaryString, "mesh")
+				StrTemp = Lower(TemporaryString)+"\"+IniGetString(file, TemporaryString, "mesh")
 				
 				rt = CreateRoomTemplate(StrTemp)
 				rt\Name = Lower(TemporaryString)
 				
-				StrTemp = Lower(GetINIString(file, TemporaryString, "shape"))
+				StrTemp = Lower(IniGetString(file, TemporaryString, "shape"))
 				Select StrTemp
 					Case "room1", "1"
 						rt\Shape = ROOM1
@@ -1625,7 +1625,7 @@ Function LoadRoomTemplates(file$)
 				End Select
 				
 				For i = 0 To 1
-					StrTemp = Lower(GetINIString(file, TemporaryString, "zone"+(i+1)))
+					StrTemp = Lower(IniGetString(file, TemporaryString, "zone"+(i+1)))
 					
 					Select StrTemp
 						Case "lcz"
@@ -1637,11 +1637,11 @@ Function LoadRoomTemplates(file$)
 					End Select
 				Next
 				
-				rt\Commonness = Max(Min(GetINIInt(file, TemporaryString, "commonness"), 100), 0)
-				rt\DisableDecals = GetINIInt(file, TemporaryString, "disabledecals")
-				rt\UseLightCones = GetINIInt(file, TemporaryString, "usevolumelighting")
-				rt\DisableOverlapCheck = GetINIInt(file, TemporaryString, "disableoverlapcheck")
-				rt\AutoSpawn = GetINIInt(file, TemporaryString, "autospawn", 0)
+				rt\Commonness = Max(Min(IniGetInt(file, TemporaryString, "commonness"), 100), 0)
+				rt\DisableDecals = IniGetInt(file, TemporaryString, "disabledecals")
+				rt\UseLightCones = IniGetInt(file, TemporaryString, "usevolumelighting")
+				rt\DisableOverlapCheck = IniGetInt(file, TemporaryString, "disableoverlapcheck")
+				rt\AutoSpawn = IniGetInt(file, TemporaryString, "autospawn", 0)
 			EndIf
 		EndIf
 	Wend
@@ -1654,7 +1654,7 @@ Function LoadRoomTemplates(file$)
 		Else
 			drawtimer = drawtimer + 1
 		EndIf
-		StrTemp = GetINIString(file, "room ambience", "ambience"+i)
+		StrTemp = IniGetString(file, "room ambience", "ambience"+i)
 		If StrTemp = "" Then Exit
 		
 		RoomAmbience[i]=LoadSound_Strict(StrTemp)
@@ -4601,7 +4601,7 @@ Function SetChunkDataValues()
 	
 	For i = 0 To 63
 		For j = 0 To 63
-			CHUNKDATA[i * 64 + j]=Rand(0,GetINIInt("Data\1499chunks.INI","general","count"))
+			CHUNKDATA[i * 64 + j]=Rand(0,IniGetInt("Data\1499chunks.ini","general","count"))
 		Next
 	Next
 	
@@ -4617,8 +4617,8 @@ Type ChunkPart
 End Type
 
 Function CreateChunkParts(r.Rooms)
-	Local File$ = "Data\1499chunks.INI"
-	Local ChunkAmount% = GetINIInt(File$,"general","count")
+	Local File$ = "Data\1499chunks.ini"
+	Local ChunkAmount% = IniGetInt(File$,"general","count")
 	Local i%,StrTemp$,j%
 	Local chp.ChunkPart,chp2.ChunkPart
 	Local obj%
@@ -4626,38 +4626,35 @@ Function CreateChunkParts(r.Rooms)
 	SeedRnd GenerateSeedNumber(RandomSeed)
 	
 	For i = 0 To ChunkAmount%
-		Local loc% = GetINISectionLocation(File$,"chunk"+i)
-		If loc > 0 Then
-			StrTemp$ = GetINIString2(File,loc%,"count")
-			chp = New ChunkPart
-			chp\Amount% = Int(StrTemp$)
-			DebugLog "------------------"
-			For j = 0 To Int(StrTemp$)
-				Local objID% = GetINIString2(File$,loc%,"obj"+j)
-				Local x$ = GetINIString2(File$,loc%,"obj"+j+"-x")
-				Local z$ = GetINIString2(File$,loc%,"obj"+j+"-z")
-				Local yaw$ = GetINIString2(File$,loc%,"obj"+j+"-yaw")
-				DebugLog "1499 chunk X/Z/Yaw: "+x$+"|"+z$+"|"+yaw$
-				chp\obj%[j] = CopyEntity(r\Objects[objID%])
-				If Lower(yaw$) = "random"
-					chp\RandomYaw#[j] = Rnd(360)
-					RotateEntity chp\obj[j],0,chp\RandomYaw[j],0
-				Else
-					RotateEntity chp\obj[j],0,Float(yaw),0
-				EndIf
-				PositionEntity chp\obj[j],Float(x),0,Float(z)
-				ScaleEntity chp\obj[j],RoomScale,RoomScale,RoomScale
-				EntityType chp\obj[j],HIT_MAP
-				EntityPickMode chp\obj[j],2
-				;EntityParent chp\obj[j],r\obj
-			Next
-			chp2 = Before(chp)
-			If chp2 <> Null
-				chp\ID = chp2\ID+1
+		StrTemp$ = IniGetString(File,"chunk"+i,"count")
+		chp = New ChunkPart
+		chp\Amount% = Int(StrTemp$)
+		DebugLog "------------------"
+		For j = 0 To Int(StrTemp$)
+			Local objID% = IniGetString(File$,"chunk"+i,"obj"+j)
+			Local x$ = IniGetString(File$,"chunk"+i,"obj"+j+"-x")
+			Local z$ = IniGetString(File$,"chunk"+i,"obj"+j+"-z")
+			Local yaw$ = IniGetString(File$,"chunk"+i,"obj"+j+"-yaw")
+			DebugLog "1499 chunk X/Z/Yaw: "+x$+"|"+z$+"|"+yaw$
+			chp\obj%[j] = CopyEntity(r\Objects[objID%])
+			If Lower(yaw$) = "random"
+				chp\RandomYaw#[j] = Rnd(360)
+				RotateEntity chp\obj[j],0,chp\RandomYaw[j],0
+			Else
+				RotateEntity chp\obj[j],0,Float(yaw),0
 			EndIf
-			DebugLog "<<<<<<<<<<<<<<<<"
-			DebugLog "Generated 1499 chunk "+chp\ID+" sucessfully"
+			PositionEntity chp\obj[j],Float(x),0,Float(z)
+			ScaleEntity chp\obj[j],RoomScale,RoomScale,RoomScale
+			EntityType chp\obj[j],HIT_MAP
+			EntityPickMode chp\obj[j],2
+			;EntityParent chp\obj[j],r\obj
+		Next
+		chp2 = Before(chp)
+		If chp2 <> Null
+			chp\ID = chp2\ID+1
 		EndIf
+		DebugLog "<<<<<<<<<<<<<<<<"
+		DebugLog "Generated 1499 chunk "+chp\ID+" sucessfully"
 	Next
 	
 	SeedRnd MilliSecs()
@@ -4698,7 +4695,7 @@ Function CreateChunk.Chunk(obj%,x#,y#,z#,isSpawnChunk%=False)
 	EntityAlpha ch\ChunkDebugObj,0.2
 	
 	If obj% > -1
-		ch\Amount% = GetINIInt("Data\1499chunks.INI","chunk"+obj,"count")
+		ch\Amount% = IniGetInt("Data\1499chunks.ini","chunk"+obj,"count")
 		For chp = Each ChunkPart
 			If chp\ID = obj%
 				For i = 0 To ch\Amount
@@ -4728,7 +4725,7 @@ Function UpdateChunks(r.Rooms,ChunkPartAmount%,spawnNPCs%=True)
 	x# = -ChunkMaxDistance#+(ChunkX*40)
 	z# = -ChunkMaxDistance#+(ChunkZ*40)
 	
-	Local CurrChunkData% = 0, MaxChunks% = GetINIInt("Data\1499chunks.INI","general","count")
+	Local CurrChunkData% = 0, MaxChunks% = IniGetInt("Data\1499chunks.ini","general","count")
 	
 	Repeat
 		Local chunkfound% = False
@@ -4742,7 +4739,7 @@ Function UpdateChunks(r.Rooms,ChunkPartAmount%,spawnNPCs%=True)
 		Next
 		If (Not chunkfound)
 			CurrChunkData = CHUNKDATA[Abs(((x+32)/40) Mod 64) * 64 + Abs(((z+32)/40) Mod 64)]
-			;ch2 = CreateChunk(Rand(0,GetINIInt("Data\1499chunks.INI","general","count")),x#,y#,z#)
+			;ch2 = CreateChunk(Rand(0,IniGetInt("Data\1499chunks.ini","general","count")),x#,y#,z#)
 			ch2 = CreateChunk(CurrChunkData%,x#,y#,z#)
 			ch2\IsSpawnChunk = False
 		EndIf

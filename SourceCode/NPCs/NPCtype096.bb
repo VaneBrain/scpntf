@@ -17,9 +17,9 @@ Function CreateNPCtype096(n.NPCs)
 	EntityType n\Collider, HIT_PLAYER
 	n\obj = LoadAnimMesh_Strict("GFX\npcs\scp096.b3d")
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-096", "speed") / 100.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-096", "speed") / 100.0)
 	
-	temp = (GetINIFloat("DATA\NPCs.ini", "SCP-096", "scale") / 3.0)
+	temp = (IniGetFloat("Data\NPCs.ini", "SCP-096", "scale") / 3.0)
 	ScaleEntity n\obj, temp, temp, temp	
 	
 	MeshCullBox (n\obj, -MeshWidth(n\obj)*2, -MeshHeight(n\obj)*2, -MeshDepth(n\obj)*2, MeshWidth(n\obj)*2, MeshHeight(n\obj)*4, MeshDepth(n\obj)*4)

@@ -22,7 +22,7 @@ Global MainMenuTab%
 Global PrevMainMenuTab%
 Global ShouldDeleteGadgets%
 
-Global IntroEnabled% = GetINIInt(gv\OptionFile, "options", "intro enabled", 1)
+Global IntroEnabled% = IniGetInt(gv\OptionFile, "options", "intro enabled", 1)
 
 Global SelectedInputBox%
 
@@ -3396,9 +3396,9 @@ Function UpdateLauncher()
 		DrawImage(LauncherIMG, 0, 0)
 		
 		If DrawButton(640 - 32, 0, 32, 32, "X", False, False, False) Then
-			PutINIValue(gv\OptionFile, "options", "width", currentWidth)
-			PutINIValue(gv\OptionFile, "options", "height", currentHeight)
-			PutINIValue(gv\OptionFile, "options", "graphic driver", opt\GraphicDriver)
+			IniWriteString(gv\OptionFile, "options", "width", currentWidth)
+			IniWriteString(gv\OptionFile, "options", "height", currentHeight)
+			IniWriteString(gv\OptionFile, "options", "graphic driver", opt\GraphicDriver)
 			Steam_Shutdown()
 			End
 		EndIf
@@ -3576,9 +3576,9 @@ Function UpdateLauncher()
 		Flip
 	Forever
 	
-	PutINIValue(gv\OptionFile, "options", "width", opt\GraphicWidth)
-	PutINIValue(gv\OptionFile, "options", "height", opt\GraphicHeight)
-	PutINIValue(gv\OptionFile, "options", "graphic driver", opt\GraphicDriver)
+	IniWriteString(gv\OptionFile, "options", "width", opt\GraphicWidth)
+	IniWriteString(gv\OptionFile, "options", "height", opt\GraphicHeight)
+	IniWriteString(gv\OptionFile, "options", "graphic driver", opt\GraphicDriver)
 	
 	DeleteMenuImages()
 	

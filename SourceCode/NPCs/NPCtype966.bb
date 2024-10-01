@@ -29,7 +29,7 @@ Function CreateNPCtype966(n.NPCs)
 	
 	EntityFX n\obj,1
 	
-	temp# = GetINIFloat("DATA\NPCs.ini", "SCP-966", "scale")/40.0
+	temp# = IniGetFloat("Data\NPCs.ini", "SCP-966", "scale")/40.0
 	ScaleEntity n\obj, temp, temp, temp
 	
 	SetAnimTime n\obj,15.0

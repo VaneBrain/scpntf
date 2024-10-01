@@ -22,14 +22,14 @@
 ;Global UsedConsole
 ;
 ;Global AchievementsMenu%
-;Global AchvMSGenabled% = GetINIInt(gv\OptionFile, "options", "achievement popup enabled", 1)
+;Global AchvMSGenabled% = IniGetInt(gv\OptionFile, "options", "achievement popup enabled", 1)
 ;For i = 0 To MAXACHIEVEMENTS-1
 ;	Local loc2% = GetINISectionLocation(AchvIni, "s"+Str(i))
 ;	Local NEW_ACH.Achievement = New Achievement
-;	NEW_ACH\Name = GetINIString2(AchvIni, loc2, "string1")
-;	NEW_ACH\Desc = GetINIString2(AchvIni, loc2, "AchvDesc")
+;	NEW_ACH\Name = IniGetString2(AchvIni, loc2, "string1")
+;	NEW_ACH\Desc = IniGetString2(AchvIni, loc2, "AchvDesc")
 ;	
-;	Local image$ = GetINIString2(AchvIni, loc2, "image")
+;	Local image$ = IniGetString2(AchvIni, loc2, "image")
 ;	
 ;	NEW_ACH\IMG = LoadImage_Strict("GFX\menu\achievements\"+image+".jpg")
 ;	NEW_ACH\IMG = ResizeImage2(NEW_ACH\IMG,ImageWidth(NEW_ACH\IMG)*opt\GraphicHeight/768.0,ImageHeight(NEW_ACH\IMG)*opt\GraphicHeight/768.0)
@@ -49,7 +49,7 @@ Function GiveAchievement(ID%, showMessage%=True)
 ;		Achievements[achvname]\Unlocked=True
 ;		If AchvMSGenabled And showMessage Then
 ;			Local loc2% = GetINISectionLocation(AchvIni, "s"+achvname)
-;			Local AchievementName$ = GetINIString2(AchvIni, loc2, "string1")
+;			Local AchievementName$ = IniGetString2(AchvIni, loc2, "string1")
 ;			CreateAchievementMsg(achvname,AchievementName)
 ;		EndIf
 ;	EndIf

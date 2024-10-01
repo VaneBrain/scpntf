@@ -21,7 +21,7 @@ Function CreateNPCtype173(n.NPCs)
 	n\obj = LoadMesh_Strict("GFX\npcs\173\173body.b3d")
 	n\obj2 = LoadMesh_Strict("GFX\npcs\173\173head.b3d")
 	
-	temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-173", "scale") / MeshDepth(n\obj))
+	temp# = (IniGetFloat("Data\NPCs.ini", "SCP-173", "scale") / MeshDepth(n\obj))
 	ScaleEntity n\obj, temp,temp,temp
 	ScaleEntity n\obj2, temp,temp,temp
 	
@@ -48,7 +48,7 @@ Function CreateNPCtype173(n.NPCs)
 		ScaleEntity n\obj2, scaleX,scaleY,scaleZ
 	EndIf
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-173", "speed") / 200.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-173", "speed") / 200.0)
 	
 	n\obj3 = LoadMesh_Strict("GFX\npcs\173\173box.b3d")
 	ScaleEntity n\obj3, RoomScale, RoomScale, RoomScale

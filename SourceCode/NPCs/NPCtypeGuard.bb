@@ -9,8 +9,8 @@ Function CreateNPCtypeGuard(n.NPCs)
 	EntityType n\Collider, HIT_PLAYER
 	n\obj = CopyEntity(GuardObj)
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "Guard", "speed") / 100.0)
-	temp# = (GetINIFloat("DATA\NPCs.ini", "Guard", "scale") / 2.5)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "Guard", "speed") / 100.0)
+	temp# = (IniGetFloat("Data\NPCs.ini", "Guard", "scale") / 2.5)
 	
 	ScaleEntity n\obj, temp, temp, temp
 	

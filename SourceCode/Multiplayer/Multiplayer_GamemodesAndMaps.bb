@@ -111,26 +111,26 @@ Function LoadMPMaps()
 			If file <> "." And file <> ".." Then
 				If (FileType(dirPath+"\"+file+"\config.ini") > 0) Then
 					mfl = New MapForList
-					mfl\MeshPath = dirPath+"\"+file+"\"+GetINIString(dirPath+"\"+file+"\config.ini","global","mesh")
-					mfl\Name = GetINIString(dirPath+"\"+file+"\config.ini","global","name")
-					mfl\Gamemodes = GetINIString(dirPath+"\"+file+"\config.ini","global","gamemodes")
-					mfl\ChunkStart = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","start")
-					mfl\ChunkEnd = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","end")
-					mfl\NTFSpawn = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","ntf_spawn")
-					mfl\CISpawn = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","ci_spawn")
-					mfl\TriggerAmount = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger_amount")
-					mfl\TriggerMeshPath = dirPath+"\"+file+"\"+GetINIString(dirPath+"\"+file+"\config.ini","chunkdata","trigger_mesh")
+					mfl\MeshPath = dirPath+"\"+file+"\"+IniGetString(dirPath+"\"+file+"\config.ini","global","mesh")
+					mfl\Name = IniGetString(dirPath+"\"+file+"\config.ini","global","name")
+					mfl\Gamemodes = IniGetString(dirPath+"\"+file+"\config.ini","global","gamemodes")
+					mfl\ChunkStart = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","start")
+					mfl\ChunkEnd = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","end")
+					mfl\NTFSpawn = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","ntf_spawn")
+					mfl\CISpawn = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","ci_spawn")
+					mfl\TriggerAmount = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger_amount")
+					mfl\TriggerMeshPath = dirPath+"\"+file+"\"+IniGetString(dirPath+"\"+file+"\config.ini","chunkdata","trigger_mesh")
 					For i = 0 To mfl\TriggerAmount-1
-						mfl\TriggerYaw[i] = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_yaw")
-						Local x# = GetINIFloat(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_x")
-						Local y# = GetINIFloat(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_y")
-						Local z# = GetINIFloat(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_z")
-						Local area1 = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_area1")
-						Local area2 = GetINIInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_area2")
+						mfl\TriggerYaw[i] = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_yaw")
+						Local x# = IniGetFloat(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_x")
+						Local y# = IniGetFloat(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_y")
+						Local z# = IniGetFloat(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_z")
+						Local area1 = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_area1")
+						Local area2 = IniGetInt(dirPath+"\"+file+"\config.ini","chunkdata","trigger"+(i+1)+"_area2")
 						mfl\TriggerCoords[i] = CreateVector3D(x,y,z,True)
 						mfl\TriggerAreas[i] = CreateVector2D(area1,area2,True)
 					Next
-					mfl\BossNPC = GetINIString(dirPath+"\"+file+"\config.ini","global","boss")
+					mfl\BossNPC = IniGetString(dirPath+"\"+file+"\config.ini","global","boss")
 					If (FileType(dirPath+"\"+file+"\preview.png") > 0) Then
 						mfl\Image = LoadImage_Strict(dirPath+"\"+file+"\preview.png")
 					Else
@@ -143,7 +143,7 @@ Function LoadMPMaps()
 		EndIf
 	Forever
 	
-	Local SelMap$ = GetINIString(gv\OptionFile,"server","map")
+	Local SelMap$ = IniGetString(gv\OptionFile,"server","map")
 	If SelMap<>"" Then
 		;Get the selected map, depending on what the player has selected
 		For mfl = Each MapForList
@@ -174,8 +174,8 @@ Function CreateMPGameModes()
 	mgm\img[0] = LoadImage_Strict("GFX\skull_logo.png")
 	MidHandle mgm\img[0]
 	ResizeImage(mgm\img[0], ImageWidth(mgm\img[0]) * MenuScale, ImageHeight(mgm\img[0]) * MenuScale)
-	mgm\MaxPhase = GetINIInt(gv\OptionFile,"server","waves_max",Waves_Short)
-	mgm\Difficulty = GetINIInt(gv\OptionFile,"server","waves_difficulty",MP_DIFFICULTY_SAFE)
+	mgm\MaxPhase = IniGetInt(gv\OptionFile,"server","waves_max",Waves_Short)
+	mgm\Difficulty = IniGetInt(gv\OptionFile,"server","waves_difficulty",MP_DIFFICULTY_SAFE)
 	mgm\Image = LoadImage_Strict("GFX\menu\gamemode_preview_waves.png")
 	mgm\Image = ResizeImage2(mgm\Image, 384 * MenuScale, 192 * MenuScale)
 	mgm\MaxPlayersAllowed = 6
@@ -203,7 +203,7 @@ Function LoadMPGameModes()
 	Local mgm.MultiplayerGameMode
 	
 	CreateMPGameModes()
-	Local SelGamemode$ = GetINIString(gv\OptionFile,"server","gamemode","")
+	Local SelGamemode$ = IniGetString(gv\OptionFile,"server","gamemode","")
 	If SelGamemode$<>"" Then
 		For mgm = Each MultiplayerGameMode
 			If mgm\name = SelGamemode Then
