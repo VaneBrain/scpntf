@@ -16,12 +16,12 @@ Function CreateNPCtype106(n.NPCs)
 	EntityType n\Collider, HIT_PLAYER
 	n\obj = LoadAnimMesh_Strict("GFX\npcs\106_2.b3d")
 	
-	temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "scale") / 2.2)		
+	temp# = (IniGetFloat("Data\NPCs.ini", "SCP-106", "scale") / 2.2)		
 	ScaleEntity n\obj, temp, temp, temp
 	
 	Local OldManEyes% = LoadTexture_Strict("GFX\npcs\oldmaneyes.jpg",1,2)
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "speed") / 100.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-106", "speed") / 100.0)
 	
 	n\obj2 = CreateSprite()
 	ScaleSprite(n\obj2, 0.03, 0.03)

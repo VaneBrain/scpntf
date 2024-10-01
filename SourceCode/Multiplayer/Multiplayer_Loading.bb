@@ -281,9 +281,9 @@ Function CreateMPGame()
 	
 	LoadMissingTexture()
 	
-	Brightness% = GetINIFloat(gv\OptionFile, "options", "brightness", 20)
-	CameraFogNear# = GetINIFloat(gv\OptionFile, "options", "camera fog near", 0.5)
-	CameraFogFar# = GetINIFloat(gv\OptionFile, "options", "camera fog far", 6.0)
+	Brightness% = IniGetFloat(gv\OptionFile, "options", "brightness", 20)
+	CameraFogNear# = IniGetFloat(gv\OptionFile, "options", "camera fog near", 0.5)
+	CameraFogFar# = IniGetFloat(gv\OptionFile, "options", "camera fog far", 6.0)
 	StoredCameraFogFar# = CameraFogFar
 	
 	LoadMaterials("Data\materials.ini")
@@ -309,7 +309,7 @@ Function CreateMPGame()
 	EndIf
 	CameraRange(Camera,0.01,GetCameraFogRangeFar(Camera)*2.0)
 	CameraFogMode (Camera, 1)
-	CameraFogColor (Camera, GetINIInt(gv\OptionFile, "options", "fog r"), GetINIInt(gv\OptionFile, "options", "fog g"), GetINIInt(gv\OptionFile, "options", "fog b"))
+	CameraFogColor (Camera, IniGetInt(gv\OptionFile, "options", "fog r"), IniGetInt(gv\OptionFile, "options", "fog g"), IniGetInt(gv\OptionFile, "options", "fog b"))
 	AmbientLight Brightness, Brightness, Brightness
 	
 	m_I\Cam = CreateCamera(Camera)
@@ -525,7 +525,7 @@ Function CreateMPGame()
 	
 	i = 1
 	Repeat
-		StrTemp = GetINIString("Data\rooms.ini", "room ambience", "ambience"+i)
+		StrTemp = IniGetString("Data\rooms.ini", "room ambience", "ambience"+i)
 		If StrTemp = "" Then Exit
 		
 		RoomAmbience[i]=LoadSound_Strict(StrTemp)
@@ -711,8 +711,6 @@ Function NullMPGame(nomenuload%=False,playbuttonsfx%=True)
 	If (Not nomenuload) Lor mp_I\PlayState = GAME_CLIENT Then
 		Disconnect()
 	EndIf
-	
-	DeleteINIFile("Data\weapons.ini")
 	
 	If (Not nomenuload) Lor mp_I\PlayState = GAME_CLIENT Then
 		Local SelGamemode$ = mp_O\Gamemode\name

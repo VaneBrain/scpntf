@@ -21,10 +21,10 @@ Function CreateNPCtype457(n.NPCs)
 	EntityType n\Collider, HIT_PLAYER
 	n\obj = LoadAnimMesh_Strict("GFX\npcs\106_2.b3d")
 	
-	temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "scale") / 2.2)		
+	temp# = (IniGetFloat("Data\NPCs.ini", "SCP-106", "scale") / 2.2)		
 	ScaleEntity n\obj, temp, temp, temp
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "speed") / 100.0)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-106", "speed") / 100.0)
 	
 	EntityColor(n\obj, 0, 0, 0)
 	EntityAlpha(n\obj, 0.1)
@@ -137,7 +137,7 @@ Function CreateNPCtype457MP(n.NPCs)
 	EntityType n\Collider, HIT_NPC_MP
 	
 	n\obj = CopyEntity(mp_I\BossModel)
-	temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "scale") / 2.2)		
+	temp# = (IniGetFloat("Data\NPCs.ini", "SCP-106", "scale") / 2.2)		
 	ScaleEntity n\obj, temp, temp, temp
 	
 	n\Speed = (1.6 / 100.0)

@@ -311,9 +311,9 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 			EntityBlend(n\obj2, BLEND_ADD)
 			SpriteViewMode(n\obj2, 2)
 			
-			n\Speed = (GetINIFloat("DATA\NPCs.ini", "forestmonster", "speed") / 100.0)
+			n\Speed = (IniGetFloat("Data\NPCs.ini", "forestmonster", "speed") / 100.0)
 			
-			temp# = (GetINIFloat("DATA\NPCs.ini", "forestmonster", "scale") / 20.0)
+			temp# = (IniGetFloat("Data\NPCs.ini", "forestmonster", "scale") / 20.0)
 			ScaleEntity n\obj, temp, temp, temp	
 			
 			MeshCullBox (n\obj, -MeshWidth(n\obj)*2, -MeshHeight(n\obj)*2, -MeshDepth(n\obj)*2, MeshWidth(n\obj)*2, MeshHeight(n\obj)*4, MeshDepth(n\obj)*4)
@@ -334,7 +334,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 			EntityType n\Collider, HIT_PLAYER
 			
 			n\obj = LoadAnimMesh_Strict("GFX\NPCs\scp-066.b3d")
-			temp# = GetINIFloat("DATA\NPCs.ini", "SCP-066", "scale")/2.5
+			temp# = IniGetFloat("Data\NPCs.ini", "SCP-066", "scale")/2.5
 			ScaleEntity n\obj, temp, temp, temp		
 			
 			;If BumpEnabled Then 
@@ -347,7 +347,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 			;	DeleteSingleTextureEntryFromCache bump1
 			;EndIf
 			
-			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-066", "speed") / 100.0)
+			n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-066", "speed") / 100.0)
 			;[End Block]
 		Case NPCtype966
 			CreateNPCtype966(n)
@@ -376,8 +376,8 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 				n\obj = LoadAnimMesh_Strict("GFX\npcs\1499-1.b3d")
 			EndIf
 			
-			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-1499-1", "speed") / 100.0) * Rnd(0.9,1.1)
-			temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-1499-1", "scale") / 4.0) * Rnd(0.8,1.0)
+			n\Speed = (IniGetFloat("Data\NPCs.ini", "SCP-1499-1", "speed") / 100.0) * Rnd(0.9,1.1)
+			temp# = (IniGetFloat("Data\NPCs.ini", "SCP-1499-1", "scale") / 4.0) * Rnd(0.8,1.0)
 			
 			ScaleEntity n\obj, temp, temp, temp
 			
@@ -464,8 +464,8 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 			EntityType n\Collider, HIT_PLAYER
 			n\obj = CopyEntity(GuardObj) ;LoadAnimMesh_Strict("GFX\npcs\mtf.b3d")
 			
-			n\Speed = (GetINIFloat("DATA\NPCs.ini", "Guard", "speed") / 100.0)
-			temp# = (GetINIFloat("DATA\NPCs.ini", "Guard", "scale") / 2.5)
+			n\Speed = (IniGetFloat("Data\NPCs.ini", "Guard", "speed") / 100.0)
+			temp# = (IniGetFloat("Data\NPCs.ini", "Guard", "scale") / 2.5)
 			
 			ScaleEntity n\obj, temp, temp, temp
 			
@@ -485,8 +485,8 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#, model%=-1)
 			EntityType n\Collider, HIT_PLAYER
 			n\obj = CopyEntity(GuardObj) ;LoadAnimMesh_Strict("GFX\npcs\mtf.b3d")
 			
-			n\Speed = (GetINIFloat("DATA\NPCs.ini", "Guard", "speed") / 100.0)
-			temp# = (GetINIFloat("DATA\NPCs.ini", "Guard", "scale") / 2.5)
+			n\Speed = (IniGetFloat("Data\NPCs.ini", "Guard", "speed") / 100.0)
+			temp# = (IniGetFloat("Data\NPCs.ini", "Guard", "scale") / 2.5)
 			
 			ScaleEntity n\obj, temp, temp, temp
 			
@@ -3913,7 +3913,7 @@ Function GetNPCManipulationValue$(NPC$,bone$,section$,valuetype%=0)
 	;2 - Float
 	;3 - Boolean
 	
-	Local value$ = GetINIString("Data\NPCBones.ini",NPC$,bone$+"_"+section$)
+	Local value$ = IniGetString("Data\NPCBones.ini",NPC$,bone$+"_"+section$)
 	Select valuetype%
 		Case 0
 			Return value$
@@ -4372,7 +4372,7 @@ Function SwitchNPCGun%(n.NPCs, WeaponID%)
 	RotateEntity n\obj,0,0,0
 	PositionEntity n\obj,0,0,0
 	
-	bone = FindChild(n\obj,GetINIString("Data\NPCBones.ini", n\NPCName, "weapon_hand_bonename"))
+	bone = FindChild(n\obj,IniGetString("Data\NPCBones.ini", n\NPCName, "weapon_hand_bonename"))
 	
 	gunname$ = ""
 	For g = Each Guns
@@ -4394,14 +4394,14 @@ Function SwitchNPCGun%(n.NPCs, WeaponID%)
 	Next
 	
 	If gunname <> "" Then
-		Scale# = GetINIFloat("Data\weapons.ini", gunname, "world scale", 0.02) / EntityScaleX(n\obj)
+		Scale# = IniGetFloat("Data\weapons.ini", gunname, "world scale", 0.02) / EntityScaleX(n\obj)
 		ScaleEntity n\Gun\obj,Scale,Scale,Scale
 		
-		VectorString = GetINIString("Data\weapons.ini", gunname, "player_model_offset", "")
+		VectorString = IniGetString("Data\weapons.ini", gunname, "player_model_offset", "")
 		If VectorString <> "" Then
 			PositionEntity n\Gun\obj, Piece(VectorString,1,"|"), Piece(VectorString,2,"|"), Piece(VectorString,3,"|")
 		EndIf
-		VectorString = GetINIString("Data\weapons.ini", gunname, "player_model_rotation", "")
+		VectorString = IniGetString("Data\weapons.ini", gunname, "player_model_rotation", "")
 		If VectorString <> "" Then
 			RotateEntity n\Gun\obj, Piece(VectorString,1,"|"), Piece(VectorString,2,"|"), Piece(VectorString,3,"|")
 		EndIf
@@ -4501,7 +4501,7 @@ Function PreloadNPCAnimation(NPCtype%, NPCName$, AnimName$)
 	Local file$ = "Data\NPCAnims.ini"
 	Local na.NPCAnim
 	
-	Local AnimString$ = GetINIString(file, NPCName, AnimName)
+	Local AnimString$ = IniGetString(file, NPCName, AnimName)
 	If AnimString<>"" Then
 		na = New NPCAnim
 		na\NPCtype = NPCtype

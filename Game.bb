@@ -102,6 +102,7 @@ Include "SourceCode\Main.bb"
 Function CheckForDlls()
 	Local InitErrorStr$ = ""
 	
+	If FileSize("IniController.dll")=0 Then InitErrorStr=InitErrorStr+ "IniController.dll"+Chr(13)+Chr(10)
 	If FileSize("Blitzcord.dll")=0 Then InitErrorStr=InitErrorStr+ "Blitzcord.dll"+Chr(13)+Chr(10)
 	If FileSize("BlitzHash.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzHash.dll"+Chr(13)+Chr(10)
 	If FileSize("BlitzMovie.dll")=0 Then InitErrorStr=InitErrorStr+ "BlitzMovie.dll"+Chr(13)+Chr(10)
@@ -137,33 +138,33 @@ End Function
 
 Function InitOptions()
 	
-	opt\EnableSFXRelease% = GetINIInt(gv\OptionFile, "audio", "sfx release", 1)
+	opt\EnableSFXRelease% = IniGetInt(gv\OptionFile, "audio", "sfx release", 1)
 	opt\EnableSFXRelease_Prev% = opt\EnableSFXRelease%
-	opt\ConsoleEnabled% = GetINIInt(gv\OptionFile, "console", "enabled", 0)
-	opt\ConsoleOpening% = GetINIInt(gv\OptionFile, "console", "auto opening", 0)
-	opt\GraphicWidth% = GetINIInt(gv\OptionFile, "options", "width", DesktopWidth())
-	opt\GraphicHeight% = GetINIInt(gv\OptionFile, "options", "height", DesktopHeight())
-	opt\ShowFPS = GetINIInt(gv\OptionFile, "options", "show FPS", 0)
-	opt\DisplayMode% = GetINIInt(gv\OptionFile, "options", "display mode", 1)
-	opt\GraphicDriver% = GetINIInt(gv\OptionFile, "options", "graphic driver", 0)
-	opt\RenderCubeMapMode% = GetINIInt(gv\OptionFile, "options", "cubemaps", 2)
-	opt\EnableRoomLights% = GetINIInt(gv\OptionFile, "options", "room lights enabled", 1)
-	opt\TextureDetails% = GetINIInt(gv\OptionFile, "options", "texture details", 2)
-	opt\TextureFiltering% = GetINIInt(gv\OptionFile, "options", "texture filtering", 2)
-	opt\LauncherEnabled% = GetINIInt(gv\OptionFile, "options", "launcher enabled", 1)
+	opt\ConsoleEnabled% = IniGetInt(gv\OptionFile, "console", "enabled", 0)
+	opt\ConsoleOpening% = IniGetInt(gv\OptionFile, "console", "auto opening", 0)
+	opt\GraphicWidth% = IniGetInt(gv\OptionFile, "options", "width", DesktopWidth())
+	opt\GraphicHeight% = IniGetInt(gv\OptionFile, "options", "height", DesktopHeight())
+	opt\ShowFPS = IniGetInt(gv\OptionFile, "options", "show FPS", 0)
+	opt\DisplayMode% = IniGetInt(gv\OptionFile, "options", "display mode", 1)
+	opt\GraphicDriver% = IniGetInt(gv\OptionFile, "options", "graphic driver", 0)
+	opt\RenderCubeMapMode% = IniGetInt(gv\OptionFile, "options", "cubemaps", 2)
+	opt\EnableRoomLights% = IniGetInt(gv\OptionFile, "options", "room lights enabled", 1)
+	opt\TextureDetails% = IniGetInt(gv\OptionFile, "options", "texture details", 2)
+	opt\TextureFiltering% = IniGetInt(gv\OptionFile, "options", "texture filtering", 2)
+	opt\LauncherEnabled% = IniGetInt(gv\OptionFile, "options", "launcher enabled", 1)
 	opt\TotalGFXModes% = CountGfxModes3D()
-	opt\SFXVolume# = GetINIFloat(gv\OptionFile, "audio", "sound volume", 1.0)
-	opt\VoiceVol# = GetINIFloat(gv\OptionFile, "audio", "voice volume", 1.0)
-	opt\MasterVol# = GetINIFloat(gv\OptionFile, "audio", "master volume", 1.0)
-	opt\MusicVol# = GetINIFloat(gv\OptionFile, "audio", "music volume", 1.0)
-	opt\MouseSmooth# = GetINIFloat(gv\OptionFile, "options", "mouse smoothing", 1.0)
-	opt\HoldToAim% = GetINIInt(gv\OptionFile, "options", "hold to aim", 1)
-	opt\HoldToCrouch% = GetINIInt(gv\OptionFile, "options", "hold to crouch", 1)
-	opt\ShowDisclaimers% = GetINIInt(gv\OptionFile, "options", "show disclaimers", 1)
+	opt\SFXVolume# = IniGetFloat(gv\OptionFile, "audio", "sound volume", 1.0)
+	opt\VoiceVol# = IniGetFloat(gv\OptionFile, "audio", "voice volume", 1.0)
+	opt\MasterVol# = IniGetFloat(gv\OptionFile, "audio", "master volume", 1.0)
+	opt\MusicVol# = IniGetFloat(gv\OptionFile, "audio", "music volume", 1.0)
+	opt\MouseSmooth# = IniGetFloat(gv\OptionFile, "options", "mouse smoothing", 1.0)
+	opt\HoldToAim% = IniGetInt(gv\OptionFile, "options", "hold to aim", 1)
+	opt\HoldToCrouch% = IniGetInt(gv\OptionFile, "options", "hold to crouch", 1)
+	opt\ShowDisclaimers% = IniGetInt(gv\OptionFile, "options", "show disclaimers", 1)
 	
 	LoadResolutions()
 	
-	gopt\SingleplayerGameMode = GetINIInt(gv\OptionFile, "game options", "game mode", GAMEMODE_DEFAULT)
+	gopt\SingleplayerGameMode = IniGetInt(gv\OptionFile, "game options", "game mode", GAMEMODE_DEFAULT)
 	gopt\GameMode = gopt\SingleplayerGameMode
 	
 End Function

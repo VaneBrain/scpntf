@@ -47,8 +47,8 @@ Global P90BulletMeter
 Global Crowbar_HitPivot
 Global MuzzleFlash
 
-Global KEY_RELOAD = GetINIInt(gv\OptionFile, "binds", "Reload key", 19)
-Global KEY_HOLSTERGUN = GetINIInt(gv\OptionFile, "binds", "Holstergun key", 16)
+Global KEY_RELOAD = IniGetInt(gv\OptionFile, "binds", "Reload key", 19)
+Global KEY_HOLSTERGUN = IniGetInt(gv\OptionFile, "binds", "Holstergun key", 16)
 
 Global BulletHole1,BulletHole2,DustParticle
 
@@ -196,12 +196,12 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 	g\IMG = LoadImage("GFX\weapons\"+img$)
 	MaskImage(g\IMG, 255, 0, 255)
 	
-	g\CurrAmmo = GetINIInt("Data\weapons.ini",name$,"ammo",1)
+	g\CurrAmmo = IniGetInt("Data\weapons.ini",name$,"ammo",1)
 	g\MaxCurrAmmo = g\CurrAmmo
 	g\CurrReloadAmmo = 0
-	g\MaxReloadAmmo = GetINIInt("Data\weapons.ini",name$,"reload_ammo")
-	g\DamageOnEntity = GetINIInt("Data\weapons.ini",name$,"damage",1)
-	g\Accuracy = GetINIFloat("Data\weapons.ini",name$,"accuracy",1.0)
+	g\MaxReloadAmmo = IniGetInt("Data\weapons.ini",name$,"reload_ammo")
+	g\DamageOnEntity = IniGetInt("Data\weapons.ini",name$,"damage",1)
+	g\Accuracy = IniGetFloat("Data\weapons.ini",name$,"accuracy",1.0)
 	g\CanHaveSilencer = canhavesilencer
 	g\obj = LoadAnimMesh_Strict("GFX\weapons\"+model$,g_I\GunPivot)
 	ScaleEntity g\obj,0.005,0.005,0.005
@@ -212,7 +212,7 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 	g\ViewModelPath = model$
 	g\IMGPath = img$
 	
-	Local StrTemp$ = GetINIString("Data\weapons.ini", g\name, "type", "semi")
+	Local StrTemp$ = IniGetString("Data\weapons.ini", g\name, "type", "semi")
 	Select StrTemp
 		Case "semi"
 			g\GunType = GUNTYPE_SEMI
@@ -226,75 +226,75 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 			g\GunType = GUNTYPE_UNKNOWN
 	End Select
 	
-	g\Knockback = GetINIFloat("Data\weapons.ini",name,"knockback")
-	g\Rate_Of_Fire = GetINIFloat("Data\weapons.ini",name,"rate_of_fire",1.0)
-	g\Reload_Time = GetINIFloat("Data\weapons.ini",name,"reload_time",1.0)
-	g\Reload_Start_Time = GetINIFloat("Data\weapons.ini",name,"reload_start_time",1.0)
-	g\Deploy_Time = GetINIFloat("Data\weapons.ini",name,"deploy_time",1.0)
-	g\MaxShootSounds = GetINIInt("Data\weapons.ini",name,"sounds_shoot",1)
-	g\MaxReloadSounds = GetINIInt("Data\weapons.ini",name,"sounds_reload",1)
-	g\MaxWallhitSounds = GetINIInt("Data\weapons.ini",name,"sounds_wallhit",1)
-	g\Amount_Of_Bullets = GetINIInt("Data\weapons.ini",name,"amount_of_bullets",1)
+	g\Knockback = IniGetFloat("Data\weapons.ini",name,"knockback")
+	g\Rate_Of_Fire = IniGetFloat("Data\weapons.ini",name,"rate_of_fire",1.0)
+	g\Reload_Time = IniGetFloat("Data\weapons.ini",name,"reload_time",1.0)
+	g\Reload_Start_Time = IniGetFloat("Data\weapons.ini",name,"reload_start_time",1.0)
+	g\Deploy_Time = IniGetFloat("Data\weapons.ini",name,"deploy_time",1.0)
+	g\MaxShootSounds = IniGetInt("Data\weapons.ini",name,"sounds_shoot",1)
+	g\MaxReloadSounds = IniGetInt("Data\weapons.ini",name,"sounds_reload",1)
+	g\MaxWallhitSounds = IniGetInt("Data\weapons.ini",name,"sounds_wallhit",1)
+	g\Amount_Of_Bullets = IniGetInt("Data\weapons.ini",name,"amount_of_bullets",1)
 	
 	Local AnimString$
 	;Deploy
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_deploy","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_deploy","")
 	g\Anim_Deploy = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	;Shoot
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_shoot","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_shoot","")
 	g\Anim_Shoot = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	;Reload
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_reload","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_reload","")
 	g\Anim_Reload = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	;Sprint Transition
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_sprint_transition","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_sprint_transition","")
 	g\Anim_Sprint_Transition = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	;Sprint Cycle
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_sprint_cycle","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_sprint_cycle","")
 	g\Anim_Sprint_Cycle = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	;Deploy No Ammo
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_noammo_deploy","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_noammo_deploy","")
 	If AnimString<>"" Then
 		g\Anim_NoAmmo_Deploy = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	EndIf
 	;Shoot No Ammo
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_noammo_shoot","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_noammo_shoot","")
 	If AnimString<>"" Then
 		g\Anim_NoAmmo_Shoot = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	EndIf
 	;Sprint Transition No Ammo
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_noammo_sprint_transition","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_noammo_sprint_transition","")
 	If AnimString<>"" Then
 		g\Anim_NoAmmo_Sprint_Transition = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	EndIf
 	;Sprint Cycle No Ammo
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_noammo_sprint_cycle","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_noammo_sprint_cycle","")
 	If AnimString<>"" Then
 		g\Anim_NoAmmo_Sprint_Cycle = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	EndIf
 	;Reload Start
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_reload_start","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_reload_start","")
 	If AnimString<>"" Then
 		g\Anim_Reload_Start = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	EndIf
 	;Reload Stop
-	AnimString = GetINIString("Data\weapons.ini",name,"anim_reload_stop","")
+	AnimString = IniGetString("Data\weapons.ini",name,"anim_reload_stop","")
 	If AnimString<>"" Then
 		g\Anim_Reload_Stop = CreateVector3D(Piece(AnimString,1,"|"),Piece(AnimString,2,"|"),Piece(AnimString,3,"|"))
 	EndIf
-	g\Frame_Idle = GetINIFloat("Data\weapons.ini",name,"frame_idle")
-	g\Frame_NoAmmo_Idle = GetINIFloat("Data\weapons.ini",name,"frame_noammo_idle")
+	g\Frame_Idle = IniGetFloat("Data\weapons.ini",name,"frame_idle")
+	g\Frame_NoAmmo_Idle = IniGetFloat("Data\weapons.ini",name,"frame_noammo_idle")
 	
 	Local VectorString$
-	VectorString = GetINIString("Data\weapons.ini",name,"offset","")
+	VectorString = IniGetString("Data\weapons.ini",name,"offset","")
 	MoveEntity g\obj,Piece(VectorString,1,"|"),Piece(VectorString,2,"|"),Piece(VectorString,3,"|")
-	VectorString = GetINIString("Data\weapons.ini",name,"aimoffset","")
+	VectorString = IniGetString("Data\weapons.ini",name,"aimoffset","")
 	If VectorString<>"" Then
 		g\IronSightCoords = CreateVector3D(Piece(VectorString,1,"|"),Piece(VectorString,2,"|"),Piece(VectorString,3,"|"))
 	EndIf
 	
-	g\DisplayName = GetINIString("Data\weapons.ini",name,"display_name",name)
-	StrTemp$ = GetINIString("Data\weapons.ini",name,"slot","secondary")
+	g\DisplayName = IniGetString("Data\weapons.ini",name,"display_name",name)
+	StrTemp$ = IniGetString("Data\weapons.ini",name,"slot","secondary")
 	Select StrTemp
 		Case "primary"
 			g\Slot = SLOT_PRIMARY
@@ -304,8 +304,8 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 			g\Slot = SLOT_MELEE
 	End Select
 	
-	g\ShootDelay = GetINIFloat("Data\weapons.ini",name,"attack_delay")
-	g\Range = GetINIFloat("Data\weapons.ini",name,"range")
+	g\ShootDelay = IniGetFloat("Data\weapons.ini",name,"attack_delay")
+	g\Range = IniGetFloat("Data\weapons.ini",name,"range")
 	
 	;Preload gun sounds
 	If g\MaxShootSounds > 1 Then
@@ -316,7 +316,7 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 		g\ShootSounds[0] = LoadSound_Strict("SFX\Guns\"+g\name+"\shoot.ogg")
 	EndIf
 	
-	VectorString = GetINIString("Data\weapons.ini",name,"muzzleoffset","")
+	VectorString = IniGetString("Data\weapons.ini",name,"muzzleoffset","")
 	g\MuzzleFlash = CreateSprite()
 	EntityFX g\MuzzleFlash,1
 	SpriteViewMode g\MuzzleFlash,2
@@ -328,7 +328,7 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 	g\PlayerModel = LoadAnimMesh_Strict("GFX\weapons\"+g\name+"_worldmodel.b3d")
 	HideEntity g\PlayerModel
 	
-	Local SimpleString$ = GetINIString("Data\weapons.ini",name,"player_model_anim","")
+	Local SimpleString$ = IniGetString("Data\weapons.ini",name,"player_model_anim","")
 	Select Lower(SimpleString)
 		Case "smg"
 			g\PlayerModelAnim = GUNANIM_SMG
@@ -344,9 +344,9 @@ Function CreateGun.Guns(name$, id, model$, img$, canhavesilencer = False, CanUse
 			RuntimeError "ERROR: Weapon type " + SimpleString + " doesn't exist!"
 	End Select
 	
-	g\ShouldCreateItem = GetINIInt("Data\weapons.ini",name,"generate_item",1)
+	g\ShouldCreateItem = IniGetInt("Data\weapons.ini",name,"generate_item",1)
 	
-	SimpleString = GetINIString("Data\weapons.ini",name,"decal_type","bullet")
+	SimpleString = IniGetString("Data\weapons.ini",name,"decal_type","bullet")
 	Select Lower(SimpleString)
 		Case "bullet"
 			g\DecalType = GUNDECAL_DEFAULT
@@ -407,7 +407,7 @@ Function InitGuns()
 			gunID = gunID + 1
 			g.Guns = CreateGun(l,gunID,l+"_viewmodel.b3d","INV"+l+".jpg",False,True)
 			If g\ShouldCreateItem Then
-				it = CreateItemTemplate(g\DisplayName,g\name,"GFX\weapons\"+g\name+"_worldmodel.b3d","GFX\weapons\INV"+g\name+".jpg","",GetINIFloat("Data\weapons.ini",g\name,"world scale",0.02))
+				it = CreateItemTemplate(g\DisplayName,g\name,"GFX\weapons\"+g\name+"_worldmodel.b3d","GFX\weapons\INV"+g\name+".jpg","",IniGetFloat("Data\weapons.ini",g\name,"world scale",0.02))
 				it\isGun% = True
 				it\sound = 66
 			EndIf

@@ -29,8 +29,8 @@ Function CreateNPCtypeMTF(n.NPCs)
 	EntityType n\Collider, HIT_PLAYER
 	n\obj = CopyEntity(MTFObj)
 	
-	n\Speed = (GetINIFloat("DATA\NPCs.ini", "MTF", "speed") / 100.0)
-	temp# = (GetINIFloat("DATA\NPCs.ini", "MTF", "scale") / 2.5)
+	n\Speed = (IniGetFloat("Data\NPCs.ini", "MTF", "speed") / 100.0)
+	temp# = (IniGetFloat("Data\NPCs.ini", "MTF", "scale") / 2.5)
 	ScaleEntity n\obj, temp, temp, temp
 	MeshCullBox (n\obj, -MeshWidth(MTFObj), -MeshHeight(MTFObj), -MeshDepth(MTFObj), MeshWidth(MTFObj)*2, MeshHeight(MTFObj)*2, MeshDepth(MTFObj)*2) 
 	

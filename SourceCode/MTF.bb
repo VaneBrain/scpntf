@@ -2,7 +2,7 @@ Global keyhituse,keydownuse
 
 Global SwitchFollow$ = "Split Up"
 Global ChatSFXCHN
-;Global KEY_CHAT = GetINIInt(gv\OptionFile, "binds", "Chat key", 46)
+;Global KEY_CHAT = IniGetInt(gv\OptionFile, "binds", "Chat key", 46)
 Global ChatSFXOpened% = False
 Global ChatSFXOpenedTimer# = 0.0
 Global ChatSFXOpenedColor% = 255
@@ -12,18 +12,18 @@ Global ChatSFX_CurrSound
 
 Global BloodSpitSprite1,BloodSpitSprite2
 
-;Global NTF_DisableConsoleOpening% = GetINIInt(gv\OptionFile, "console", "disable opening")
+;Global NTF_DisableConsoleOpening% = IniGetInt(gv\OptionFile, "console", "disable opening")
 
 Global ClassDObj2,N966Obj
 
-Global KEY_USE = GetINIInt(gv\OptionFile, "binds", "Use key", 18)
+Global KEY_USE = IniGetInt(gv\OptionFile, "binds", "Use key", 18)
 
 Global NTF_PainSFX[8]
 Global NTF_PainWeakSFX[2]
 
 Global NTF_MaxAmbientSFX% = 39
 
-Global NTF_AimCross% = GetINIInt(gv\OptionFile, "options", "aim cross", 1)
+Global NTF_AimCross% = IniGetInt(gv\OptionFile, "options", "aim cross", 1)
 
 ;AI For the NTF
 
@@ -38,7 +38,7 @@ Global flame01,Ash
 Global NTF_457Flame
 
 Global NTF_RadioCHN
-Global KEY_RADIOTOGGLE = GetINIInt(gv\OptionFile, "binds", "Radiotoggle key", 20)
+Global KEY_RADIOTOGGLE = IniGetInt(gv\OptionFile, "binds", "Radiotoggle key", 20)
 
 Global NTF_BrokenDoorSFX
 
@@ -247,8 +247,8 @@ NTF_SewerAmbienceStrings[8] = "Tunnels2"
 
 Global NTF_GasMaskBlood
 
-Global GunPitchShift% = GetINIInt(gv\OptionFile, "options", "gun sfx pitch", 1)
-;Global NTF_LQModels% = GetINIInt(gv\OptionFile, "ingame", "lq models")
+Global GunPitchShift% = IniGetInt(gv\OptionFile, "options", "gun sfx pitch", 1)
+;Global NTF_LQModels% = IniGetInt(gv\OptionFile, "ingame", "lq models")
 
 Global NTF_AchvMenuScroll# = 0.0
 ;Global NTF_LangMenuScroll# = 0.0
@@ -275,7 +275,7 @@ Global MeleeSFX
 
 Global IsPlayerSprinting% = False
 
-;Global SFXRelease% = GetINIInt(gv\OptionFile, "options", "sfx release", 1)
+;Global SFXRelease% = IniGetInt(gv\OptionFile, "options", "sfx release", 1)
 
 Global CurrD9341.NPCs
 
@@ -303,7 +303,7 @@ Global WaterParticleTexture%[2]
 
 Global SplashTextSFX% = LoadSound_Strict("SFX\Interact\Typing.ogg")
 
-Global SaveTexturesInVRam = GetINIInt(gv\OptionFile,"options","enable vram",1)
+Global SaveTexturesInVRam = IniGetInt(gv\OptionFile,"options","enable vram",1)
 
 Global EquipmentSFX[2 * 8] ; TODO unusued
 For i = 0 To 7
@@ -335,7 +335,7 @@ Global CKM_Back = 3		;Circle
 Global CKM_Next = 6		;R1
 Global CKM_Prev = 5		;L1
 
-Global FOV% = GetINIInt(gv\OptionFile, "options", "fov", 60)
+Global FOV% = IniGetInt(gv\OptionFile, "options", "fov", 60)
 
 Type CubeMap
 	Field Name$
@@ -765,7 +765,7 @@ Function UpdateRadio()
 		Select NTF_RadioCHN
 			Case 0 ;randomkanava
 				
-			Case 1 ;h�?¤lytyskanava
+			Case 1 ;h�?¤lytyskanava
 				DebugLog RadioState[1] 
 				
 				ResumeChannel(RadioCHN[1])
@@ -1746,20 +1746,20 @@ Function ApplyHitBoxes.HitBox(npctype,npcname$)
 	
 	;If NTF_GameModeFlag=3 And mp_I\PlayState=GAME_CLIENT Then Return
 	
-	For i = 0 To GetINIInt(file$,npcname$,"hitbox_amount")-1
-		htype% = GetINIInt(file$,npcname$,"hitbox"+(i+1)+"_type")
-		bonename$ = GetINIString(file$,npcname$,"hitbox"+(i+1)+"_parent")
+	For i = 0 To IniGetInt(file$,npcname$,"hitbox_amount")-1
+		htype% = IniGetInt(file$,npcname$,"hitbox"+(i+1)+"_type")
+		bonename$ = IniGetString(file$,npcname$,"hitbox"+(i+1)+"_parent")
 		hb\BoneName[i] = bonename
 		;bone% = FindChild(n\obj,bonename$)
 		;If bone% = 0 Then RuntimeError "Error applying hitbox: Bone "+bonename$+" not found for npc "+npcname$
 		If htype = 0
 			hb\HitBox1[i] = CreateCube()
-			scaleX# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleX",1.0)
-			scaleY# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleY",1.0)
-			scaleZ# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleZ",1.0)
-			posX# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posX",0.0)
-			posY# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posY",0.0)
-			posZ# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posZ",0.0)
+			scaleX# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleX",1.0)
+			scaleY# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleY",1.0)
+			scaleZ# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleZ",1.0)
+			posX# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posX",0.0)
+			posY# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posY",0.0)
+			posZ# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posZ",0.0)
 			ScaleEntity hb\HitBox1[i],scaleX,scaleY,scaleZ
 			PositionEntity hb\HitBox1[i],posX,posY,posZ
 			EntityPickMode hb\HitBox1[i],2
@@ -1767,12 +1767,12 @@ Function ApplyHitBoxes.HitBox(npctype,npcname$)
 			HideEntity hb\HitBox1[i]
 		ElseIf htype = 1
 			hb\HitBox2[i] = CreateCube()
-			scaleX# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleX",1.0)
-			scaleY# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleY",1.0)
-			scaleZ# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleZ",1.0)
-			posX# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posX",0.0)
-			posY# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posY",0.0)
-			posZ# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posZ",0.0)
+			scaleX# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleX",1.0)
+			scaleY# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleY",1.0)
+			scaleZ# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleZ",1.0)
+			posX# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posX",0.0)
+			posY# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posY",0.0)
+			posZ# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posZ",0.0)
 			ScaleEntity hb\HitBox2[i],scaleX,scaleY,scaleZ
 			PositionEntity hb\HitBox2[i],posX,posY,posZ
 			EntityPickMode hb\HitBox2[i],2
@@ -1780,12 +1780,12 @@ Function ApplyHitBoxes.HitBox(npctype,npcname$)
 			HideEntity hb\HitBox2[i]
 		Else
 			hb\HitBox3[i] = CreateCube()
-			scaleX# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleX",1.0)
-			scaleY# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleY",1.0)
-			scaleZ# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleZ",1.0)
-			posX# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posX",0.0)
-			posY# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posY",0.0)
-			posZ# = GetINIFloat(file$,npcname$,"hitbox"+(i+1)+"_posZ",0.0)
+			scaleX# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleX",1.0)
+			scaleY# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleY",1.0)
+			scaleZ# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_scaleZ",1.0)
+			posX# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posX",0.0)
+			posY# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posY",0.0)
+			posZ# = IniGetFloat(file$,npcname$,"hitbox"+(i+1)+"_posZ",0.0)
 			ScaleEntity hb\HitBox3[i],scaleX,scaleY,scaleZ
 			PositionEntity hb\HitBox3[i],posX,posY,posZ
 			EntityPickMode hb\HitBox3[i],2
@@ -1913,9 +1913,9 @@ Function GetAnimationSequences(n.NPCs,npcname$)
 	Local animstart%,animstop%
 	Local file$ = "Data\NPCBones.ini"
 	
-	For i = 1 To GetINIInt(file$,npcname$,"anim_amount")
-		animstart = GetINIInt(file$,npcname$,"anim"+i+"_start")
-		animstop = GetINIInt(file$,npcname$,"anim"+i+"_stop")
+	For i = 1 To IniGetInt(file$,npcname$,"anim_amount")
+		animstart = IniGetInt(file$,npcname$,"anim"+i+"_start")
+		animstop = IniGetInt(file$,npcname$,"anim"+i+"_stop")
 		ExtractAnimSeq(n\obj,animstart,animstop,0)
 	Next
 	
@@ -1924,7 +1924,7 @@ End Function
 Function GetAnimationSpeed(n.NPCs,npcname$,currsequence%)
 	Local file$ = "Data\NPCBones.ini"
 	
-	Return GetINIFloat(file$,npcname$,"anim"+currsequence%+"_speed",0.5)
+	Return IniGetFloat(file$,npcname$,"anim"+currsequence%+"_speed",0.5)
 End Function
 
 Function ApplyAnimation(n.NPCs,sequence%,speed#,animmode%=1) ;Only works for animations with consistent speed - ENDSHN

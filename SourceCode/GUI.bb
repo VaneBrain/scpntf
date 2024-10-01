@@ -1220,39 +1220,39 @@ Function UpdateGUI()
 						x2 = (SelectedItem\state+1.0)
 						
 						Local iniStr$ = Data294
-						
-						Local loc% = GetINISectionLocation(iniStr, SelectedItem\name)
+
+						Local drink$ = FindSCP294Drink(SelectedItem\name)
 						
 						;Stop
 						
-						strtemp = GetINIString2(iniStr, loc, "message")
+						strtemp = IniGetString(iniStr, drink, "message")
 						If strtemp <> "" Then Msg = strtemp : MsgTimer = 70*6
 						
-						If GetINIInt2(iniStr, loc, "lethal") Lor GetINIInt2(iniStr, loc, "deathtimer") Then 
-							DeathMSG = GetINIString2(iniStr, loc, "deathmessage")
-							If GetINIInt2(iniStr, loc, "lethal") Then Kill()
+						If IniGetInt(iniStr, drink, "lethal") Lor IniGetInt(iniStr, drink, "deathtimer") Then 
+							DeathMSG = IniGetString(iniStr, drink, "deathmessage")
+							If IniGetInt(iniStr, drink, "lethal") Then Kill()
 						EndIf
-						BlurTimer = GetINIInt2(iniStr, loc, "blur")*70;*temp
-						If VomitTimer = 0 Then VomitTimer = GetINIInt2(iniStr, loc, "vomit")
-						CameraShakeTimer = GetINIString2(iniStr, loc, "camerashake")
-						;Injuries = Max(Injuries + GetINIInt2(iniStr, loc, "damage"),0);*temp
-						;Bloodloss = Max(Bloodloss + GetINIInt2(iniStr, loc, "blood loss"),0);*temp
-						DamageSPPlayer(GetINIInt2(iniStr, loc, "damage") * 25.0, True)
-						strtemp =  GetINIString2(iniStr, loc, "sound")
+						BlurTimer = IniGetInt(iniStr, drink, "blur")*70;*temp
+						If VomitTimer = 0 Then VomitTimer = IniGetInt(iniStr, drink, "vomit")
+						CameraShakeTimer = IniGetString(iniStr, drink, "camerashake")
+						;Injuries = Max(Injuries + IniGetInt2(iniStr, loc, "damage"),0);*temp
+						;Bloodloss = Max(Bloodloss + IniGetInt2(iniStr, loc, "blood loss"),0);*temp
+						DamageSPPlayer(IniGetInt(iniStr, drink, "damage") * 25.0, True)
+						strtemp =  IniGetString(iniStr, drink, "sound")
 						If strtemp<>"" Then
 							PlaySound_Strict LoadTempSound(strtemp)
 						EndIf
-						If GetINIInt2(iniStr, loc, "stomachache") Then SCP1025state[3]=1
+						If IniGetInt(iniStr, drink, "stomachache") Then SCP1025state[3]=1
 						
-						DeathTimer=GetINIInt2(iniStr, loc, "deathtimer")*70
+						DeathTimer=IniGetInt(iniStr, drink, "deathtimer")*70
 						
-						BlinkEffect = Float(GetINIString2(iniStr, loc, "blink effect", 1.0))*x2
-						BlinkEffectTimer = Float(GetINIString2(iniStr, loc, "blink effect timer", 1.0))*x2
+						BlinkEffect = Float(IniGetString(iniStr, drink, "blink effect", 1.0))*x2
+						BlinkEffectTimer = Float(IniGetString(iniStr, drink, "blink effect timer", 1.0))*x2
 						
-						StaminaEffect = Float(GetINIString2(iniStr, loc, "stamina effect", 1.0))*x2
-						StaminaEffectTimer = Float(GetINIString2(iniStr, loc, "stamina effect timer", 1.0))*x2
+						StaminaEffect = Float(IniGetString(iniStr, drink, "stamina effect", 1.0))*x2
+						StaminaEffectTimer = Float(IniGetString(iniStr, drink, "stamina effect timer", 1.0))*x2
 						
-						strtemp = GetINIString2(iniStr, loc, "refusemessage")
+						strtemp = IniGetString(iniStr, drink, "refusemessage")
 						If strtemp <> "" Then
 							Msg = strtemp 
 							MsgTimer = 70*6		
@@ -4145,13 +4145,13 @@ Function UpdateMenu()
 ;			
 ;			If AchievementsMenu>0 Then
 ;				If AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS-1)/12.0) Then 
-;					If DrawButton(x+341*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "â?¶", 2) Then
+;					If DrawButton(x+341*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "ï¿½?ï¿½", 2) Then
 ;						AchievementsMenu = AchievementsMenu+1
 ;						ShouldDeleteGadgets=True
 ;					EndIf
 ;				EndIf
 ;				If AchievementsMenu > 1 Then
-;					If DrawButton(x+41*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "â??", 2) Then
+;					If DrawButton(x+41*MenuScale, y + 344*MenuScale, 50*MenuScale, 60*MenuScale, "ï¿½??", 2) Then
 ;						AchievementsMenu = AchievementsMenu-1
 ;						ShouldDeleteGadgets=True
 ;					EndIf

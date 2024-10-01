@@ -18,7 +18,7 @@ Function SaveGame(file$, newzone%=-1)
 	EndIf
 	
 	Local savename$ = Replace(Replace(file, SavePath, ""), "\", "")
-	PutINIValue(gv\OptionFile, "options", "last save", savename)
+	IniWriteString(gv\OptionFile, "options", "last save", savename)
 	m_I\CurrentSave = savename
 	
 	;Save global data in here
@@ -2510,7 +2510,7 @@ Function LoadSaveGames()
 	SaveGameAmount = 0
 	
 	If m_I <> Null And m_I\CurrentSave = "" Then
-		m_I\CurrentSave = GetINIString(gv\OptionFile, "options", "last save")
+		m_I\CurrentSave = IniGetString(gv\OptionFile, "options", "last save")
 	EndIf
 	
 	If FileType(SavePath)=1 Then RuntimeError "Can't create dir "+Chr(34)+SavePath+Chr(34)

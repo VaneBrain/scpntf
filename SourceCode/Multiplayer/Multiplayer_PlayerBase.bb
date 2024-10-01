@@ -188,7 +188,7 @@ Function SwitchPlayerGun(playerID%)
 	;SetAnimTime Players[playerID]\obj_lower,0
 	;SetAnimTime Players[playerID]\obj_upper,0
 	
-	Local bone = FindChild(Players[playerID]\obj_upper,GetINIString("Data\PlayerBones.ini", "Player", "weapon_hand_bonename"))
+	Local bone = FindChild(Players[playerID]\obj_upper,IniGetString("Data\PlayerBones.ini", "Player", "weapon_hand_bonename"))
 	
 	Local gunname$ = ""
 	For g = Each Guns
@@ -200,14 +200,14 @@ Function SwitchPlayerGun(playerID%)
 	Next
 	
 	If gunname <> "" Then
-		Local scale# = GetINIFloat("Data\weapons.ini",gunname,"world scale",0.02) / (0.29 / 2.5)
+		Local scale# = IniGetFloat("Data\weapons.ini",gunname,"world scale",0.02) / (0.29 / 2.5)
 		ScaleEntity Players[playerID]\GunModel,scale,scale,scale
 		
-		VectorString = GetINIString("Data\weapons.ini",gunname,"player_model_offset","")
+		VectorString = IniGetString("Data\weapons.ini",gunname,"player_model_offset","")
 		If VectorString<>"" Then
 			PositionEntity Players[playerID]\GunModel,Piece(VectorString,1,"|"),Piece(VectorString,2,"|"),Piece(VectorString,3,"|")
 		EndIf
-		VectorString = GetINIString("Data\weapons.ini",gunname,"player_model_rotation","")
+		VectorString = IniGetString("Data\weapons.ini",gunname,"player_model_rotation","")
 		If VectorString<>"" Then
 			RotateEntity Players[playerID]\GunModel,Piece(VectorString,1,"|"),Piece(VectorString,2,"|"),Piece(VectorString,3,"|")
 		EndIf
@@ -1237,18 +1237,18 @@ Function ApplyPlayerHitBoxes.HitBox()
 	
 	;If NTF_GameModeFlag=3 And mp_I\PlayState=GAME_CLIENT Then Return
 	
-	For i = 0 To GetINIInt(file$,"Player","hitbox_amount")-1
-		htype% = GetINIInt(file$,"Player","hitbox"+(i+1)+"_type")
-		bonename$ = GetINIString(file$,"Player","hitbox"+(i+1)+"_parent")
+	For i = 0 To IniGetInt(file$,"Player","hitbox_amount")-1
+		htype% = IniGetInt(file$,"Player","hitbox"+(i+1)+"_type")
+		bonename$ = IniGetString(file$,"Player","hitbox"+(i+1)+"_parent")
 		hb\BoneName[i] = bonename
 		If htype = 0
 			hb\HitBox1[i] = CreateCube()
-			scaleX# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleX",1.0)
-			scaleY# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleY",1.0)
-			scaleZ# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleZ",1.0)
-			posX# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posX",0.0)
-			posY# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posY",0.0)
-			posZ# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posZ",0.0)
+			scaleX# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleX",1.0)
+			scaleY# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleY",1.0)
+			scaleZ# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleZ",1.0)
+			posX# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posX",0.0)
+			posY# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posY",0.0)
+			posZ# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posZ",0.0)
 			ScaleEntity hb\HitBox1[i],scaleX,scaleY,scaleZ
 			PositionEntity hb\HitBox1[i],posX,posY,posZ
 			EntityPickMode hb\HitBox1[i],2
@@ -1256,12 +1256,12 @@ Function ApplyPlayerHitBoxes.HitBox()
 			HideEntity hb\HitBox1[i]
 		ElseIf htype = 1
 			hb\HitBox2[i] = CreateCube()
-			scaleX# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleX",1.0)
-			scaleY# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleY",1.0)
-			scaleZ# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleZ",1.0)
-			posX# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posX",0.0)
-			posY# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posY",0.0)
-			posZ# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posZ",0.0)
+			scaleX# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleX",1.0)
+			scaleY# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleY",1.0)
+			scaleZ# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleZ",1.0)
+			posX# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posX",0.0)
+			posY# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posY",0.0)
+			posZ# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posZ",0.0)
 			ScaleEntity hb\HitBox2[i],scaleX,scaleY,scaleZ
 			PositionEntity hb\HitBox2[i],posX,posY,posZ
 			EntityPickMode hb\HitBox2[i],2
@@ -1269,12 +1269,12 @@ Function ApplyPlayerHitBoxes.HitBox()
 			HideEntity hb\HitBox2[i]
 		Else
 			hb\HitBox3[i] = CreateCube()
-			scaleX# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleX",1.0)
-			scaleY# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleY",1.0)
-			scaleZ# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_scaleZ",1.0)
-			posX# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posX",0.0)
-			posY# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posY",0.0)
-			posZ# = GetINIFloat(file$,"Player","hitbox"+(i+1)+"_posZ",0.0)
+			scaleX# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleX",1.0)
+			scaleY# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleY",1.0)
+			scaleZ# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_scaleZ",1.0)
+			posX# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posX",0.0)
+			posY# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posY",0.0)
+			posZ# = IniGetFloat(file$,"Player","hitbox"+(i+1)+"_posZ",0.0)
 			ScaleEntity hb\HitBox3[i],scaleX,scaleY,scaleZ
 			PositionEntity hb\HitBox3[i],posX,posY,posZ
 			EntityPickMode hb\HitBox3[i],2

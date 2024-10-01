@@ -298,7 +298,7 @@ Function UpdateNPCtypeD2(n.NPCs)
 		n\LastSeen = 0.0
 		n\Reload = 0.0
 		If n\Gun <> Null And n\Frame >= v3d\y-0.5 Then
-			bone% = FindChild(n\obj, GetINIString("Data\NPCBones.ini", n\NPCName, "weapon_hand_bonename"))
+			bone% = FindChild(n\obj, IniGetString("Data\NPCBones.ini", n\NPCName, "weapon_hand_bonename"))
 			For g = Each Guns
 				If g\ID = n\Gun\ID Then
 					it = CreateItem(g\DisplayName, g\name, EntityX(bone%, True), EntityY(bone%, True) + 0.025, EntityZ(bone%, True))

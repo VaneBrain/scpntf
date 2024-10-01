@@ -1,6 +1,6 @@
 
 Include "SourceCode\Math.bb"
-Include "SourceCode\IniControler.bb"
+Include "SourceCode\IniController.bb"
 
 Type FixedTimesteps
 	Field tickDuration#
@@ -75,9 +75,20 @@ Function UpdateLang(Lang$)
 		I_Loc\Lang = Lang
 		I_Loc\LangPath = "Localization\" + Lang + "\"
 		I_Loc\Localized = True
-		IniWriteBuffer(I_Loc\LangPath + "Data\local.ini", 1)
+		IniWriteBuffer(I_Loc\LangPath + "Data\local.ini")
+		IniWriteBuffer(I_Loc\LangPath + "Data\SCP-294.ini")
 	EndIf
-	IniWriteBuffer("Data\local.ini", 1)
+	IniWriteBuffer("Data\local.ini")
+	IniWriteBuffer("Data\1499chunks.ini")
+	;IniWriteBuffer("Data\events.ini")
+	IniWriteBuffer("Data\materials.ini")
+	IniWriteBuffer("Data\NPCAnims.ini")
+	IniWriteBuffer("Data\NPCBones.ini")
+	IniWriteBuffer("Data\NPCs.ini")
+	IniWriteBuffer("Data\PlayerBones.ini")
+	IniWriteBuffer("Data\rooms.ini")
+	IniWriteBuffer("Data\SCP-294.ini")
+	IniWriteBuffer("Data\weapons.ini")
 	InitFonts()
 End Function
 
@@ -130,40 +141,40 @@ Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2 = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
-;Global EnableSFXRelease% = GetINIInt(gv\OptionFile, "audio", "sfx release", 1)
+;Global EnableSFXRelease% = IniGetInt(gv\OptionFile, "audio", "sfx release", 1)
 ;Global EnableSFXRelease_Prev% = EnableSFXRelease%
 
-;Global ConsoleEnabled% = Instr(gv\Cmd$,"-console");GetINIInt(gv\OptionFile, "console", "enabled")
+;Global ConsoleEnabled% = Instr(gv\Cmd$,"-console");IniGetInt(gv\OptionFile, "console", "enabled")
 
 ;[Block]
 
-;Global LauncherWidth%= Min(GetINIInt(gv\OptionFile, "launcher", "launcher width", 640), 1024)
-;Global LauncherHeight% = Min(GetINIInt(gv\OptionFile, "launcher", "launcher height", 480), 768)
-;Global LauncherEnabled% = GetINIInt(gv\OptionFile, "launcher", "launcher enabled", 1)
+;Global LauncherWidth%= Min(IniGetInt(gv\OptionFile, "launcher", "launcher width", 640), 1024)
+;Global LauncherHeight% = Min(IniGetInt(gv\OptionFile, "launcher", "launcher height", 480), 768)
+;Global LauncherEnabled% = IniGetInt(gv\OptionFile, "launcher", "launcher enabled", 1)
 Global LauncherIMG%
 
-;Global GraphicWidth% = GetINIInt(gv\OptionFile, "options", "width", DesktopWidth())
-;Global GraphicHeight% = GetINIInt(gv\OptionFile, "options", "height", DesktopHeight())
+;Global GraphicWidth% = IniGetInt(gv\OptionFile, "options", "width", DesktopWidth())
+;Global GraphicHeight% = IniGetInt(gv\OptionFile, "options", "height", DesktopHeight())
 ;Global Depth% = 0
 
 ;Global SelectedGFXMode%
-;Global SelectedGFXDriver% = Max(GetINIInt(gv\OptionFile, "options", "gfx driver", 1), 1)
+;Global SelectedGFXDriver% = Max(IniGetInt(gv\OptionFile, "options", "gfx driver", 1), 1)
 
 Global fresize_image%, fresize_texture%, fresize_texture2%
 Global fresize_cam%
 
-;Global ShowFPS = GetINIInt(gv\OptionFile, "options", "show FPS")
+;Global ShowFPS = IniGetInt(gv\OptionFile, "options", "show FPS")
 
 Global WireframeState
 Global HalloweenTex
 
-;Global DisplayMode% = GetINIInt(gv\OptionFile, "options", "display mode", 1)
+;Global DisplayMode% = IniGetInt(gv\OptionFile, "options", "display mode", 1)
 Global RealGraphicWidth%,RealGraphicHeight%
 Global AspectRatioRatio#
 
-;Global EnableRoomLights% = GetINIInt(gv\OptionFile, "options", "room lights enabled", 1)
+;Global EnableRoomLights% = IniGetInt(gv\OptionFile, "options", "room lights enabled", 1)
 
-;Global TextureDetails% = GetINIInt(gv\OptionFile, "options", "texture details", 3)
+;Global TextureDetails% = IniGetInt(gv\OptionFile, "options", "texture details", 3)
 Global TextureFloat#
 Select opt\TextureDetails%
 	Case 0
@@ -173,8 +184,8 @@ Select opt\TextureDetails%
 	Case 2
 		TextureFloat# = -0.8
 End Select
-;Global ConsoleOpening% = GetINIInt(gv\OptionFile, "console", "auto opening")
-;Global SFXVolume# = GetINIFloat(gv\OptionFile, "audio", "sound volume", 1.0)
+;Global ConsoleOpening% = IniGetInt(gv\OptionFile, "console", "auto opening")
+;Global SFXVolume# = IniGetFloat(gv\OptionFile, "audio", "sound volume", 1.0)
 
 ;Include "SourceCode\Achievements.bb"
 ;Include "SourceCode\Difficulty.bb"
@@ -204,6 +215,7 @@ EndIf
 
 If FileType(I_Loc\LangPath + Data294) = 1 Then
 	Data294 = I_Loc\LangPath + Data294
+	IniWriteBuffer(Data294)
 EndIf
 
 If FileType(I_Loc\LangPath + AchvIni) = 1 Then
@@ -218,15 +230,15 @@ SetBuffer(BackBuffer())
 
 Global CurTime%, PrevTime%, LoopDelay%, FPSfactor#, FPSfactor2#
 
-Global Framelimit% = GetINIInt(gv\OptionFile, "options", "framelimit", 120)
-Global Vsync% = GetINIInt(gv\OptionFile, "options", "vsync")
+Global Framelimit% = IniGetInt(gv\OptionFile, "options", "framelimit", 120)
+Global Vsync% = IniGetInt(gv\OptionFile, "options", "vsync")
 
 Global CurrFrameLimit# = (Framelimit%-29)/100.0
 
 TextureAnisotropic 2^(opt\TextureFiltering+1)
 TextureLodBias TextureFloat#
 
-Global ScreenGamma# = GetINIFloat(gv\OptionFile, "options", "screengamma", 1.0)
+Global ScreenGamma# = IniGetFloat(gv\OptionFile, "options", "screengamma", 1.0)
 
 SeedRnd MilliSecs()
 
@@ -271,17 +283,17 @@ Global mouse_left_limit% = 250 * MenuScale, mouse_right_limit% = opt\GraphicWidt
 Global mouse_top_limit% = 150 * MenuScale, mouse_bottom_limit% = opt\GraphicHeight - mouse_top_limit ; As above.
 Global mouse_x_speed_1#, mouse_y_speed_1#
 
-Global KEY_RIGHT = GetINIInt(gv\OptionFile, "binds", "Right key", 32)
-Global KEY_LEFT = GetINIInt(gv\OptionFile, "binds", "Left key", 30)
-Global KEY_UP = GetINIInt(gv\OptionFile, "binds", "Up key", 17)
-Global KEY_DOWN = GetINIInt(gv\OptionFile, "binds", "Down key", 31)
+Global KEY_RIGHT = IniGetInt(gv\OptionFile, "binds", "Right key", 32)
+Global KEY_LEFT = IniGetInt(gv\OptionFile, "binds", "Left key", 30)
+Global KEY_UP = IniGetInt(gv\OptionFile, "binds", "Up key", 17)
+Global KEY_DOWN = IniGetInt(gv\OptionFile, "binds", "Down key", 31)
 
-Global KEY_BLINK = GetINIInt(gv\OptionFile, "binds", "Blink key", 57)
-Global KEY_SPRINT = GetINIInt(gv\OptionFile, "binds", "Sprint key", 42)
-Global KEY_INV = GetINIInt(gv\OptionFile, "binds", "Inventory key", 15)
-Global KEY_CROUCH = GetINIInt(gv\OptionFile, "binds", "Crouch key", 29)
-Global KEY_SAVE = GetINIInt(gv\OptionFile, "binds", "Save key", 63)
-Global KEY_CONSOLE = GetINIInt(gv\OptionFile, "binds", "Console key", 61)
+Global KEY_BLINK = IniGetInt(gv\OptionFile, "binds", "Blink key", 57)
+Global KEY_SPRINT = IniGetInt(gv\OptionFile, "binds", "Sprint key", 42)
+Global KEY_INV = IniGetInt(gv\OptionFile, "binds", "Inventory key", 15)
+Global KEY_CROUCH = IniGetInt(gv\OptionFile, "binds", "Crouch key", 29)
+Global KEY_SAVE = IniGetInt(gv\OptionFile, "binds", "Save key", 63)
+Global KEY_CONSOLE = IniGetInt(gv\OptionFile, "binds", "Console key", 61)
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
@@ -324,7 +336,7 @@ Global PlayerZone%, PlayerRoom.Rooms
 
 Global GrabbedEntity%
 
-Global InvertMouse% = GetINIInt(gv\OptionFile, "options", "invert mouse y")
+Global InvertMouse% = IniGetInt(gv\OptionFile, "options", "invert mouse y")
 Global MouseHit1%, MouseDown1%, MouseHit2%, MouseDown2%, DoubleClick%, LastMouseHit1%, MouseUp1%
 
 Global GodMode%, NoClip%, NoClipSpeed# = 2.0
@@ -408,18 +420,18 @@ Global BlurVolume#, BlurTimer#
 
 Global LightBlink#, LightFlash#
 
-Global BumpEnabled% = GetINIInt(gv\OptionFile, "options", "bump mapping enabled", 1)
-Global HUDenabled% = GetINIInt(gv\OptionFile, "options", "HUD enabled", 1)
+Global BumpEnabled% = IniGetInt(gv\OptionFile, "options", "bump mapping enabled", 1)
+Global HUDenabled% = IniGetInt(gv\OptionFile, "options", "HUD enabled", 1)
 
 Global Camera%, CameraShake#, CurrCameraZoom#
 
-Global Brightness% = GetINIFloat(gv\OptionFile, "options", "brightness", 20)
-Global CameraFogNear# = GetINIFloat(gv\OptionFile, "options", "camera fog near", 0.5)
-Global CameraFogFar# = GetINIFloat(gv\OptionFile, "options", "camera fog far", 6.0)
+Global Brightness% = IniGetFloat(gv\OptionFile, "options", "brightness", 20)
+Global CameraFogNear# = IniGetFloat(gv\OptionFile, "options", "camera fog near", 0.5)
+Global CameraFogFar# = IniGetFloat(gv\OptionFile, "options", "camera fog far", 6.0)
 
 Global StoredCameraFogFar# = CameraFogFar
 
-Global MouseSens# = GetINIFloat(gv\OptionFile, "options", "mouse sensitivity")
+Global MouseSens# = IniGetFloat(gv\OptionFile, "options", "mouse sensitivity")
 
 Include "SourceCode\dreamfilter.bb"
 
@@ -476,7 +488,7 @@ Music[37] = "Multiplayer\It_Watches"
 Music[38] = "Suspense"
 Music[39] = "SaveMeFrom"
 
-;Global MusicVolume# = GetINIFloat(gv\OptionFile, "audio", "music volume", 0.5)
+;Global MusicVolume# = IniGetFloat(gv\OptionFile, "audio", "music volume", 0.5)
 ;Global MusicCHN% = PlaySound_Strict(Music[2])
 
 Global MusicCHN
@@ -632,8 +644,8 @@ MaskImage NVGImages,255,0,255
 Global Wearing1499% = False
 Global AmbientLightRoomTex%, AmbientLightRoomVal%
 
-Global EnableUserTracks% = GetINIInt(gv\OptionFile, "audio", "enable user tracks")
-Global UserTrackMode% = GetINIInt(gv\OptionFile, "audio", "user track setting")
+Global EnableUserTracks% = IniGetInt(gv\OptionFile, "audio", "enable user tracks")
+Global UserTrackMode% = IniGetInt(gv\OptionFile, "audio", "user track setting")
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
 Global UserTrackName$[64]
@@ -663,7 +675,7 @@ Global room2gw_brokendoor% = False
 Global room2gw_x# = 0.0
 Global room2gw_z# = 0.0
 
-Global ParticleAmount% = GetINIInt(gv\OptionFile,"options","particle amount", 2)
+Global ParticleAmount% = IniGetInt(gv\OptionFile,"options","particle amount", 2)
 
 Global NavImages%[5]
 For i = 0 To 3
@@ -3223,9 +3235,9 @@ Function LoadEntities()
 	
 	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
 	MaskImage(Panel294, 255,0,255)
-	Brightness% = GetINIFloat(gv\OptionFile, "options", "brightness", 20)
-	CameraFogNear# = GetINIFloat(gv\OptionFile, "options", "camera fog near", 0.5)
-	CameraFogFar# = GetINIFloat(gv\OptionFile, "options", "camera fog far", 6.0)
+	Brightness% = IniGetFloat(gv\OptionFile, "options", "brightness", 20)
+	CameraFogNear# = IniGetFloat(gv\OptionFile, "options", "camera fog near", 0.5)
+	CameraFogFar# = IniGetFloat(gv\OptionFile, "options", "camera fog far", 6.0)
 	StoredCameraFogFar# = CameraFogFar
 	
 	;TextureLodBias
@@ -3247,7 +3259,7 @@ Function LoadEntities()
 	CameraRange(Camera, 0.01, CameraFogFar)
 	CameraFogMode (Camera, 1)
 	CameraFogRange (Camera, CameraFogNear, CameraFogFar)
-	CameraFogColor (Camera, GetINIInt(gv\OptionFile, "options", "fog r"), GetINIInt(gv\OptionFile, "options", "fog g"), GetINIInt(gv\OptionFile, "options", "fog b"))
+	CameraFogColor (Camera, IniGetInt(gv\OptionFile, "options", "fog r"), IniGetInt(gv\OptionFile, "options", "fog g"), IniGetInt(gv\OptionFile, "options", "fog b"))
 	AmbientLight Brightness, Brightness, Brightness
 	
 	m_I\Cam = CreateCamera(Camera)
@@ -4146,7 +4158,7 @@ Function NullGame(nomenuload%=False,playbuttonsfx%=True)
 				entry = PlayerRoomName
 			EndIf
 		EndIf
-		PutINIValue(gv\OptionFile,"options","progress",entry)
+		IniWriteString(gv\OptionFile,"options","progress",entry)
 		InitConsole(2)
 		Delete Each Menu3DInstance
 		Load3DMenu(entry)
@@ -4835,24 +4847,24 @@ Function Use294()
 					Input294 = Right(Input294, Len(Input294)-9)
 				EndIf
 				
-				If Input294<>""
-					Local loc% = GetINISectionLocation(Data294, Input294)
+				If Input294 <> ""
+					Local drink$ = FindSCP294Drink(Input294)
 				EndIf
 				
-				If loc > 0 Then
-					strtemp$ = GetINIString2(Data294, loc, "dispensesound")
+				If drink <> "Null" Then
+					strtemp$ = IniGetString(Data294, drink, "dispensesound")
 					If strtemp="" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict (LoadTempSound("SFX\SCP\294\dispense1.ogg"))
 					Else
 						PlayerRoom\SoundCHN = PlaySound_Strict (LoadTempSound(strtemp))
 					EndIf
 					
-					If GetINIInt2(Data294, loc, "explosion")=True Then 
+					If IniGetInt(Data294, drink, "explosion")=True Then 
 						ExplosionTimer = 135
-						DeathMSG = GetINIString2(Data294, loc, "deathmessage")
+						DeathMSG = IniGetString(Data294, drink, "deathmessage")
 					EndIf
 					
-					strtemp$ = GetINIString2(Data294, loc, "color")
+					strtemp$ = IniGetString(Data294, drink, "color")
 					
 					sep1 = Instr(strtemp, ",", 1)
 					sep2 = Instr(strtemp, ",", sep1+1)
@@ -4860,8 +4872,8 @@ Function Use294()
 					g% = Trim(Mid(strtemp, sep1+1, sep2-sep1-1))
 					b% = Trim(Right(strtemp, Len(strtemp)-sep2))
 					
-					alpha# = Float(GetINIString2(Data294, loc, "alpha",1.0))
-					glow = GetINIInt2(Data294, loc, "glow")
+					alpha# = Float(IniGetString(Data294, drink, "alpha",1.0))
+					glow = IniGetInt(Data294, drink, "glow")
 					;If alpha = 0 Then alpha = 1.0
 					If glow Then alpha = -alpha
 					
@@ -5277,371 +5289,62 @@ Include "SourceCode/Decals.bb"
 
 ;--------------------------------------- INI-functions -------------------------------------------------------
 
-Type INIFile
-	Field name$
-	Field bank%
-	Field bankOffset% = 0
-	Field size%
-End Type
-
-Function ReadINILine$(file.INIFile)
-	Local rdbyte%
-	Local firstbyte% = True
-	Local offset% = file\bankOffset
-	Local bank% = file\bank
-	Local retStr$ = ""
-	rdbyte = PeekByte(bank,offset)
-	While ((firstbyte) Lor ((rdbyte<>13) And (rdbyte<>10))) And (offset<file\size)
-		rdbyte = PeekByte(bank,offset)
-		If ((rdbyte<>13) And (rdbyte<>10)) Then
-			firstbyte = False
-			retStr=retStr+Chr(rdbyte)
-		EndIf
-		offset=offset+1
-	Wend
-	file\bankOffset = offset
-	Return retStr
-End Function
-
-Function UpdateINIFile$(filename$)
-	Local file.INIFile = Null
-	For k.INIFile = Each INIFile
-		If k\name = Lower(filename) Then
-			file = k
-			Exit
-		EndIf
-	Next
-	
-	If file=Null Then Return
-	
-	If file\bank<>0 Then FreeBank file\bank
-	Local f% = ReadFile(file\name)
-	Local fleSize% = 1
-	While fleSize<FileSize(file\name)
-		fleSize=fleSize*2
-	Wend
-	file\bank = CreateBank(fleSize)
-	file\size = 0
-	While Not Eof(f)
-		PokeByte(file\bank,file\size,ReadByte(f))
-		file\size=file\size+1
-	Wend
-	CloseFile(f)
-End Function
-
-Function DeleteINIFile(filename$)
-	If FileType(filename) <> 0 Then
-		Local file.INIFile = Null
-		For k.INIFile = Each INIFile
-			If k\name = Lower(filename) Then
-				file = k
-				Exit
-			EndIf
-		Next
-		If file <> Null Then
-			FreeBank file\bank
-			DebugLog "FREED BANK FOR "+filename
-			Delete file
-			Return
-		EndIf
-	EndIf
-	DebugLog "COULD NOT FREE BANK FOR "+filename+": INI FILE IS NOT LOADED"
-End Function
-
-Function GetINIString$(file$, section$, parameter$, defaultvalue$="")
-	Local TemporaryString$ = ""
-	
-	Local lfile.INIFile = Null
-	For k.INIFile = Each INIFile
-		If k\name = Lower(file) Then
-			lfile = k
-			Exit
-		EndIf
-	Next
-	
-	If lfile = Null Then
-		DebugLog "CREATE BANK FOR "+file
-		lfile = New INIFile
-		lfile\name = Lower(file)
-		lfile\bank = 0
-		UpdateINIFile(lfile\name)
-	EndIf
-	
-	lfile\bankOffset = 0
-	
-	section = Lower(section)
-	
-	;While Not Eof(f)
-	While lfile\bankOffset<lfile\size
-		Local strtemp$ = ReadINILine(lfile)
-		If Left(strtemp,1) = "[" Then
-			strtemp$ = Lower(strtemp)
-			If Mid(strtemp, 2, Len(strtemp)-2)=section Then
-				Repeat
-					TemporaryString = ReadINILine(lfile)
-					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(parameter) Then
-						;CloseFile f
-						Return Trim( Right(TemporaryString,Len(TemporaryString)-Instr(TemporaryString,"=")) )
-					EndIf
-				Until (Left(TemporaryString, 1) = "[") Lor (lfile\bankOffset>=lfile\size)
-				
-				;CloseFile f
-				Return defaultvalue
-			EndIf
-		EndIf
-	Wend
-	
-	Return defaultvalue
-End Function
-
-Function GetINIInt%(file$, section$, parameter$, defaultvalue% = 0)
-	Local txt$ = GetINIString(file$, section$, parameter$, defaultvalue)
-	If Lower(txt) = "true" Then
-		Return 1
-	ElseIf Lower(txt) = "false"
-		Return 0
-	Else
-		Return Int(txt)
-	EndIf
-End Function
-
-Function GetINIFloat#(file$, section$, parameter$, defaultvalue# = 0.0)
-	Return Float(GetINIString(file$, section$, parameter$, defaultvalue))
-End Function
-
-
-Function GetINIString2$(file$, start%, parameter$, defaultvalue$="")
-	Local TemporaryString$ = ""
-	Local f% = ReadFile(file)
-	
-	Local n%=0
-	While Not Eof(f)
-		Local strtemp$ = ReadLine(f)
-		n=n+1
-		If n=start Then 
-			Repeat
-				TemporaryString = ReadLine(f)
-				If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(parameter) Then
-					CloseFile f
-					Return Trim( Right(TemporaryString,Len(TemporaryString)-Instr(TemporaryString,"=")) )
-				EndIf
-			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
-			CloseFile f
-			Return defaultvalue
-		EndIf
-	Wend
-	
-	CloseFile f	
-	
-	Return defaultvalue
-End Function
-
-Function GetINIInt2%(file$, start%, parameter$, defaultvalue$="")
-	Local txt$ = GetINIString2(file$, start%, parameter$, defaultvalue$)
-	If Lower(txt) = "true" Then
-		Return 1
-	ElseIf Lower(txt) = "false"
-		Return 0
-	Else
-		Return Int(txt)
-	EndIf
-End Function
-
-
-Function GetINISectionLocation%(file$, section$)
-	Local Temp%
-	Local f% = ReadFile(file)
-	
-	section = Lower(section)
-	
-	Local n%=0
-	While Not Eof(f)
-		Local strtemp$ = ReadLine(f)
-		n=n+1
-		If Left(strtemp,1) = "[" Then
-			strtemp$ = Lower(strtemp)
-			Temp = Instr(strtemp, section)
-			If Temp>0 Then
-				If (Mid(strtemp, Temp-1, 1)="[" Lor Mid(strtemp, Temp-1, 1)="|") And (Mid(strtemp, Temp+Len(section), 1)="]" Lor Mid(strtemp, Temp+Len(section), 1)="|") Then
-					CloseFile f
-					Return n
-				EndIf
-			EndIf
-		EndIf
-	Wend
-	
-	CloseFile f
-End Function
-
-
-
-Function PutINIValue%(file$, INI_sSection$, INI_sKey$, INI_sValue$)
-	
-	; Returns: True (Success) Lor False (Failed)
-	
-	INI_sSection = "[" + Trim$(INI_sSection) + "]"
-	Local INI_sUpperSection$ = Upper$(INI_sSection)
-	INI_sKey = Trim$(INI_sKey)
-	INI_sValue = Trim$(INI_sValue)
-	Local INI_sFilename$ = file$
-	
-	; Retrieve the INI Data (If it exists)
-	
-	Local INI_sContents$ = INI_FileToString(INI_sFilename)
-	
-		; (Re)Create the INI file updating/adding the SECTION, KEY And VALUE
-	
-	Local INI_bWrittenKey% = False
-	Local INI_bSectionFound% = False
-	Local INI_sCurrentSection$ = ""
-	
-	Local INI_lFileHandle% = WriteFile(INI_sFilename)
-	If INI_lFileHandle = 0 Then Return False ; Create file failed!
-	
-	Local INI_lOldPos% = 1
-	Local INI_lPos% = Instr(INI_sContents, Chr$(0))
-	
-	While (INI_lPos <> 0)
-		
-		Local INI_sTemp$ = Mid$(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos))
-		
-		If (INI_sTemp <> "") Then
-			
-			If Left$(INI_sTemp, 1) = "[" And Right$(INI_sTemp, 1) = "]" Then
-				
-					; Process SECTION
-				
-				If (INI_sCurrentSection = INI_sUpperSection) And (INI_bWrittenKey = False) Then
-					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				End If
-				INI_sCurrentSection = Upper$(INI_CreateSection(INI_lFileHandle, INI_sTemp))
-				If (INI_sCurrentSection = INI_sUpperSection) Then INI_bSectionFound = True
-				
-			Else
-				If Left(INI_sTemp, 1) = ":" Then
-					WriteLine INI_lFileHandle, INI_sTemp
-				Else
-						; KEY=VALUE				
-					Local lEqualsPos% = Instr(INI_sTemp, "=")
-					If (lEqualsPos <> 0) Then
-						If (INI_sCurrentSection = INI_sUpperSection) And (Upper$(Trim$(Left$(INI_sTemp, (lEqualsPos - 1)))) = Upper$(INI_sKey)) Then
-							If (INI_sValue <> "") Then INI_CreateKey INI_lFileHandle, INI_sKey, INI_sValue
-							INI_bWrittenKey = True
-						Else
-							WriteLine INI_lFileHandle, INI_sTemp
-						End If
-					End If
-				EndIf
-				
-			End If
-			
-		End If
-		
-			; Move through the INI file...
-		
-		INI_lOldPos = INI_lPos + 1
-		INI_lPos% = Instr(INI_sContents, Chr$(0), INI_lOldPos)
-		
-	Wend
-	
-		; KEY wasn;t found in the INI file - Append a New SECTION If required And create our KEY=VALUE Line
-	
-	If (INI_bWrittenKey = False) Then
-		If (INI_bSectionFound = False) Then INI_CreateSection INI_lFileHandle, INI_sSection
-		INI_CreateKey INI_lFileHandle, INI_sKey, INI_sValue
-	End If
-	
-	CloseFile INI_lFileHandle
-	
-	Return True ; Success
-	
-End Function
-
-Function INI_FileToString$(INI_sFilename$)
-	
-	Local INI_sString$ = ""
-	Local INI_lFileHandle%= ReadFile(INI_sFilename)
-	If INI_lFileHandle <> 0 Then
-		While Not(Eof(INI_lFileHandle))
-			INI_sString = INI_sString + ReadLine$(INI_lFileHandle) + Chr$(0)
-		Wend
-		CloseFile INI_lFileHandle
-	End If
-	Return INI_sString
-	
-End Function
-
-Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine INI_lFileHandle, "" ; Blank Line between sections
-	WriteLine INI_lFileHandle, INI_sNewSection
-	Return INI_sNewSection
-	
-End Function
-
-Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
-	
-	WriteLine INI_lFileHandle, INI_sKey + " = " + INI_sValue
-	Return True
-	
-End Function
-
 ;Save options to .ini.
 Function SaveOptionsINI()
 	
-	PutINIValue(gv\OptionFile, "options", "mouse sensitivity", MouseSens)
-	PutINIValue(gv\OptionFile, "options", "mouse smoothing", opt\MouseSmooth)
-	PutINIValue(gv\OptionFile, "options", "invert mouse y", InvertMouse)
-	PutINIValue(gv\OptionFile, "options", "hold to aim", opt\HoldToAim)
-	PutINIValue(gv\OptionFile, "options", "hold to crouch", opt\HoldToCrouch)
-	PutINIValue(gv\OptionFile, "options", "bump mapping enabled", BumpEnabled)			
-	PutINIValue(gv\OptionFile, "options", "HUD enabled", HUDenabled)
-	PutINIValue(gv\OptionFile, "options", "screengamma", ScreenGamma)
-	PutINIValue(gv\OptionFile, "options", "vsync", Vsync)
-	PutINIValue(gv\OptionFile, "options", "show FPS", opt\ShowFPS)
-	PutINIValue(gv\OptionFile, "options", "framelimit", Framelimit%)
-	PutINIValue(gv\OptionFile, "options", "achievement popup enabled", AchvMSGenabled%)
-	PutINIValue(gv\OptionFile, "options", "room lights enabled", opt\EnableRoomLights%)
-	PutINIValue(gv\OptionFile, "options", "texture details", opt\TextureDetails%)
-	PutINIValue(gv\OptionFile, "options", "texture filtering", opt\TextureFiltering%)
-	PutINIValue(gv\OptionFile, "console", "enabled", opt\ConsoleEnabled%)
-	PutINIValue(gv\OptionFile, "console", "auto opening", opt\ConsoleOpening%)
-	PutINIValue(gv\OptionFile, "options", "particle amount", ParticleAmount)
-	PutINIValue(gv\OptionFile, "options", "enable vram", SaveTexturesInVRam)
-	PutINIValue(gv\OptionFile, "options", "cubemaps", opt\RenderCubeMapMode)
+	IniWriteString(gv\OptionFile, "options", "mouse sensitivity", MouseSens)
+	IniWriteString(gv\OptionFile, "options", "mouse smoothing", opt\MouseSmooth)
+	IniWriteString(gv\OptionFile, "options", "invert mouse y", InvertMouse)
+	IniWriteString(gv\OptionFile, "options", "hold to aim", opt\HoldToAim)
+	IniWriteString(gv\OptionFile, "options", "hold to crouch", opt\HoldToCrouch)
+	IniWriteString(gv\OptionFile, "options", "bump mapping enabled", BumpEnabled)			
+	IniWriteString(gv\OptionFile, "options", "HUD enabled", HUDenabled)
+	IniWriteString(gv\OptionFile, "options", "screengamma", ScreenGamma)
+	IniWriteString(gv\OptionFile, "options", "vsync", Vsync)
+	IniWriteString(gv\OptionFile, "options", "show FPS", opt\ShowFPS)
+	IniWriteString(gv\OptionFile, "options", "framelimit", Framelimit%)
+	IniWriteString(gv\OptionFile, "options", "achievement popup enabled", AchvMSGenabled%)
+	IniWriteString(gv\OptionFile, "options", "room lights enabled", opt\EnableRoomLights%)
+	IniWriteString(gv\OptionFile, "options", "texture details", opt\TextureDetails%)
+	IniWriteString(gv\OptionFile, "options", "texture filtering", opt\TextureFiltering%)
+	IniWriteString(gv\OptionFile, "console", "enabled", opt\ConsoleEnabled%)
+	IniWriteString(gv\OptionFile, "console", "auto opening", opt\ConsoleOpening%)
+	IniWriteString(gv\OptionFile, "options", "particle amount", ParticleAmount)
+	IniWriteString(gv\OptionFile, "options", "enable vram", SaveTexturesInVRam)
+	IniWriteString(gv\OptionFile, "options", "cubemaps", opt\RenderCubeMapMode)
 	
-	PutINIValue(gv\OptionFile, "audio", "master volume", opt\MasterVol)
-	PutINIValue(gv\OptionFile, "audio", "music volume", opt\MusicVol)
-	PutINIValue(gv\OptionFile, "audio", "sound volume", opt\SFXVolume)
-	PutINIValue(gv\OptionFile, "audio", "voice volume", opt\VoiceVol)
-	PutINIValue(gv\OptionFile, "audio", "sfx release", opt\EnableSFXRelease)
-	PutINIValue(gv\OptionFile, "audio", "enable user tracks", EnableUserTracks%)
-	PutINIValue(gv\OptionFile, "audio", "user track setting", UserTrackMode%)
+	IniWriteString(gv\OptionFile, "audio", "master volume", opt\MasterVol)
+	IniWriteString(gv\OptionFile, "audio", "music volume", opt\MusicVol)
+	IniWriteString(gv\OptionFile, "audio", "sound volume", opt\SFXVolume)
+	IniWriteString(gv\OptionFile, "audio", "voice volume", opt\VoiceVol)
+	IniWriteString(gv\OptionFile, "audio", "sfx release", opt\EnableSFXRelease)
+	IniWriteString(gv\OptionFile, "audio", "enable user tracks", EnableUserTracks%)
+	IniWriteString(gv\OptionFile, "audio", "user track setting", UserTrackMode%)
 	
-	PutINIValue(gv\OptionFile, "binds", "Right key", KEY_RIGHT)
-	PutINIValue(gv\OptionFile, "binds", "Left key", KEY_LEFT)
-	PutINIValue(gv\OptionFile, "binds", "Up key", KEY_UP)
-	PutINIValue(gv\OptionFile, "binds", "Down key", KEY_DOWN)
-	PutINIValue(gv\OptionFile, "binds", "Blink key", KEY_BLINK)
-	PutINIValue(gv\OptionFile, "binds", "Sprint key", KEY_SPRINT)
-	PutINIValue(gv\OptionFile, "binds", "Inventory key", KEY_INV)
-	PutINIValue(gv\OptionFile, "binds", "Crouch key", KEY_CROUCH)
-	PutINIValue(gv\OptionFile, "binds", "Save key", KEY_SAVE)
-	PutINIValue(gv\OptionFile, "binds", "Console key", KEY_CONSOLE)
+	IniWriteString(gv\OptionFile, "binds", "Right key", KEY_RIGHT)
+	IniWriteString(gv\OptionFile, "binds", "Left key", KEY_LEFT)
+	IniWriteString(gv\OptionFile, "binds", "Up key", KEY_UP)
+	IniWriteString(gv\OptionFile, "binds", "Down key", KEY_DOWN)
+	IniWriteString(gv\OptionFile, "binds", "Blink key", KEY_BLINK)
+	IniWriteString(gv\OptionFile, "binds", "Sprint key", KEY_SPRINT)
+	IniWriteString(gv\OptionFile, "binds", "Inventory key", KEY_INV)
+	IniWriteString(gv\OptionFile, "binds", "Crouch key", KEY_CROUCH)
+	IniWriteString(gv\OptionFile, "binds", "Save key", KEY_SAVE)
+	IniWriteString(gv\OptionFile, "binds", "Console key", KEY_CONSOLE)
 	
 	;NTF mod options
-	PutINIValue(gv\OptionFile, "binds", "Reload key", KEY_RELOAD)
-	;PutINIValue(gv\OptionFile, "binds", "Chat key", KEY_CHAT)
-	PutINIValue(gv\OptionFile, "binds", "Holstergun key", KEY_HOLSTERGUN)
-	PutINIValue(gv\OptionFile, "binds", "Radiotoggle key", KEY_RADIOTOGGLE)
-	PutINIValue(gv\OptionFile, "binds", "Use key", KEY_USE)
-	PutINIValue(gv\OptionFile, "options", "fov", FOV)
-	;PutINIValue(gv\OptionFile, "options", "pack", "English") TODO
-	PutINIValue(gv\OptionFile, "options", "show disclaimers", opt\ShowDisclaimers)
+	IniWriteString(gv\OptionFile, "binds", "Reload key", KEY_RELOAD)
+	;IniWriteString(gv\OptionFile, "binds", "Chat key", KEY_CHAT)
+	IniWriteString(gv\OptionFile, "binds", "Holstergun key", KEY_HOLSTERGUN)
+	IniWriteString(gv\OptionFile, "binds", "Radiotoggle key", KEY_RADIOTOGGLE)
+	IniWriteString(gv\OptionFile, "binds", "Use key", KEY_USE)
+	IniWriteString(gv\OptionFile, "options", "fov", FOV)
+	;IniWriteString(gv\OptionFile, "options", "pack", "English") TODO
+	IniWriteString(gv\OptionFile, "options", "show disclaimers", opt\ShowDisclaimers)
 	SaveController()
 	SaveKeyBinds()
 	
-	PutINIValue(gv\OptionFile, "game options", "game mode", gopt\SingleplayerGameMode)
+	IniWriteString(gv\OptionFile, "game options", "game mode", gopt\SingleplayerGameMode)
 	
 End Function
 
@@ -6105,18 +5808,18 @@ End Function
 Function InitFonts()
 	Local txt$
 	
-	fo\Font[Font_Default] = LoadFont("GFX\font\Courier New.ttf", Int(16 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Default_Medium] = LoadFont("GFX\font\Courier New.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Default_Large] = LoadFont("GFX\font\Courier New.ttf", Int(46 * (opt\GraphicHeight / 1024.0))) ;TODO make this use a bold font
-	fo\Font[Font_Menu_Small] = LoadFont("GFX\font\Capture It.ttf",Int(23 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Menu_Medium] = LoadFont("GFX\font\Capture It.ttf",Int(42 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Menu] = LoadFont("GFX\font\Capture It.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Digital_Small] = LoadFont("GFX\font\DS-Digital.ttf", Int(20 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Digital_Medium] = LoadFont("GFX\font\DS-Digital.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Digital_Large] = LoadFont("GFX\font\DS-Digital.ttf", Int(58 * (opt\GraphicHeight / 1024.0)))
-	fo\Font[Font_Journal] = LoadFont("GFX\font\Journal.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Default] = LoadFont_Strict("GFX\font\Courier New.ttf", Int(16 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Default_Medium] = LoadFont_Strict("GFX\font\Courier New.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Default_Large] = LoadFont_Strict("GFX\font\Courier New.ttf", Int(46 * (opt\GraphicHeight / 1024.0))) ;TODO make this use a bold font
+	fo\Font[Font_Menu_Small] = LoadFont_Strict("GFX\font\Capture It.ttf",Int(23 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Menu_Medium] = LoadFont_Strict("GFX\font\Capture It.ttf",Int(42 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Menu] = LoadFont_Strict("GFX\font\Capture It.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Digital_Small] = LoadFont_Strict("GFX\font\DS-Digital.ttf", Int(20 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Digital_Medium] = LoadFont_Strict("GFX\font\DS-Digital.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Digital_Large] = LoadFont_Strict("GFX\font\DS-Digital.ttf", Int(58 * (opt\GraphicHeight / 1024.0)))
+	fo\Font[Font_Journal] = LoadFont_Strict("GFX\font\Journal.ttf", Int(56 * (opt\GraphicHeight / 1024.0)))
 	
-	fo\ConsoleFont% = LoadFont("GFX\font\Minimal5x7.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
+	fo\ConsoleFont% = LoadFont_Strict("GFX\font\Minimal5x7.ttf", Int(28 * (opt\GraphicHeight / 1024.0)))
 	
 	SetFont fo\Font[Font_Menu]
 	
@@ -6160,7 +5863,7 @@ End Function
 Function PlayStartupVideos()
 	CatchErrors("PlayStartupVideos()")
 	
-	If GetINIInt(gv\OptionFile,"options","play startup video",1)=0 Then Return
+	If IniGetInt(gv\OptionFile,"options","play startup video",1)=0 Then Return
 	
 	HidePointer()
 	
@@ -6188,7 +5891,7 @@ Function PlayStartupVideos()
 		SplashScreenVideo = BlitzMovie_OpenD3D(moviefile$+".wmv", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
 			
 		If SplashScreenVideo = 0 Then
-			PutINIValue(gv\OptionFile, "options", "play startup video", "false")
+			IniWriteString(gv\OptionFile, "options", "play startup video", "false")
 			Return
 		EndIf
 		

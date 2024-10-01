@@ -38,16 +38,16 @@ Function InitLoadingScreens(filename$)
 			
 			ls\title = TemporaryString
 			For i = 0 To (LOADINGSCREEN_MAX_IMG-1)
-				ls\imgpath[i] = GetINIString(file, TemporaryString, "image"+(i+1))
+				ls\imgpath[i] = IniGetString(file, TemporaryString, "image"+(i+1))
 				If ls\imgpath[i]<> "" Then ls\imgamount=ls\imgamount+1
 			Next
 			
 			For i = 0 To (LOADINGSCREEN_MAX_TXT-1)
-				ls\txt[i] = GetINIString(file, TemporaryString, "text"+(i+1))
+				ls\txt[i] = IniGetString(file, TemporaryString, "text"+(i+1))
 				If ls\txt[i]<> "" Then ls\txtamount=ls\txtamount+1
 			Next
 			
-			ls\noAuto = GetINIInt(file, TemporaryString, "disable auto selection")
+			ls\noAuto = IniGetInt(file, TemporaryString, "disable auto selection")
 		EndIf
 	Wend
 	

@@ -293,11 +293,11 @@ Function InitMultiplayer()
 	mp_O.MultiplayerOptions = New MultiplayerOptions
 	
 	mp_O\PlayerName = Steam_GetPlayerName()
-	mp_O\MaxPlayers = GetINIInt(gv\OptionFile,"server","max players",4)
-	mp_O\TimeOut = GetINIInt(gv\OptionFile,"server","timeout",5)
-	mp_O\LocalServer = GetINIInt(gv\OptionFile,"server","local",0)
-	mp_O\ServerName = GetINIString(gv\OptionFile,"server","name")
-	mp_O\Password = GetINIString(gv\OptionFile,"server","password")
+	mp_O\MaxPlayers = IniGetInt(gv\OptionFile,"server","max players",4)
+	mp_O\TimeOut = IniGetInt(gv\OptionFile,"server","timeout",5)
+	mp_O\LocalServer = IniGetInt(gv\OptionFile,"server","local",0)
+	mp_O\ServerName = IniGetString(gv\OptionFile,"server","name")
+	mp_O\Password = IniGetString(gv\OptionFile,"server","password")
 	mp_O\BanFile = GetEnv("AppData")+"\scpntf\server_bans.txt"
 	ReadBanList()
 	
@@ -736,20 +736,20 @@ End Function
 Function SaveMPOptions()
 	Local mgm.MultiplayerGameMode
 	
-	PutINIValue(gv\OptionFile,"server","max players",mp_O\MaxPlayers)
-	PutINIValue(gv\OptionFile,"server","timeout",mp_O\TimeOut)
-	PutINIValue(gv\OptionFile,"server","local",mp_O\LocalServer)
-	PutINIValue(gv\OptionFile,"server","name",mp_O\ServerName)
-	PutINIValue(gv\OptionFile,"server","password",mp_O\Password)
-	PutINIValue(gv\OptionFile,"server","map",mp_O\MapInList\Name)
-	PutINIValue(gv\OptionFile,"server","gamemode",mp_O\Gamemode\name)
+	IniWriteString(gv\OptionFile,"server","max players",mp_O\MaxPlayers)
+	IniWriteString(gv\OptionFile,"server","timeout",mp_O\TimeOut)
+	IniWriteString(gv\OptionFile,"server","local",mp_O\LocalServer)
+	IniWriteString(gv\OptionFile,"server","name",mp_O\ServerName)
+	IniWriteString(gv\OptionFile,"server","password",mp_O\Password)
+	IniWriteString(gv\OptionFile,"server","map",mp_O\MapInList\Name)
+	IniWriteString(gv\OptionFile,"server","gamemode",mp_O\Gamemode\name)
 	
 	For mgm = Each MultiplayerGameMode
 		Select mgm\ID
 			Case Gamemode_Waves
 				;[Block]
-				PutINIValue(gv\OptionFile,"server","waves_difficulty",mgm\Difficulty)
-				PutINIValue(gv\OptionFile,"server","waves_max",mgm\MaxPhase)
+				IniWriteString(gv\OptionFile,"server","waves_difficulty",mgm\Difficulty)
+				IniWriteString(gv\OptionFile,"server","waves_max",mgm\MaxPhase)
 				;[End Block]
 		End Select
 	Next
