@@ -4,17 +4,17 @@
 Const NPCtype173% = 1, NPCtypeOldMan% = 2, NPCtypeGuard% = 3, NPCtypeD% = 4
 Const NPCtype372% = 6, NPCtypeApache% = 7, NPCtypeMTF% = 8, NPCtype096 = 9
 Const NPCtype049% = 10, NPCtypeZombie% = 11, NPCtype5131% = 12, NPCtypeTentacle% = 13
-Const NPCtype860% = 14, NPCtype939% = 15, NPCtype066% = 16, NPCtype178% = 17, NPCtypePdPlane% = 18
-Const NPCtype966% = 19, NPCtype1048a = 20, NPCtype1499% = 21, NPCtype008% = 22, NPCtypeClerk% = 23
+Const NPCtype860% = 14, NPCtype939% = 15, NPCtype066% = 16, NPCtypePdPlane% = 17
+Const NPCtype966% = 18, NPCtype1048a = 19, NPCtype1499% = 20, NPCtype008% = 21, NPCtypeClerk% = 22
 
-Const NPCtypeD2% = 24, NPCtype076% = 25, NPCtypeSci% = 26, NPCtypeEGuard% = 27, NPCtypeKGuard% = 29
-Const NPCtypeD9341 = 30
+Const NPCtypeD2% = 23, NPCtype076% = 24, NPCtypeSci% = 25, NPCtypeEGuard% = 26, NPCtypeKGuard% = 27
+Const NPCtypeD9341 = 28
 
-Const NPCtypeZombieMP% = 28
-Const NPCtypeGuardZombieMP% = 31
-Const NPCtype035% = 32
-Const NPCtype682% = 33
-Const NPCtype457% = 34
+Const NPCtypeZombieMP% = 29
+Const NPCtypeGuardZombieMP% = 30
+Const NPCtype035% = 31
+Const NPCtype682% = 32
+Const NPCtype457% = 33
 
 Const MaxHitBoxes% = 25
 Const MaxWayPoints% = 21
